@@ -29,10 +29,12 @@ class CancellablePromiseKitTests: XCTestCase {
         Promise.value(1).get {
             XCTAssertEqual($0, 1)
             ex1.fulfill()
-            }.done {
-                XCTAssertEqual($0, 1)
-                ex2.fulfill()
-            } // .silenceWarning()
+        }.done {
+            XCTAssertEqual($0, 1)
+            ex2.fulfill()
+        }.catch { error in
+            XCTFail("Error: \(error)")
+        }
         wait(for: [ex1, ex2], timeout: 10)
     }
     
