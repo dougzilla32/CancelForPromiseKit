@@ -11,6 +11,7 @@
 		4950D0918242628C3E20E46C /* Pods_CancellablePromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A72C0F87F6FC81088E670765 /* Pods_CancellablePromiseKit.framework */; };
 		49A5584D1DC5185900E4D01B /* ResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A5584B1DC5172F00E4D01B /* ResolverTests.swift */; };
 		4AA3B3C801A224705800C35F /* Pods_CancellablePromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 910B77962097F90000A893F8 /* Pods_CancellablePromiseKit.framework */; };
+		5649B2C9C5BF7D1419C51AD1 /* Pods_CancelTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 773E8E3DCCDAB269137785BC /* Pods_CancelTests.framework */; };
 		630A8056203CEF6800D25F23 /* AnyPromiseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 630A8051203CEF6800D25F23 /* AnyPromiseTests.m */; settings = {COMPILER_FLAGS = "-fobjc-arc-exceptions"; }; };
 		630A8057203CEF6800D25F23 /* PMKManifoldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 630A8052203CEF6800D25F23 /* PMKManifoldTests.m */; };
 		630A8058203CEF6800D25F23 /* JoinTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 630A8053203CEF6800D25F23 /* JoinTests.m */; };
@@ -98,6 +99,8 @@
 		63CF6D79203CC66000EC8927 /* ErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTests.swift; sourceTree = "<group>"; };
 		63CF6D7B203CCDAB00EC8927 /* GuaranteeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuaranteeTests.swift; sourceTree = "<group>"; };
 		63CF6D7F203CD19200EC8927 /* ThenableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThenableTests.swift; sourceTree = "<group>"; };
+		773E8E3DCCDAB269137785BC /* Pods_CancelTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CancelTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		900373EB57217183E1F1FE4E /* Pods-CancelTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CancelTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CancelTests/Pods-CancelTests.release.xcconfig"; sourceTree = "<group>"; };
 		910B77702097DCB500A893F8 /* after.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = after.swift; path = Sources/after.swift; sourceTree = "<group>"; };
 		910B77722097DCB500A893F8 /* CancellablePromise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CancellablePromise.swift; path = Sources/CancellablePromise.swift; sourceTree = "<group>"; };
 		910B77762097DD7500A893F8 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Error.swift; path = Sources/Error.swift; sourceTree = "<group>"; };
@@ -108,6 +111,7 @@
 		910B77962097F90000A893F8 /* Pods_CancellablePromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_CancellablePromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A72C0F87F6FC81088E670765 /* Pods_CancellablePromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CancellablePromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C03256B5AA0A453FECEB8523 /* Pods-CancellablePromiseKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CancellablePromiseKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-CancellablePromiseKit/Pods-CancellablePromiseKit.release.xcconfig"; sourceTree = "<group>"; };
+		CDF82EB81EE68CD96ECFB2F4 /* Pods-CancelTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CancelTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CancelTests/Pods-CancelTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EFAF4168B226A1B1BB3452D5 /* Pods-CancellablePromiseKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CancellablePromiseKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CancellablePromiseKit/Pods-CancellablePromiseKit.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -133,6 +137,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5649B2C9C5BF7D1419C51AD1 /* Pods_CancelTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,6 +256,8 @@
 			children = (
 				EFAF4168B226A1B1BB3452D5 /* Pods-CancellablePromiseKit.debug.xcconfig */,
 				C03256B5AA0A453FECEB8523 /* Pods-CancellablePromiseKit.release.xcconfig */,
+				CDF82EB81EE68CD96ECFB2F4 /* Pods-CancelTests.debug.xcconfig */,
+				900373EB57217183E1F1FE4E /* Pods-CancelTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -261,6 +268,7 @@
 				910B77962097F90000A893F8 /* Pods_CancellablePromiseKit.framework */,
 				910B77942097F8AB00A893F8 /* PromiseKit.framework */,
 				A72C0F87F6FC81088E670765 /* Pods_CancellablePromiseKit.framework */,
+				773E8E3DCCDAB269137785BC /* Pods_CancelTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -329,9 +337,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 910B77862097E0AA00A893F8 /* Build configuration list for PBXNativeTarget "CancelTests" */;
 			buildPhases = (
+				73498DA3F27B64B09B94C379 /* [CP] Check Pods Manifest.lock */,
 				910B777A2097E0AA00A893F8 /* Sources */,
 				910B777B2097E0AA00A893F8 /* Frameworks */,
 				910B777C2097E0AA00A893F8 /* Resources */,
+				058531BD9E892297F06C8172 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -409,6 +419,44 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-CancellablePromiseKit-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		058531BD9E892297F06C8172 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-CancelTests/Pods-CancelTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CancelTests/Pods-CancelTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		73498DA3F27B64B09B94C379 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CancelTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -651,7 +699,6 @@
 				DEFINES_MODULE = YES;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -711,7 +758,6 @@
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -744,6 +790,7 @@
 		};
 		910B77872097E0AA00A893F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CDF82EB81EE68CD96ECFB2F4 /* Pods-CancelTests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -756,7 +803,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = FYX55SR9QC;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -771,7 +817,6 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.doug.CancelTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -781,6 +826,7 @@
 		};
 		910B77882097E0AA00A893F8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 900373EB57217183E1F1FE4E /* Pods-CancelTests.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -793,7 +839,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = FYX55SR9QC;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -803,7 +848,6 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.doug.CancelTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
