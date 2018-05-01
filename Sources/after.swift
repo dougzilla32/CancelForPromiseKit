@@ -11,15 +11,15 @@ import PromiseKit
 
 // MARK: Cancellable 'after'
 
-public func afterWithCancel(seconds: TimeInterval, cancelContext: CancelContext? = nil) -> Promise<Void> {
-    return atWithCancel(when: DispatchTime.now() + seconds, cancelContext: cancelContext)
+public func cancellableAfter(seconds: TimeInterval, cancelContext: CancelContext? = nil) -> Promise<Void> {
+    return cancellableAt(when: DispatchTime.now() + seconds, cancelContext: cancelContext)
 }
 
-public func afterWithCancel(_ interval: DispatchTimeInterval, cancelContext: CancelContext? = nil) -> Promise<Void> {
-    return atWithCancel(when: DispatchTime.now() + interval, cancelContext: cancelContext)
+public func cancellableAfter(_ interval: DispatchTimeInterval, cancelContext: CancelContext? = nil) -> Promise<Void> {
+    return cancellableAt(when: DispatchTime.now() + interval, cancelContext: cancelContext)
 }
 
-public func atWithCancel(when: DispatchTime, cancelContext: CancelContext? = nil) -> Promise<Void> {
+public func cancellableAt(when: DispatchTime, cancelContext: CancelContext? = nil) -> Promise<Void> {
     let task = DispatchWorkItemTask()
     let promise = Promise<Void> { seal in
         task.reject = seal.reject

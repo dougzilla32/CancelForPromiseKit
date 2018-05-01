@@ -11,7 +11,7 @@ func promise3() -> Promise<Int> {
 }
 
 firstly {
-    Promise(value: 1)
+    Promise.value(1)
 }.map { _ in
     2
 }.then { _ in

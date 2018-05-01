@@ -99,8 +99,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "910B777D2097E0AA00A893F8"
-               BuildableName = "CancellablePromiseKitTests.xctest"
-               BlueprintName = "CancellablePromiseKitTests"
+               BuildableName = "CancelTests.xctest"
+               BlueprintName = "CancelTests"
                ReferencedContainer = "container:CancellablePromiseKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
