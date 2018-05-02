@@ -15,21 +15,23 @@ import PromiseKit
 // private var cancellableTaskMap: NSMapTable<ObjectIdentifierClass, CancelItem> = NSMapTable.strongToWeakObjects()
 var cancellableTaskMap = [ObjectIdentifier: CancellableTask]()
 
-public class CancellableTask {
+open class CancellableTask {
     var reject: ((Error) -> Void)?
     
-    func cancel() {
+    public init() { }
+    
+    open func cancel() {
         cancelAttempted = true
         reject?(PromiseCancelledError())
     }
     
-    var isCancelled: Bool {
+    open var isCancelled: Bool {
         get {
             return cancelAttempted
         }
     }
     
-    var cancelAttempted = false
+    public var cancelAttempted = false
 }
 
 //class ObjectIdentifierClass: Hashable {
@@ -50,7 +52,7 @@ public class CancellableTask {
 //    }
 //}
 
-class DispatchWorkItemTask: CancellableTask {
+open class DispatchWorkItemTask: CancellableTask {
     var task: DispatchWorkItem?
     
     override init() {
@@ -62,17 +64,17 @@ class DispatchWorkItemTask: CancellableTask {
         self.task = task
     }
     
-    override public func cancel() {
+    override open func cancel() {
         super.cancel()
         
-// Invoke the work item now, causing it to error out with a cancellation error
+        // Invoke the work item now, causing it to error out with a cancellation error
         task?.perform()
         
-// Cancel the work item so that it doesn't get invoked later.  'perform' must be called before 'cancel', otherwise the perform will get ignored.
+        // Cancel the work item so that it doesn't get invoked later.  'perform' must be called before 'cancel', otherwise the perform will get ignored.
         task?.cancel()
     }
     
-    override public var isCancelled: Bool {
+    override open var isCancelled: Bool {
         get {
             return task?.isCancelled ?? false
         }

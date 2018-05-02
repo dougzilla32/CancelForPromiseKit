@@ -10,7 +10,6 @@
 		0C42F31B1FCF86320051309C /* HangTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C42F3191FCF86240051309C /* HangTests.swift */; };
 		4950D0918242628C3E20E46C /* Pods_CancellablePromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A72C0F87F6FC81088E670765 /* Pods_CancellablePromiseKit.framework */; };
 		49A5584D1DC5185900E4D01B /* ResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A5584B1DC5172F00E4D01B /* ResolverTests.swift */; };
-		4AA3B3C801A224705800C35F /* Pods_CancellablePromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 910B77962097F90000A893F8 /* Pods_CancellablePromiseKit.framework */; };
 		5649B2C9C5BF7D1419C51AD1 /* Pods_CancelTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 773E8E3DCCDAB269137785BC /* Pods_CancelTests.framework */; };
 		630A8056203CEF6800D25F23 /* AnyPromiseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 630A8051203CEF6800D25F23 /* AnyPromiseTests.m */; settings = {COMPILER_FLAGS = "-fobjc-arc-exceptions"; }; };
 		630A8057203CEF6800D25F23 /* PMKManifoldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 630A8052203CEF6800D25F23 /* PMKManifoldTests.m */; };
@@ -129,7 +128,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4950D0918242628C3E20E46C /* Pods_CancellablePromiseKit.framework in Frameworks */,
-				4AA3B3C801A224705800C35F /* Pods_CancellablePromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -720,7 +718,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_PACKAGE_TYPE = FMWK;
 				PRODUCT_NAME = CancellablePromiseKit;
 				SKIP_INSTALL = YES;
@@ -779,7 +777,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_PACKAGE_TYPE = FMWK;
 				PRODUCT_NAME = CancellablePromiseKit;
 				SKIP_INSTALL = YES;
@@ -815,7 +813,7 @@
 				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.doug.CancelTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -846,7 +844,7 @@
 				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.doug.CancelTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

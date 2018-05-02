@@ -123,6 +123,16 @@
          </BuildableReference>
       </CodeCoverageTargets>
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "910B777D2097E0AA00A893F8"
+               BuildableName = "CancelTests.xctest"
+               BlueprintName = "CancelTests"
+               ReferencedContainer = "container:CancellablePromiseKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
