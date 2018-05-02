@@ -53,7 +53,7 @@ class CancellablePromiseKitTests: XCTestCase {
         }
         cancellableAfterPromiseWithError.cancel()
         
-        wait(for: [exComplete, exCancel], timeout: 3)
+        wait(for: [exComplete, exCancel], timeout: 1)
     }
     
     func testPerformanceExample() {

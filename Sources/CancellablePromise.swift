@@ -11,62 +11,22 @@ import PromiseKit
 
 // MARK: Cancellable Tasks
 
-// TODO: change these to weak references (keys and values), does it work for ObjectIdentifier?
-// private var cancellableTaskMap: NSMapTable<ObjectIdentifierClass, CancelItem> = NSMapTable.strongToWeakObjects()
-var cancellableTaskMap = [ObjectIdentifier: CancellableTask]()
-
-open class CancellableTask {
-    var reject: ((Error) -> Void)?
+public protocol CancellableTask {
+    func cancel()
     
-    public init() { }
-    
-    open func cancel() {
-        cancelAttempted = true
-        reject?(PromiseCancelledError())
-    }
-    
-    open var isCancelled: Bool {
-        get {
-            return cancelAttempted
-        }
-    }
-    
-    public var cancelAttempted = false
+    var isCancelled: Bool { get }
 }
-
-//class ObjectIdentifierClass: Hashable {
-//    let id: ObjectIdentifier
-//
-//    init(_ id: ObjectIdentifier) {
-//        self.id = id
-//
-//    }
-//
-//    var hashValue: Int {
-//        get { return id.hashValue }
-//
-//    }
-//
-//    static func == (lhs: ObjectIdentifierClass, rhs: ObjectIdentifierClass) -> Bool {
-//        return lhs.id == rhs.id
-//    }
-//}
 
 open class DispatchWorkItemTask: CancellableTask {
     var task: DispatchWorkItem?
     
-    override init() {
-        super.init()
-    }
+    init() { }
     
     init(_ task: DispatchWorkItem) {
-        super.init()
         self.task = task
     }
     
-    override open func cancel() {
-        super.cancel()
-        
+    public func cancel() {
         // Invoke the work item now, causing it to error out with a cancellation error
         task?.perform()
         
@@ -74,7 +34,7 @@ open class DispatchWorkItemTask: CancellableTask {
         task?.cancel()
     }
     
-    override open var isCancelled: Bool {
+    public var isCancelled: Bool {
         get {
             return task?.isCancelled ?? false
         }
@@ -102,9 +62,10 @@ public class CancelContext {
 public extension Promise {
     public class func valueWithCancel(_ value: T, cancelContext: CancelContext? = nil) -> Promise<T> {
         let task = DispatchWorkItemTask()
+        var reject: ((Error) -> Void)?
         
         let promise = Promise<T> { seal in
-            task.reject = seal.reject
+            reject = seal.reject
             Swift.print("SEAL ME valueWithCancel")
 //            task.task = DispatchWorkItem() {
             seal.fulfill(value)
@@ -114,13 +75,16 @@ public extension Promise {
         }
         
         cancelContext?.add(cancel: promise.cancel)
-        cancellableTaskMap[ObjectIdentifier(promise)] = task
+        promise.cancellableTask = task
+        promise.cancelReject = reject
         return promise
     }
     
     convenience init(task: CancellableTask, cancelContext: CancelContext? = nil, resolver body: @escaping (Resolver<T>) throws -> Void) {
+        var reject: ((Error) -> Void)?
+
         self.init() { seal in
-            task.reject = seal.reject
+            reject = seal.reject
             Swift.print("SEAL ME CancellableTask")
             do {
                 try body(seal)
@@ -130,24 +94,20 @@ public extension Promise {
         }
         
         cancelContext?.add(cancel: self.cancel)
-//        cancellableTaskMap.setObject(
-//            CancelDispatchWorkItem(workItem: task),
-//            forKey: ObjectIdentifierClass(ObjectIdentifier(self)))
-        cancellableTaskMap[ObjectIdentifier(self)] = task
+        self.cancellableTask = task
+        self.cancelReject = reject
     }
     
     public func cancel() {
         Swift.print("try cancel")
-//        if let cancelItem = cancellableTaskMap.object(forKey: ObjectIdentifierClass(ObjectIdentifier(self))) {
-        if let cancelItem = cancellableTaskMap[ObjectIdentifier(self)] {
-            cancelItem.cancel()
-        }
-    }
+        cancelAttempted = true
+        cancelReject?(PromiseCancelledError())
+        cancellableTask?.cancel()
+   }
     
     public var isCancelled: Bool {
         get {
-            //            if let cancelItem = cancellableTaskMap.object(forKey: ObjectIdentifierClass(ObjectIdentifier(self))) {
-            if let cancelItem = cancellableTaskMap[ObjectIdentifier(self)] {
+            if let cancelItem = cancellableTask {
                 return cancelItem.isCancelled
             } else {
                 return false
@@ -157,29 +117,43 @@ public extension Promise {
     
     public var isCancellable: Bool {
         get {
-//            return cancellableTaskMap.object(forKey: ObjectIdentifierClass(ObjectIdentifier(self))) != nil
-            return cancellableTaskMap[ObjectIdentifier(self)] != nil
+            return cancellableTask != nil
+        }
+    }
+
+    public var cancellableTask: CancellableTask? {
+        get {
+            return objc_getAssociatedObject(self, &CancellablePromiseAssociatedKeys.cancellableTask) as? CancellableTask
+        }
+        set {
+            objc_setAssociatedObject(self, &CancellablePromiseAssociatedKeys.cancellableTask, newValue,
+                                     objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
     public var cancelAttempted: Bool {
         get {
-            if let cancelItem = cancellableTaskMap[ObjectIdentifier(self)] , cancelItem.cancelAttempted {
-                return true
-            } else {
-                return false
-            }
+            return (objc_getAssociatedObject(self, &CancellablePromiseAssociatedKeys.cancelAttempted) as? Bool) ?? false
+        }
+        set {
+            objc_setAssociatedObject(self, &CancellablePromiseAssociatedKeys.cancelAttempted, newValue,
+                                     objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
-    private func cancelledError() -> PromiseCancelledError? {
-//        if let cancelItem = cancellableTaskMap.object(forKey: ObjectIdentifierClass(ObjectIdentifier(self))) {
-        if let cancelItem = cancellableTaskMap[ObjectIdentifier(self)] , cancelItem.cancelAttempted {
-            Swift.print("cancelledError.cancelAttemped \(cancelItem.cancelAttempted)")
-            return PromiseCancelledError()
-        } else {
-            Swift.print("cancelledError.cancelAttemped nil or false")
-            return nil
+    var cancelReject: ((Error) -> Void)? {
+        get {
+            return objc_getAssociatedObject(self, &CancellablePromiseAssociatedKeys.cancelReject) as? (Error) -> Void
+        }
+        set {
+            objc_setAssociatedObject(self, &CancellablePromiseAssociatedKeys.cancelReject, newValue,
+                                     objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
+}
+
+struct CancellablePromiseAssociatedKeys {
+    static var cancellableTask: UInt8 = 0
+    static var cancelAttempted: UInt8 = 0
+    static var cancelReject: UInt8 = 0
 }

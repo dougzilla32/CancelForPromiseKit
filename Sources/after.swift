@@ -21,8 +21,10 @@ public func cancellableAfter(_ interval: DispatchTimeInterval, cancelContext: Ca
 
 public func cancellableAt(when: DispatchTime, cancelContext: CancelContext? = nil) -> Promise<Void> {
     let task = DispatchWorkItemTask()
+    var reject: ((Error) -> Void)?
+
     let promise = Promise<Void> { seal in
-        task.reject = seal.reject
+        reject = seal.reject
         print("SEAL ME atWithCancel")
         task.task = DispatchWorkItem {
             seal.fulfill(())
@@ -31,7 +33,8 @@ public func cancellableAt(when: DispatchTime, cancelContext: CancelContext? = ni
     }
     
     cancelContext?.add(cancel: promise.cancel)
-    cancellableTaskMap[ObjectIdentifier(promise)] = task
+    promise.cancellableTask = task
+    promise.cancelReject = reject
     return promise
 }
 
