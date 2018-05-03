@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0C42F31B1FCF86320051309C /* HangTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C42F3191FCF86240051309C /* HangTests.swift */; };
+		2051C2DF337B64627174C21C /* Pods_CancellablePromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 910B77962097F90000A893F8 /* Pods_CancellablePromiseKit.framework */; };
 		4950D0918242628C3E20E46C /* Pods_CancellablePromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A72C0F87F6FC81088E670765 /* Pods_CancellablePromiseKit.framework */; };
 		49A5584D1DC5185900E4D01B /* ResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A5584B1DC5172F00E4D01B /* ResolverTests.swift */; };
 		5649B2C9C5BF7D1419C51AD1 /* Pods_CancelTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 773E8E3DCCDAB269137785BC /* Pods_CancelTests.framework */; };
@@ -74,7 +75,7 @@
 		635893921D5BE4E000F14B55 /* CancellablePromiseKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = CancellablePromiseKit.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		635893941D5BE4F900F14B55 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		635893951D5BE4F900F14B55 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		635893961D5BE4F900F14B55 /* CancellablePromiseKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = CancellablePromiseKit.podspec; sourceTree = "<group>"; };
+		635893961D5BE4F900F14B55 /* CancellablePromiseKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = CancellablePromiseKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		635893971D5BE4F900F14B55 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		635D64081D59635300BC0AF5 /* PromiseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseTests.swift; sourceTree = "<group>"; };
 		635D64091D59635300BC0AF5 /* CancellableErrorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CancellableErrorTests.swift; sourceTree = "<group>"; };
@@ -128,6 +129,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4950D0918242628C3E20E46C /* Pods_CancellablePromiseKit.framework in Frameworks */,
+				2051C2DF337B64627174C21C /* Pods_CancellablePromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,7 +184,7 @@
 			path = Tests/CorePromise;
 			sourceTree = "<group>";
 		};
-		635893991D5BE51700F14B55 /* … */ = {
+		635893991D5BE51700F14B55 /* Podspec */ = {
 			isa = PBXGroup;
 			children = (
 				63B0AC581D595E1B00FA21D9 /* Products */,
@@ -191,7 +193,7 @@
 				635893951D5BE4F900F14B55 /* Package.swift */,
 				635893961D5BE4F900F14B55 /* CancellablePromiseKit.podspec */,
 			);
-			name = "…";
+			name = Podspec;
 			sourceTree = "<group>";
 		};
 		635D64061D59630200BC0AF5 /* Tests */ = {
@@ -213,7 +215,7 @@
 				63B0AC601D595E4C00FA21D9 /* Sources.swift */,
 				63B912AB1F1E657400D49110 /* Sources.objc */,
 				635D64061D59630200BC0AF5 /* Tests */,
-				635893991D5BE51700F14B55 /* … */,
+				635893991D5BE51700F14B55 /* Podspec */,
 				72F348650562B3413ED1FD69 /* Pods */,
 				7CED5C5FF05FBAC1AD6922F9 /* Frameworks */,
 			);
@@ -694,6 +696,7 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES_AGGRESSIVE;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEFINES_MODULE = YES;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_TESTABILITY = YES;
@@ -754,6 +757,7 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES_AGGRESSIVE;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEFINES_MODULE = YES;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;

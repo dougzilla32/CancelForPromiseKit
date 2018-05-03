@@ -10,10 +10,24 @@ import PromiseKit
 
 // MARK: Cancellable error
 
-class PromiseCancelledError: CancellableError {
+class PromiseCancelledError: CancellableError, CustomStringConvertible {
+    public private(set) var file: String
+    public private(set) var function: String
+    public private(set) var line: Int
+    
+    init(file: String, function: String, line: Int) {
+        self.file = URL(fileURLWithPath: file).deletingPathExtension().lastPathComponent
+        self.function = function
+        self.line = line
+    }
+    
     var isCancelled: Bool {
         get {
             return true
         }
+    }
+    
+    var description: String {
+        return "PromiseCancelledError at \(file).\(function):\(line)"
     }
 }

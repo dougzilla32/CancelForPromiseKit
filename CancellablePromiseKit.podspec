@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
 # s.social_media_url = ''
   s.authors  = { 'Doug Stein' => 'dougstein@gmail.com' }
 # s.documentation_url = ''
-# s.default_subspecs = 'CoreCancellablePromise', 'UIKit', 'Foundation'
+  s.default_subspecs = 'CoreCancellablePromise' # , 'UIKit', 'Foundation'
   s.requires_arc = true
   s.swift_version = '4.0'
 
@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
   # even though for us it is nonsense. Our root spec has no
   # sources.
   s.ios.deployment_target = '8.0'
-  s.osx.deployment_target = '10.9'
+  s.osx.deployment_target = '10.11'
   s.watchos.deployment_target = '2.0'
   s.tvos.deployment_target = '9.0'
   
@@ -49,6 +49,7 @@ Pod::Spec.new do |s|
     ss.source_files = 'Extensions/Alamofire/Sources/*'
     ss.dependency 'Alamofire', '~> 4.0'
     ss.dependency 'PromiseKit/Alamofire', '~> 6.0'
+    ss.dependency 'CancellablePromiseKit/CoreCancellablePromise', '~> 1.0'
     ss.ios.deployment_target = '8.0'
     ss.osx.deployment_target = '10.11'
     ss.watchos.deployment_target = '2.0'
@@ -104,25 +105,25 @@ Pod::Spec.new do |s|
 #    ss.osx.deployment_target = '10.9'
 #    ss.tvos.deployment_target = '9.0'
 #  end
-#
-#  s.subspec 'CoreCancellablePromise' do |ss|
-#    hh = Dir['Sources/*.h'] # - Dir['Sources/*+Private.h']
-#
-#    cc = Dir['Sources/*.swift'] # - ['Sources/SwiftPM.swift']
-#    cc << 'Sources/{after,CancellableAnyPromise}.m'
-#    cc += hh
-#    
-#    ss.source_files = cc
-#    ss.public_header_files = hh
-##    ss.preserve_paths = 'Sources/AnyPromise+Private.h', 'Sources/PMKCallVariadicBlock.m', 'Sources/NSMethodSignatureForBlock.m'
-#    ss.frameworks = 'Foundation'
-#    
-#    ss.ios.deployment_target = '8.0'
-#    ss.osx.deployment_target = '10.9'
-#    ss.watchos.deployment_target = '2.0'
-#    ss.tvos.deployment_target = '9.0'
-#  end
-#
+
+  s.subspec 'CoreCancellablePromise' do |ss|
+    hh = Dir['Sources/*.h'] # - Dir['Sources/*+Private.h']
+
+    cc = Dir['Sources/*.swift'] # - ['Sources/SwiftPM.swift']
+    cc << 'Sources/{after,CancellableAnyPromise}.m'
+    cc += hh
+    
+    ss.source_files = cc
+    ss.public_header_files = hh
+#    ss.preserve_paths = 'Sources/AnyPromise+Private.h', 'Sources/PMKCallVariadicBlock.m', 'Sources/NSMethodSignatureForBlock.m'
+    ss.frameworks = 'Foundation'
+    
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.11'
+    ss.watchos.deployment_target = '2.0'
+    ss.tvos.deployment_target = '9.0'
+  end
+
 #  s.subspec 'CoreLocation' do |ss|
 #    ss.source_files = 'Extensions/CoreLocation/Sources/*'
 #    ss.watchos.source_files = 'Extensions/CoreLocation/Sources/CLGeocoder*'

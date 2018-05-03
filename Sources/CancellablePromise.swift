@@ -44,15 +44,15 @@ open class DispatchWorkItemTask: CancellableTask {
 // MARK: Cancel Context
 
 public class CancelContext {
-    private var cancelFunctions = [() -> Void]()
+    private var cancelFunctions = [(String, String, Int) -> Void]()
     
-    func add(cancel: @escaping () -> Void) {
+    func add(cancel: @escaping (String, String, Int) -> Void) {
         cancelFunctions.append(cancel)
     }
     
-    public func cancelAll() {
+    public func cancelAll(file: String = #file, _ function: String = #function, line: Int = #line) {
         for cancel in cancelFunctions {
-            cancel()
+            cancel(file, function, line)
         }
     }
 }
@@ -60,7 +60,7 @@ public class CancelContext {
 // MARK: Promise extensions
 
 public extension Promise {
-    public class func valueWithCancel(_ value: T, cancelContext: CancelContext? = nil) -> Promise<T> {
+    public class func cancellableValue(_ value: T, cancelContext: CancelContext? = nil) -> Promise<T> {
         let task = DispatchWorkItemTask()
         var reject: ((Error) -> Void)?
         
@@ -98,10 +98,10 @@ public extension Promise {
         self.cancelReject = reject
     }
     
-    public func cancel() {
+    public func cancel(file: String = #file, _ function: String = #function, line: Int = #line) {
         Swift.print("try cancel")
         cancelAttempted = true
-        cancelReject?(PromiseCancelledError())
+        cancelReject?(PromiseCancelledError(file: file, function: function, line: line))
         cancellableTask?.cancel()
    }
     
