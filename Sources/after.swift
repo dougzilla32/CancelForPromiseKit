@@ -12,14 +12,14 @@ import PromiseKit
 // MARK: Cancellable 'after'
 
 public func after(seconds: TimeInterval, cancel: CancelType) -> Promise<Void> {
-    return cancellableAt(when: DispatchTime.now() + seconds, cancel: cancel)
+    return at(when: DispatchTime.now() + seconds, cancel: cancel)
 }
 
-public func cancellableAfter(_ interval: DispatchTimeInterval, cancel: CancelType) -> Promise<Void> {
-    return cancellableAt(when: DispatchTime.now() + interval, cancel: cancel)
+public func after(_ interval: DispatchTimeInterval, cancel: CancelType) -> Promise<Void> {
+    return at(when: DispatchTime.now() + interval, cancel: cancel)
 }
 
-public func cancellableAt(when: DispatchTime, cancel: CancelType) -> Promise<Void> {
+public func at(when: DispatchTime, cancel: CancelType) -> Promise<Void> {
     let task = DispatchWorkItemTask()
     var reject: ((Error) -> Void)?
 
