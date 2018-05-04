@@ -43,14 +43,35 @@ open class DispatchWorkItemTask: CancellableTask {
 
 // MARK: Cancel Context
 
+public enum CancelType {
+    case enable
+    case disable
+    case context(CancelContext)
+    
+    public static func createContext() -> CancelType {
+        return CancelType.context(CancelContext())
+    }
+    
+    public func cancelAll(file: String = #file, function: String = #function, line: Int = #line) {
+        switch self {
+        case .context(let context):
+            context.cancelAll(file: file, function: function, line: line)
+        case .enable, .disable:
+            break
+        }
+    }
+}
+
 public class CancelContext {
     private var cancelFunctions = [(String, String, Int) -> Void]()
+    
+    fileprivate init() { }
     
     func add(cancel: @escaping (String, String, Int) -> Void) {
         cancelFunctions.append(cancel)
     }
     
-    public func cancelAll(file: String = #file, _ function: String = #function, line: Int = #line) {
+    public func cancelAll(file: String = #file, function: String = #function, line: Int = #line) {
         for cancel in cancelFunctions {
             cancel(file, function, line)
         }
@@ -60,7 +81,11 @@ public class CancelContext {
 // MARK: Promise extensions
 
 public extension Promise {
-    public class func cancellableValue(_ value: T, cancelContext: CancelContext? = nil) -> Promise<T> {
+    public class func value(_ value: T, cancel: CancelType) -> Promise<T> {
+        if case .disable = cancel {
+            return Promise.value(value)
+        }
+        
         let task = DispatchWorkItemTask()
         var reject: ((Error) -> Void)?
         
@@ -74,14 +99,20 @@ public extension Promise {
 //            DispatchQueue.global(qos: .default).asyncAfter(deadline: DispatchTime.now() + 0.001, execute: task.task!)
         }
         
-        cancelContext?.add(cancel: promise.cancel)
+        if case .context(let context) = cancel {
+            context.add(cancel: promise.cancel)
+        }
         promise.cancellableTask = task
         promise.cancelReject = reject
         return promise
     }
     
-    convenience init(task: CancellableTask, cancelContext: CancelContext? = nil, resolver body: @escaping (Resolver<T>) throws -> Void) {
+    public convenience init(task: CancellableTask, cancel: CancelType, resolver body: @escaping (Resolver<T>) throws -> Void) {
         var reject: ((Error) -> Void)?
+        if case .disable = cancel {
+            self.init(resolver: body)
+            return
+        }
 
         self.init() { seal in
             reject = seal.reject
@@ -93,7 +124,9 @@ public extension Promise {
             }
         }
         
-        cancelContext?.add(cancel: self.cancel)
+        if case .context(let context) = cancel {
+            context.add(cancel: self.cancel)
+        }
         self.cancellableTask = task
         self.cancelReject = reject
     }
