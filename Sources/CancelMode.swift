@@ -5,20 +5,20 @@
 //  Created by Doug Stein on 5/3/18.
 //
 
-public enum CancelType {
-    case enable
-    case disable
+public enum CancelMode {
+    case enabled
+    case disabled
     case context(CancelContext)
     
-    public static func createContext() -> CancelType {
-        return CancelType.context(CancelContext())
+    public static func createContext() -> CancelMode {
+        return CancelMode.context(CancelContext())
     }
     
     public func cancelAll(file: String = #file, function: String = #function, line: Int = #line) {
         switch self {
         case .context(let context):
             context.cancelAll(file: file, function: function, line: line)
-        case .enable, .disable:
+        case .enabled, .disabled:
             break
         }
     }

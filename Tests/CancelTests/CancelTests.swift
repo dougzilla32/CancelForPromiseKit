@@ -35,7 +35,7 @@ class CancellablePromiseKitTests: XCTestCase {
         }
         
         // Test 'cancellableAfter' to ensure it is cancelled
-        let cancellableAfterPromise = after(seconds: 0.1, cancel: .enable)
+        let cancellableAfterPromise = after(seconds: 0.1, cancel: .enabled)
         cancellableAfterPromise.done {
             XCTFail("cancellableAfter not cancelled")
         }.catch(policy: .allErrorsExceptCancellation) { error in
@@ -45,7 +45,7 @@ class CancellablePromiseKitTests: XCTestCase {
         
         // Test 'cancellableAfter' to ensure it is cancelled and throws a 'CancellableError'
         let exCancel = expectation(description: "after cancels")
-        let cancellableAfterPromiseWithError = after(seconds: 0.1, cancel: .enable)
+        let cancellableAfterPromiseWithError = after(seconds: 0.1, cancel: .enabled)
         cancellableAfterPromiseWithError.done {
             XCTFail("cancellableAfterWithError not cancelled")
         }.catch(policy: .allErrors) { error in

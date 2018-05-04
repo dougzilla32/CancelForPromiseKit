@@ -9,8 +9,8 @@
 import PromiseKit
 
 public extension Promise {
-    public class func value(_ value: T, cancel: CancelType) -> Promise<T> {
-        if case .disable = cancel {
+    public class func value(_ value: T, cancel: CancelMode) -> Promise<T> {
+        if case .disabled = cancel {
             return Promise.value(value)
         }
         
@@ -35,9 +35,9 @@ public extension Promise {
         return promise
     }
     
-    public convenience init(task: CancellableTask, cancel: CancelType, resolver body: @escaping (Resolver<T>) throws -> Void) {
+    public convenience init(task: CancellableTask, cancel: CancelMode, resolver body: @escaping (Resolver<T>) throws -> Void) {
         var reject: ((Error) -> Void)?
-        if case .disable = cancel {
+        if case .disabled = cancel {
             self.init(resolver: body)
             return
         }
