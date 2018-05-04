@@ -10,7 +10,7 @@ import PromiseKit
 
 // MARK: Cancellable error
 
-class PromiseCancelledError: CancellableError, CustomStringConvertible {
+public class PromiseCancelledError: CancellableError, CustomStringConvertible {
     public private(set) var file: String
     public private(set) var function: String
     public private(set) var line: Int
@@ -21,13 +21,13 @@ class PromiseCancelledError: CancellableError, CustomStringConvertible {
         self.line = line
     }
     
-    var isCancelled: Bool {
+    public var isCancelled: Bool {
         get {
             return true
         }
     }
     
-    var description: String {
+    public var description: String {
         return "PromiseCancelledError at \(file).\(function):\(line)"
     }
 }

@@ -6,79 +6,7 @@
 //  Copyright © 2018 Doug Stein. All rights reserved.
 //
 
-import Foundation
 import PromiseKit
-
-// MARK: Cancellable Tasks
-
-public protocol CancellableTask {
-    func cancel()
-    
-    var isCancelled: Bool { get }
-}
-
-open class DispatchWorkItemTask: CancellableTask {
-    var task: DispatchWorkItem?
-    
-    init() { }
-    
-    init(_ task: DispatchWorkItem) {
-        self.task = task
-    }
-    
-    public func cancel() {
-        // Invoke the work item now, causing it to error out with a cancellation error
-        task?.perform()
-        
-        // Cancel the work item so that it doesn't get invoked later.  'perform' must be called before 'cancel', otherwise the perform will get ignored.
-        task?.cancel()
-    }
-    
-    public var isCancelled: Bool {
-        get {
-            return task?.isCancelled ?? false
-        }
-    }
-}
-
-// MARK: Cancel Context
-
-public enum CancelType {
-    case enable
-    case disable
-    case context(CancelContext)
-    
-    public static func createContext() -> CancelType {
-        return CancelType.context(CancelContext())
-    }
-    
-    public func cancelAll(file: String = #file, function: String = #function, line: Int = #line) {
-        switch self {
-        case .context(let context):
-            context.cancelAll(file: file, function: function, line: line)
-        case .enable, .disable:
-            break
-        }
-    }
-}
-
-public class CancelContext {
-    private var cancelFunctions = [(String, String, Int) -> Void]()
-    
-    fileprivate init() { }
-    
-    func add(cancel: @escaping (String, String, Int) -> Void) {
-        cancelFunctions.append(cancel)
-    }
-    
-    public func cancelAll(file: String = #file, function: String = #function, line: Int = #line) {
-        for cancel in cancelFunctions {
-            cancel(file, function, line)
-        }
-    }
-}
-
-// MARK: Promise extensions
 
 public extension Promise {
     public class func value(_ value: T, cancel: CancelType) -> Promise<T> {
