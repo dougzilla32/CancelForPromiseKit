@@ -1,8 +1,6 @@
 ![PromiseKit](http://promisekit.org/public/img/logo-tight.png)
 
-![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] [![Build Status](https://travis-ci.org/mxcl/PromiseKit.svg?branch=master)](https://travis-ci.org/mxcl/PromiseKit)
-
-[繁體中文](README.zh_Hant.md) (*outdated*), [简体中文](README.zh_CN.md) (*outdated*)
+![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] [![Build Status](https://github.com/dougzilla32/CancellablePromiseKit.svg?branch=master)](https://github.com/dougzilla32/CancellablePromiseKit)
 
 ---
 
