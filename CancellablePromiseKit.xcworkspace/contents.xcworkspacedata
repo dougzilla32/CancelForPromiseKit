@@ -8,6 +8,9 @@
       location = "group:Extensions/Alamofire/CPKAlamofire.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:Extensions/Foundation/CPKFoundation.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>

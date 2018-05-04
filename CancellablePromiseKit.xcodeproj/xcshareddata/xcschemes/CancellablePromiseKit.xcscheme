@@ -29,8 +29,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "630019011D596292003B4E30"
-               BuildableName = "PMKCoreTests.xctest"
-               BlueprintName = "PMKCoreTests"
+               BuildableName = "CPKCoreTests.xctest"
+               BlueprintName = "CPKCoreTests"
                ReferencedContainer = "container:CancellablePromiseKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

@@ -7,13 +7,10 @@ pkg.products = [
     .library(name: "CancellablePromiseKit", targets: ["CancellablePromiseKit"]),
 ]
 
-let pmk: Target = .target(name: "CancellablePromiseKit")
-pmk.path = "Sources"
-pmk.exclude = [
-    "after.m"
-]
-pkg.swiftLanguageVersions = [3, 4]
-pkg.targets = [
-    pmk,
+let cpk: Target = .target(name: "CancellablePromiseKit")
+cpk.path = "Sources"
+cpk.swiftLanguageVersions = [3, 4]
+cpk.targets = [
+    cpk,
     .testTarget(name: "A+", dependencies: ["CancellablePromiseKit"]),
 ]

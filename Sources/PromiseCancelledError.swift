@@ -8,8 +8,6 @@
 
 import PromiseKit
 
-// MARK: Cancellable error
-
 public class PromiseCancelledError: CancellableError, CustomStringConvertible {
     public private(set) var file: String
     public private(set) var function: String

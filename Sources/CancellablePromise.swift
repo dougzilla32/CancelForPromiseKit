@@ -34,14 +34,14 @@ public extension Promise {
         promise.cancelReject = reject
         return promise
     }
-    
-    public convenience init(task: CancellableTask, cancel: CancelMode, resolver body: @escaping (Resolver<T>) throws -> Void) {
+ 
+    public convenience init(cancel: CancelMode, resolver body: @escaping (Resolver<T>) throws -> Void) {
         var reject: ((Error) -> Void)?
         if case .disabled = cancel {
             self.init(resolver: body)
             return
         }
-
+        
         self.init() { seal in
             reject = seal.reject
             Swift.print("SEAL ME CancellableTask")
@@ -55,8 +55,12 @@ public extension Promise {
         if case .context(let context) = cancel {
             context.add(cancel: self.cancel)
         }
-        self.cancellableTask = task
         self.cancelReject = reject
+    }
+    
+    public convenience init(cancel: CancelMode, task: CancellableTask, resolver body: @escaping (Resolver<T>) throws -> Void) {
+        self.init(cancel: cancel, resolver: body)
+        self.cancellableTask = task
     }
     
     public func cancel(file: String = #file, _ function: String = #function, line: Int = #line) {
