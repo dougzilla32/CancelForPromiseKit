@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   # even though for us it is nonsense. Our root spec has no
   # sources.
   s.ios.deployment_target = '8.0'
-  s.osx.deployment_target = '10.11'
+  s.osx.deployment_target = '10.9'
   s.watchos.deployment_target = '2.0'
   s.tvos.deployment_target = '9.0'
   
@@ -85,7 +85,7 @@ Pod::Spec.new do |s|
     ss.frameworks = 'Foundation'
     
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.11'
+    ss.osx.deployment_target = '10.9'
     ss.watchos.deployment_target = '2.0'
     ss.tvos.deployment_target = '9.0'
   end
