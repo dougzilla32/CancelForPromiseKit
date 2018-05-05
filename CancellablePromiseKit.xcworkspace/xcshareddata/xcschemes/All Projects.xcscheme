@@ -62,20 +62,6 @@
                ReferencedContainer = "container:Extensions/Foundation/CPKFoundation.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "630019011D596292003B4E30"
-               BuildableName = "CPKCoreTests.xctest"
-               BlueprintName = "CPKCoreTests"
-               ReferencedContainer = "container:CancellablePromiseKit.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -88,9 +74,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "910B777D2097E0AA00A893F8"
-               BuildableName = "CancelTests.xctest"
-               BlueprintName = "CancelTests"
+               BlueprintIdentifier = "630019011D596292003B4E30"
+               BuildableName = "CPKCoreTests.xctest"
+               BlueprintName = "CPKCoreTests"
                ReferencedContainer = "container:CancellablePromiseKit.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -112,16 +98,6 @@
                BuildableName = "CPKNSTests.xctest"
                BlueprintName = "CPKNSTests"
                ReferencedContainer = "container:Extensions/Foundation/CPKFoundation.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "630019011D596292003B4E30"
-               BuildableName = "CPKCoreTests.xctest"
-               BlueprintName = "CPKCoreTests"
-               ReferencedContainer = "container:CancellablePromiseKit.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
