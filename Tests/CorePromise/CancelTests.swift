@@ -48,7 +48,7 @@ class CancellablePromiseKitTests: XCTestCase {
         cancellableAfterPromiseWithError.done {
             XCTFail("cancellableAfterWithError not cancelled")
         }.catch(policy: .allErrors) { error in
-            exCancel.fulfill()
+            error.isCancelled ? exCancel.fulfill() : XCTFail("unexpected error \(error)")
         }
         cancellableAfterPromiseWithError.cancel()
         
