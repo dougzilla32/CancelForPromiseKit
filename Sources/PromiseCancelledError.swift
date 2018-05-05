@@ -1,5 +1,5 @@
 //
-//  Error.swift
+//  PromiseCancelledError.swift
 //  CancellablePromiseKit
 //
 //  Created by Doug on 4/28/18.

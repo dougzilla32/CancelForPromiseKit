@@ -9,49 +9,37 @@
 import Foundation
 import PromiseKit
 
-public func after(seconds: TimeInterval, cancel: CancelMode) -> Promise<Void> {
+public func after(seconds: TimeInterval, cancel: CancelContext) -> Promise<Void> {
     return at(when: DispatchTime.now() + seconds, cancel: cancel)
 }
 
-public func after(_ interval: DispatchTimeInterval, cancel: CancelMode) -> Promise<Void> {
+public func after(_ interval: DispatchTimeInterval, cancel: CancelContext) -> Promise<Void> {
     return at(when: DispatchTime.now() + interval, cancel: cancel)
 }
 
-public func at(when: DispatchTime, cancel: CancelMode) -> Promise<Void> {
-    if case .disabled = cancel {
-        return Promise<Void> { seal in
-            let task = DispatchWorkItem {
+public func at(when: DispatchTime, cancel: CancelContext) -> Promise<Void> {
 #if swift(>=4.0)
-                seal.fulfill(())
+    var fulfill: ((()) -> Void)?
 #else
-                seal.fulfill()
+    var fulfill: (() -> Void)?
 #endif
-            }
-            q.asyncAfter(deadline: when, execute: task)
-        }
-    }
-    
-    let task = DispatchWorkItemTask()
     var reject: ((Error) -> Void)?
 
     let promise = Promise<Void> { seal in
+        fulfill = seal.fulfill
         reject = seal.reject
-        print("SEAL ME atWithCancel")
-        task.task = DispatchWorkItem {
-#if swift(>=4.0)
-            seal.fulfill(())
-#else
-            seal.fulfill()
-#endif
-        }
-        q.asyncAfter(deadline: when, execute: task.task!)
     }
     
-    if case .context(let context) = cancel {
-        context.add(cancel: promise.cancel)
+    let task = DispatchWorkItem {
+#if swift(>=4.0)
+        fulfill!(())
+#else
+        fulfill!()
+#endif
     }
-    promise.cancellableTask = task
-    promise.cancelReject = reject
+    q.asyncAfter(deadline: when, execute: task)
+
+    cancel.append(task: task, reject: reject!)
     return promise
 }
 

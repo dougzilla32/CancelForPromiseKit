@@ -1,4 +1,4 @@
-![PromiseKit](http://promisekit.org/public/img/logo-tight.png)
+![CancellablePromiseKit](http://promisekit.org/public/img/logo-tight.png)
 
 ![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] [![Build Status](https://github.com/dougzilla32/CancellablePromiseKit.svg?branch=master)](https://github.com/dougzilla32/CancellablePromiseKit)
 

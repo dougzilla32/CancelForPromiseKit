@@ -33,25 +33,37 @@ class CancellablePromiseKitTests: XCTestCase {
             XCTFail("afterPromise failed with error: \(error)")
         }
         
+        let contextIgnore = CancelContext()
+        let exCancelComplete = expectation(description: "after completes")
+
+        // Test 'cancellableAfter' to ensure it is fulfilled if not cancelled
+        let cancelIgnoreAfterPromise = after(seconds: 0.1, cancel: contextIgnore)
+        cancelIgnoreAfterPromise.done {
+            exCancelComplete.fulfill()
+        }.catch(policy: .allErrors) { error in
+            XCTFail("cancellableAfterPromise failed with error: \(error)")
+        }
+        
+       let context = CancelContext()
+        
         // Test 'cancellableAfter' to ensure it is cancelled
-        let cancellableAfterPromise = after(seconds: 0.1, cancel: .enabled)
+        let cancellableAfterPromise = after(seconds: 0.1, cancel: context)
         cancellableAfterPromise.done {
             XCTFail("cancellableAfter not cancelled")
         }.catch(policy: .allErrorsExceptCancellation) { error in
             XCTFail("cancellableAfterPromise failed with error: \(error)")
         }
-        cancellableAfterPromise.cancel()
         
         // Test 'cancellableAfter' to ensure it is cancelled and throws a 'CancellableError'
         let exCancel = expectation(description: "after cancels")
-        let cancellableAfterPromiseWithError = after(seconds: 0.1, cancel: .enabled)
+        let cancellableAfterPromiseWithError = after(seconds: 0.1, cancel: context)
         cancellableAfterPromiseWithError.done {
             XCTFail("cancellableAfterWithError not cancelled")
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? exCancel.fulfill() : XCTFail("unexpected error \(error)")
         }
-        cancellableAfterPromiseWithError.cancel()
-        
-        wait(for: [exComplete, exCancel], timeout: 1)
+
+        context.cancel()
+        wait(for: [exComplete, exCancelComplete, exCancel], timeout: 1)
     }
 }
