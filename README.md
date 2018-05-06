@@ -3,9 +3,11 @@
 
 ---
 
-CancellablePromiseKit provides clear and concise cancellation extensions for [PromiseKit][PromiseKit]
+CancellablePromiseKit provides clear and concise cancellation extensions for [PromiseKit]
 
-PromiseKit includes some basic support for cancellation. CancellablePromiseKit extends this to make cancelling promises straightforward.
+PromiseKit includes basic support for cancellation. CancellablePromiseKit extends this to make cancelling promises straightforward.
+
+This README has the same structure as the PromiseKit README, with cancellation added to the sample code blocks:
 
 ```swift
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -22,15 +24,16 @@ firstly {
 }.ensure {
     UIApplication.shared.isNetworkActivityIndicatorVisible = false
 }.catch(policy: .allErrors) { error in
+    // Will be invoked with a PromiseCancelledError when cancel is called on the context.
+    // Use the default policy of .allErrorsExceptCancellation to ignore cancellation errors.
     self.show(UIAlertController(for: error), sender: self)
 }
 
 //…
 
+// Cancel all tasks in the context and fail all promises with PromiseCancelledError
 context.cancel()
 ```
-
-[![codecov](https://codecov.io/gh/mxcl/PromiseKit/branch/master/graph/badge.svg)](https://codecov.io/gh/mxcl/PromiseKit)
 
 # Quick Start
 
@@ -63,7 +66,7 @@ If you are looking for a function’s documentation, then please note
 
 # Extensions
 
-Extensions are provided for all asynchronous tasks that support cancellation.
+Cancellable extensions are provided for PromiseKit extensions where the underlying asynchronous tasks support cancellation.
 
 The default CocoaPod provides CancellablePromises and the extension for Foundation. The other extensions are available by specifying additional subspecs in your `Podfile`,
 eg:
@@ -76,7 +79,17 @@ pod "CancellablePromiseKit/CoreLocation"
 # CLLocationManager.requestLocation(cancel: context).then { /*…*/ }
 ```
 
-All our extensions are separate repositories at [CancellablePromiseKit].
+As with PromiseKit, all extensions are separate repositories.  Here is a complete list of extensions that support cancellation, linked to their github repositories:
+
+[Alamofire]     (http://github.com/dougzilla32/CancellablePromiseKit-Alamofire)  
+[Bolts]         (http://github.com/dougzilla32/CancellablePromiseKit-Bolts)  
+[Cloudkit]      (http://github.com/dougzilla32/CancellablePromiseKit-CloudKit)  
+[CoreLocation]  (http://github.com/dougzilla32/CancellablePromiseKit-CoreLocation)  
+[Foundation]    [Foundation]  
+[MapKit]        (http://github.com/dougzilla32/CancellablePromiseKit-MapKit)  
+[OMGHTTPURLRQ]  [OMGHTTPURLRQ]  
+[StoreKit]      (http://github.com/dougzilla32/CancellablePromiseKit-StoreKit)  
+[WatchConnectivity](http://github.com/dougzilla32/CancellablePromiseKit-WatchConnectivity)  
 
 ## I don't want the extensions!
 
@@ -90,7 +103,7 @@ pod "CancellablePromiseKit/CorePromise", "~> 1.0"
 
 ## Choose Your Networking Library
 
-All the networking libraries supported by PromiseKit are now cancellable!
+All the networking library extensions supported by PromiseKit are now simple to cancel!
 
 [Alamofire]:
 

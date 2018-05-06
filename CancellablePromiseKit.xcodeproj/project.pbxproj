@@ -15,6 +15,7 @@
 		912F4C1E209BED250037EF4C /* CancellableTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912F4C1D209BED250037EF4C /* CancellableTask.swift */; };
 		9184A38A209D7AE400B45601 /* CancelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B778A2097E0F300A893F8 /* CancelTests.swift */; };
 		9187EA7B209C24DF00EA1DDF /* CancelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9187EA7A209C24DF00EA1DDF /* CancelContext.swift */; };
+		F7A4374DB189B03AF3353600 /* Pods_CancellablePromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 910B77962097F90000A893F8 /* Pods_CancellablePromiseKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4950D0918242628C3E20E46C /* Pods_CancellablePromiseKit.framework in Frameworks */,
+				F7A4374DB189B03AF3353600 /* Pods_CancellablePromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
