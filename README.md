@@ -5,7 +5,7 @@
 
 CancellablePromiseKit provides clear and concise cancellation extensions for [PromiseKit]
 
-PromiseKit includes basic support for cancellation. CancellablePromiseKit extends this to make cancelling promises straightforward.
+While PromiseKit includes basic support for cancellation, CancellablePromiseKit extends this to make cancelling promises and their associated tasks straightforward.
 
 This README has the same structure as the PromiseKit README, with cancellation added to the sample code blocks:
 
@@ -81,14 +81,14 @@ pod "CancellablePromiseKit/CoreLocation"
 
 As with PromiseKit, all extensions are separate repositories.  Here is a complete list of extensions that support cancellation, linked to their github repositories:
 
-[Alamofire]     (http://github.com/dougzilla32/CancellablePromiseKit-Alamofire)  
-[Bolts]         (http://github.com/dougzilla32/CancellablePromiseKit-Bolts)  
-[Cloudkit]      (http://github.com/dougzilla32/CancellablePromiseKit-CloudKit)  
-[CoreLocation]  (http://github.com/dougzilla32/CancellablePromiseKit-CoreLocation)  
-[Foundation]    [Foundation]  
-[MapKit]        (http://github.com/dougzilla32/CancellablePromiseKit-MapKit)  
-[OMGHTTPURLRQ]  [OMGHTTPURLRQ]  
-[StoreKit]      (http://github.com/dougzilla32/CancellablePromiseKit-StoreKit)  
+[Alamofire](http://github.com/dougzilla32/CancellablePromiseKit-Alamofire)  
+[Bolts](http://github.com/dougzilla32/CancellablePromiseKit-Bolts)  
+[Cloudkit](http://github.com/dougzilla32/CancellablePromiseKit-CloudKit)  
+[CoreLocation](http://github.com/dougzilla32/CancellablePromiseKit-CoreLocation)  
+[Foundation][Foundation]  
+[MapKit](http://github.com/dougzilla32/CancellablePromiseKit-MapKit)  
+[OMGHTTPURLRQ](http://github.com/dougzilla32/CancellablePromiseKit-OMGHTTPURLRQ)  
+[StoreKit](http://github.com/dougzilla32/CancellablePromiseKit-StoreKit)  
 [WatchConnectivity](http://github.com/dougzilla32/CancellablePromiseKit-WatchConnectivity)  
 
 ## I don't want the extensions!
