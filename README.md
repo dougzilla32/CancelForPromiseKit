@@ -120,8 +120,9 @@ context.cancel()
 // pod 'CancellablePromiseKit/OMGHTTPURLRQ'
 // # https://github.com/dougzilla32/CancellablePromiseKit-OMGHTTPURLRQ
 
+let context = CancelContext()
 firstly {
-    URLSession.shared.POST("http://example.com", JSON: params)
+    URLSession.shared.POST("http://example.com", JSON: params, cancel: context)
 }.map {
     try JSONDecoder().decoder(Foo.self, with: $0.data)
 }.done { foo in
@@ -129,6 +130,10 @@ firstly {
 }.catch { error in
     //…
 }
+
+//…
+
+context.cancel()
 ```
 
 And (of course) plain `URLSession` from [Foundation]:
