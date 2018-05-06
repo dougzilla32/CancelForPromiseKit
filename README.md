@@ -1,11 +1,11 @@
 # CancellablePromiseKit
-![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] 
+![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit]
 
 ---
 
 CancellablePromiseKit provides clear and concise cancellation extensions for [PromiseKit]
 
-While PromiseKit includes basic support for cancellation, CancellablePromiseKit extends this to make cancelling promises and their associated tasks straightforward.
+While PromiseKit includes basic support for cancellation, CancellablePromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
 
 This README has the same structure as the PromiseKit README, with cancellation added to the sample code blocks:
 
@@ -81,13 +81,13 @@ pod "CancellablePromiseKit/CoreLocation"
 
 As with PromiseKit, all extensions are separate repositories.  Here is a complete list of extensions that support cancellation, linked to their github repositories:
 
-[Alamofire](http://github.com/dougzilla32/CancellablePromiseKit-Alamofire)  
+[Alamofire][Alamofire]  
 [Bolts](http://github.com/dougzilla32/CancellablePromiseKit-Bolts)  
 [Cloudkit](http://github.com/dougzilla32/CancellablePromiseKit-CloudKit)  
 [CoreLocation](http://github.com/dougzilla32/CancellablePromiseKit-CoreLocation)  
 [Foundation][Foundation]  
 [MapKit](http://github.com/dougzilla32/CancellablePromiseKit-MapKit)  
-[OMGHTTPURLRQ](http://github.com/dougzilla32/CancellablePromiseKit-OMGHTTPURLRQ)  
+[OMGHTTPURLRQ][OMGHTTPURLRQ]  
 [StoreKit](http://github.com/dougzilla32/CancellablePromiseKit-StoreKit)  
 [WatchConnectivity](http://github.com/dougzilla32/CancellablePromiseKit-WatchConnectivity)  
 
@@ -183,8 +183,8 @@ func makeUrlRequest() throws -> URLRequest {
 
 [badge-pod]: https://img.shields.io/cocoapods/v/CancellablePromiseKit.svg?label=version
 [badge-pms]: https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20SwiftPM-green.svg
-[badge-languages]: https://img.shields.io/badge/languages-Swift%20%7C%20ObjC-orange.svg
-[badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-lightgrey.svg
+[badge-languages]: https://img.shields.io/badge/languages-Swift-orange.svg
+[badge-platforms]: https://img.shields.io/cocoapods/p/CancellablePromiseKit.svg
 [badge-mit]: https://img.shields.io/badge/license-MIT-blue.svg
 [PromiseKit]: https://github.com/mxcl/PromiseKit
 [CancellablePromiseKit]: https://github.com/dougzilla32/CancellablePromiseKit
