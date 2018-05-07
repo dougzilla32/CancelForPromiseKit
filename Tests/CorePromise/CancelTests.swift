@@ -66,4 +66,17 @@ class CancellablePromiseKitTests: XCTestCase {
         context.cancel()
         wait(for: [exComplete, exCancelComplete, exCancel], timeout: 1)
     }
+    
+    func testValue() {
+        let context = CancelContext()
+        let exComplete = expectation(description: "after completes")
+        Promise.value("hi", cancel: context).done { value in
+            XCTFail("value not cancelled")
+        }.catch(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }
+        context.cancel()
+
+        wait(for: [exComplete], timeout: 1)
+    }
 }
