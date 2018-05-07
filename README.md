@@ -2,7 +2,7 @@
 ![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit]
 
 ---
-
+ 
 CancelForPromiseKit provides clear and concise cancellation extensions for [PromiseKit]
 
 While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
