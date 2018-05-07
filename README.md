@@ -1,11 +1,11 @@
-# CancellablePromiseKit
+# CancelForPromiseKit
 ![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit]
 
 ---
 
-CancellablePromiseKit provides clear and concise cancellation extensions for [PromiseKit]
+CancelForPromiseKit provides clear and concise cancellation extensions for [PromiseKit]
 
-While PromiseKit includes basic support for cancellation, CancellablePromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
+While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
 
 This README has the same structure as the PromiseKit README, with cancellation added to the sample code blocks:
 
@@ -44,11 +44,11 @@ use_frameworks!
 
 target "Change Me!" do
   pod "PromiseKit", "~> 6.0"
-  pod "CancellablePromiseKit", "~> 1.0"
+  pod "CancelForPromiseKit", "~> 1.0"
 end
 ```
 
-CancellablePromiseKit has the same platform and XCode support as PromiseKit
+CancelForPromiseKit has the same platform and XCode support as PromiseKit
 
 # Documentation -- TBD
 
@@ -68,35 +68,35 @@ If you are looking for a function’s documentation, then please note
 
 Cancellable extensions are provided for PromiseKit extensions where the underlying asynchronous tasks support cancellation.
 
-The default CocoaPod provides CancellablePromises and the extension for Foundation. The other extensions are available by specifying additional subspecs in your `Podfile`,
+The default CocoaPod provides the core cancellable promises and the extension for Foundation. The other extensions are available by specifying additional subspecs in your `Podfile`,
 eg:
 
 ```ruby
-pod "CancellablePromiseKit/MapKit"
+pod "CancelForPromiseKit/MapKit"
 # MKDirections().calculate(cancel: context).then { /*…*/ }
 
-pod "CancellablePromiseKit/CoreLocation"
+pod "CancelForPromiseKit/CoreLocation"
 # CLLocationManager.requestLocation(cancel: context).then { /*…*/ }
 ```
 
 As with PromiseKit, all extensions are separate repositories.  Here is a complete list of extensions that support cancellation, linked to their github repositories:
 
 [Alamofire][Alamofire]  
-[Bolts](http://github.com/dougzilla32/CancellablePromiseKit-Bolts)  
-[Cloudkit](http://github.com/dougzilla32/CancellablePromiseKit-CloudKit)  
-[CoreLocation](http://github.com/dougzilla32/CancellablePromiseKit-CoreLocation)  
+[Bolts](http://github.com/dougzilla32/CancelForPromiseKit-Bolts)  
+[Cloudkit](http://github.com/dougzilla32/CancelForPromiseKit-CloudKit)  
+[CoreLocation](http://github.com/dougzilla32/CancelForPromiseKit-CoreLocation)  
 [Foundation][Foundation]  
-[MapKit](http://github.com/dougzilla32/CancellablePromiseKit-MapKit)  
+[MapKit](http://github.com/dougzilla32/CancelForPromiseKit-MapKit)  
 [OMGHTTPURLRQ][OMGHTTPURLRQ]  
-[StoreKit](http://github.com/dougzilla32/CancellablePromiseKit-StoreKit)  
-[WatchConnectivity](http://github.com/dougzilla32/CancellablePromiseKit-WatchConnectivity)  
+[StoreKit](http://github.com/dougzilla32/CancelForPromiseKit-StoreKit)  
+[WatchConnectivity](http://github.com/dougzilla32/CancelForPromiseKit-WatchConnectivity)  
 
 ## I don't want the extensions!
 
 As with PromiseKit, extensions are optional:
 
 ```ruby
-pod "CancellablePromiseKit/CorePromise", "~> 1.0"
+pod "CancelForPromiseKit/CorePromise", "~> 1.0"
 ```
 
 > *Note* Carthage installations come with no extensions by default.
@@ -108,8 +108,8 @@ All the networking library extensions supported by PromiseKit are now simple to 
 [Alamofire]:
 
 ```swift
-// pod 'CancellablePromiseKit/Alamofire'
-// # https://github.com/dougzilla32/CancellablePromiseKit-Alamofire
+// pod 'CancelForPromiseKit/Alamofire'
+// # https://github.com/dougzilla32/CancelForPromiseKit-Alamofire
 
 let context = CancelContext()
 firstly {
@@ -130,8 +130,8 @@ context.cancel()
 [OMGHTTPURLRQ]:
 
 ```swift
-// pod 'CancellablePromiseKit/OMGHTTPURLRQ'
-// # https://github.com/dougzilla32/CancellablePromiseKit-OMGHTTPURLRQ
+// pod 'CancelForPromiseKit/OMGHTTPURLRQ'
+// # https://github.com/dougzilla32/CancelForPromiseKit-OMGHTTPURLRQ
 
 let context = CancelContext()
 firstly {
@@ -152,8 +152,8 @@ context.cancel()
 And (of course) plain `URLSession` from [Foundation]:
 
 ```swift
-// pod 'CancellablePromiseKit/Foundation'
-// # https://github.com/dougzilla32/CancellablePromiseKit-Foundation
+// pod 'CancelForPromiseKit/Foundation'
+// # https://github.com/dougzilla32/CancelForPromiseKit-Foundation
 
 let context = CancelContext()
 firstly {
@@ -181,14 +181,14 @@ func makeUrlRequest() throws -> URLRequest {
 }
 ```
 
-[badge-pod]: https://img.shields.io/cocoapods/v/CancellablePromiseKit.svg?label=version
+[badge-pod]: https://img.shields.io/cocoapods/v/CancelForPromiseKit.svg?label=version
 [badge-pms]: https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20SwiftPM-green.svg
 [badge-languages]: https://img.shields.io/badge/languages-Swift-orange.svg
-[badge-platforms]: https://img.shields.io/cocoapods/p/CancellablePromiseKit.svg
+[badge-platforms]: https://img.shields.io/cocoapods/p/CancelForPromiseKit.svg
 [badge-mit]: https://img.shields.io/badge/license-MIT-blue.svg
 [PromiseKit]: https://github.com/mxcl/PromiseKit
-[CancellablePromiseKit]: https://github.com/dougzilla32/CancellablePromiseKit
-[OMGHTTPURLRQ]: http://github.com/dougzilla32/CancellablePromiseKit-OMGHTTPURLRQ
-[Alamofire]: http://github.com/dougzilla32/CancellablePromiseKit-Alamofire
-[Foundation]: http://github.com/dougzilla32/CancellablePromiseKit-Foundation
+[CancelForPromiseKit]: https://github.com/dougzilla32/CancelForPromiseKit
+[OMGHTTPURLRQ]: http://github.com/dougzilla32/CancelForPromiseKit-OMGHTTPURLRQ
+[Alamofire]: http://github.com/dougzilla32/CancelForPromiseKit-Alamofire
+[Foundation]: http://github.com/dougzilla32/CancelForPromiseKit-Foundation
 [Podfile]: https://guides.cocoapods.org/syntax/podfile.html

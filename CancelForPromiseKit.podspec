@@ -1,8 +1,8 @@
 # coding: utf-8
 Pod::Spec.new do |s|
-  s.name = "CancellablePromiseKit"
+  s.name = "CancelForPromiseKit"
 
-  `xcodebuild -project CancellablePromiseKit.xcodeproj -showBuildSettings` =~ /CURRENT_PROJECT_VERSION = ((\d\.)+\d)/
+  `xcodebuild -project CancelForPromiseKit.xcodeproj -showBuildSettings` =~ /CURRENT_PROJECT_VERSION = ((\d\.)+\d)/
   abort("No version detected") if $1.nil?
   s.version = $1
 
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
 
   s.license = 'MIT'
   s.summary = 'Cancellable Promises for Swift.'
-  s.homepage = 'https://github.com/dougzilla32/CancellablePromiseKit.git'
+  s.homepage = 'https://github.com/dougzilla32/CancelForPromiseKit.git'
   s.description = 'Add-on to PromiseKit to enable cancellation of all tasks have the ability to be cancelled.  Simply call the cancel() function on any Promise, or use a CancelContext to cancel all Promises in a chain or other grouping.'
 # s.social_media_url = ''
   s.authors  = { 'Doug Stein' => 'dougstein@gmail.com' }
@@ -39,7 +39,7 @@ Pod::Spec.new do |s|
     ss.source_files = 'Extensions/Alamofire/Sources/*'
     ss.dependency 'Alamofire', '~> 4.0'
     ss.dependency 'PromiseKit/Alamofire', '~> 6.0'
-    ss.dependency 'CancellablePromiseKit/CorePromise'
+    ss.dependency 'CancelForPromiseKit/CorePromise'
     ss.ios.deployment_target = '8.0'
     ss.osx.deployment_target = '10.11'
     ss.watchos.deployment_target = '2.0'
@@ -53,7 +53,7 @@ Pod::Spec.new do |s|
 
 #  s.subspec 'Bolts' do |ss|
 #    ss.source_files = 'Extensions/Bolts/Sources/*'
-#    ss.dependency 'CancellablePromiseKit/CorePromise'
+#    ss.dependency 'CancelForPromiseKit/CorePromise'
 #    ss.dependency 'Bolts', '~> 1.9.0'
 #    ss.ios.deployment_target = '8.0'
 #    ss.osx.deployment_target = '10.9'
@@ -64,7 +64,7 @@ Pod::Spec.new do |s|
 #  s.subspec 'CloudKit' do |ss|
 #    ss.source_files = 'Extensions/CloudKit/Sources/*'
 #    ss.frameworks = 'CloudKit'
-#    ss.dependency 'CancellablePromiseKit/CorePromise'
+#    ss.dependency 'CancelForPromiseKit/CorePromise'
 #    ss.ios.deployment_target = '8.0'
 #    ss.osx.deployment_target = '10.10'
 #    ss.tvos.deployment_target = '9.0'
@@ -93,7 +93,7 @@ Pod::Spec.new do |s|
 #  s.subspec 'CoreLocation' do |ss|
 #    ss.source_files = 'Extensions/CoreLocation/Sources/*'
 #    ss.watchos.source_files = 'Extensions/CoreLocation/Sources/CLGeocoder*'
-#    ss.dependency 'CancellablePromiseKit/CorePromise'
+#    ss.dependency 'CancelForPromiseKit/CorePromise'
 #    ss.frameworks = 'CoreLocation'
 #
 #    ss.ios.deployment_target = '8.0'
@@ -105,7 +105,7 @@ Pod::Spec.new do |s|
   s.subspec 'Foundation' do |ss|
     ss.source_files = Dir['Extensions/Foundation/Sources/*']
     ss.dependency 'PromiseKit/Foundation', '~> 6.0'
-    ss.dependency 'CancellablePromiseKit/CorePromise'
+    ss.dependency 'CancelForPromiseKit/CorePromise'
     ss.frameworks = 'Foundation'
     ss.ios.deployment_target = '8.0'
     ss.osx.deployment_target = '10.9'
@@ -120,7 +120,7 @@ Pod::Spec.new do |s|
 #  s.subspec 'MapKit' do |ss|
 #    ss.ios.source_files = ss.osx.source_files = ss.tvos.source_files = 'Extensions/MapKit/Sources/*'
 #    ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'MapKit'
-#    ss.dependency 'CancellablePromiseKit/CorePromise'
+#    ss.dependency 'CancelForPromiseKit/CorePromise'
 #    ss.ios.deployment_target = '8.0'
 #    ss.osx.deployment_target = '10.9'
 #    ss.watchos.deployment_target = '2.0'
@@ -129,7 +129,7 @@ Pod::Spec.new do |s|
 #
 #  s.subspec 'OMGHTTPURLRQ' do |ss|
 #    ss.source_files = 'Extensions/OMGHTTPURLRQ/Sources/*'
-#    ss.dependency 'CancellablePromiseKit/Foundation'
+#    ss.dependency 'CancelForPromiseKit/Foundation'
 #    ss.dependency 'OMGHTTPURLRQ', '~> 3.2'
 #    ss.ios.deployment_target = '8.0'
 #    ss.osx.deployment_target = '10.9'
@@ -141,7 +141,7 @@ Pod::Spec.new do |s|
 #  s.subspec 'StoreKit' do |ss|
 #    ss.ios.source_files = ss.osx.source_files = ss.tvos.source_files = 'Extensions/StoreKit/Sources/*'
 #    ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'StoreKit'
-#    ss.dependency 'CancellablePromiseKit/CorePromise'
+#    ss.dependency 'CancelForPromiseKit/CorePromise'
 #    ss.ios.deployment_target = '8.0'
 #    ss.osx.deployment_target = '10.9'
 #    ss.tvos.deployment_target = '9.0'
@@ -151,7 +151,7 @@ Pod::Spec.new do |s|
 #  s.subspec 'WatchConnectivity' do |ss|
 #    ss.ios.source_files = ss.watchos.source_files = 'Extensions/WatchConnectivity/Sources/*'
 #    ss.ios.frameworks = ss.watchos.frameworks = 'WatchConnectivity'
-#    ss.dependency 'CancellablePromiseKit/CorePromise'
+#    ss.dependency 'CancelForPromiseKit/CorePromise'
 #    ss.ios.deployment_target = '8.0'
 #    ss.watchos.deployment_target = '2.0'
 #  end

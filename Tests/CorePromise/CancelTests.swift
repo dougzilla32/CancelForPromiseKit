@@ -6,7 +6,7 @@
 //
 
 import XCTest
-import CancellablePromiseKit
+import CancelForPromiseKit
 import PromiseKit
 
 class CancellablePromiseKitTests: XCTestCase {
