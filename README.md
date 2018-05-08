@@ -66,7 +66,7 @@ If you are looking for a function’s documentation, then please note
 
 # Extensions
 
-Cancellable extensions are provided for PromiseKit extensions where the underlying asynchronous tasks support cancellation.
+CancelForPromiseKit provides the same extensions and functions as PromiseKit so long as the underlying asynchronous task(s) support cancellation.
 
 The default CocoaPod provides the core cancellable promises and the extension for Foundation. The other extensions are available by specifying additional subspecs in your `Podfile`,
 eg:
@@ -79,13 +79,37 @@ pod "CancelForPromiseKit/CoreLocation"
 # CLLocationManager.requestLocation(cancel: context).then { /*…*/ }
 ```
 
-As with PromiseKit, all extensions are separate repositories.  Here is a complete list of extensions that support cancellation, linked to their github repositories:
+As with PromiseKit, all extensions are separate repositories.  Here is a complete list of CancelForPromiseKit extensions listing the specific functions that support cancellation (PromiseKit extensions without any functions supporting cancellation are omitted):
 
 [Alamofire][Alamofire]  
+
+	Alamofire.DataRequest
+		response(_:queue:cancel:)
+		responseData(queue:cancel:)
+		responseString(queue:cancel:)
+		responseJSON(queue:options:cancel:)
+		responsePropertyList(queue:options:cancel:)
+		responseDecodable<T>(queue::decoder:cancel:)
+		responseDecodable<T>(_:queue:decoder:cancel:)
+
+	Alamofire.DownloadRequest
+		response(_:queue:cancel:)
+		responseData(queue:cancel:)
+
 [Bolts](http://github.com/dougzilla32/CancelForPromiseKit-Bolts)  
 [Cloudkit](http://github.com/dougzilla32/CancelForPromiseKit-CloudKit)  
 [CoreLocation](http://github.com/dougzilla32/CancelForPromiseKit-CoreLocation)  
 [Foundation][Foundation]  
+
+	Process
+		launch(_:cancel)
+		
+	URLSession
+		dataTask(_:with:cancel:)
+		uploadTask(_:with:from:cancel:)
+		uploadTask(_:with:fromFile:cancel:)
+		downloadTask(_:with:to:cancel:)
+
 [MapKit](http://github.com/dougzilla32/CancelForPromiseKit-MapKit)  
 [OMGHTTPURLRQ][OMGHTTPURLRQ]  
 [StoreKit](http://github.com/dougzilla32/CancelForPromiseKit-StoreKit)  
