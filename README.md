@@ -52,6 +52,17 @@ CancelForPromiseKit has the same platform and XCode support as PromiseKit
 
 # Documentation -- TBD
 
+The following functions are part of the core CancelForPromiseKit module:
+
+	Global functions
+		after(seconds:cancel:)
+		after(_ interval:cancel:)
+		
+	Promise extensions
+		value(_ value: cancel:)
+		init(cancel:resolver:)
+		init(cancel:task:resolver:)
+
 * Handbook
   * [Getting Started](Documentation/GettingStarted.md)
   * [Promises: Common Patterns](Documentation/CommonPatterns.md)
@@ -90,7 +101,7 @@ As with PromiseKit, all extensions are separate repositories.  Here is a complet
 		responseJSON(queue:options:cancel:)
 		responsePropertyList(queue:options:cancel:)
 		responseDecodable<T>(queue::decoder:cancel:)
-		responseDecodable<T>(_:queue:decoder:cancel:)
+		responseDecodable<T>(_ type:queue:decoder:cancel:)
 
 	Alamofire.DownloadRequest
 		response(_:queue:cancel:)
