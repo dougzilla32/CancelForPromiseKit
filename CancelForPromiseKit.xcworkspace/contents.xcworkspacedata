@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:CancellablePromiseKit.xcodeproj">
+      location = "group:CancelForPromiseKit.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Extensions/Alamofire/CPKAlamofire.xcodeproj">

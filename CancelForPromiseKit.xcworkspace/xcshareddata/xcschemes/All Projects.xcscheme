@@ -15,9 +15,23 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63B0AC561D595E1B00FA21D9"
-               BuildableName = "CancellablePromiseKit.framework"
-               BlueprintName = "CancellablePromiseKit"
-               ReferencedContainer = "container:CancellablePromiseKit.xcodeproj">
+               BuildableName = "CancelForPromiseKit.framework"
+               BlueprintName = "CancelForPromiseKit"
+               ReferencedContainer = "container:CancelForPromiseKit.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "630019011D596292003B4E30"
+               BuildableName = "CPKCoreTests.xctest"
+               BlueprintName = "CPKCoreTests"
+               ReferencedContainer = "container:CancelForPromiseKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -74,16 +88,6 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "630019011D596292003B4E30"
-               BuildableName = "CPKCoreTests.xctest"
-               BlueprintName = "CPKCoreTests"
-               ReferencedContainer = "container:CancellablePromiseKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "63C7FFF11D5C020D003BAE60"
                BuildableName = "CPKAFTests.xctest"
                BlueprintName = "CPKAFTests"
@@ -105,9 +109,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63B0AC561D595E1B00FA21D9"
-            BuildableName = "CancellablePromiseKit.framework"
-            BlueprintName = "CancellablePromiseKit"
-            ReferencedContainer = "container:CancellablePromiseKit.xcodeproj">
+            BuildableName = "CancelForPromiseKit.framework"
+            BlueprintName = "CancelForPromiseKit"
+            ReferencedContainer = "container:CancelForPromiseKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -127,9 +131,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63B0AC561D595E1B00FA21D9"
-            BuildableName = "CancellablePromiseKit.framework"
-            BlueprintName = "CancellablePromiseKit"
-            ReferencedContainer = "container:CancellablePromiseKit.xcodeproj">
+            BuildableName = "CancelForPromiseKit.framework"
+            BlueprintName = "CancelForPromiseKit"
+            ReferencedContainer = "container:CancelForPromiseKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -145,9 +149,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63B0AC561D595E1B00FA21D9"
-            BuildableName = "CancellablePromiseKit.framework"
-            BlueprintName = "CancellablePromiseKit"
-            ReferencedContainer = "container:CancellablePromiseKit.xcodeproj">
+            BuildableName = "CancelForPromiseKit.framework"
+            BlueprintName = "CancelForPromiseKit"
+            ReferencedContainer = "container:CancelForPromiseKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
