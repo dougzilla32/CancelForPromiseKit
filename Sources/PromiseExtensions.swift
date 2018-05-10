@@ -31,6 +31,10 @@ public extension Promise {
      * future.  This gives the 'cancel' a change to happen before 'done' checks 'fulfilled'.
      * Not a great workaround because there is still a window where you call 'cancel' and later
      * the body is still invoked.
+     *
+     * To avoid this problem entirely, use Thenable.done(cancel:) rather than Promise.value(cancel:).
+     * Promise.value(cancel:) is still provided because Thenable.then(cancel:) cannot currently be
+     * implemented.
      */
     public class func value(_ value: T, cancel: CancelContext) -> Promise<T> {
         var task: DispatchWorkItem!
