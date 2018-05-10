@@ -5,23 +5,28 @@ import PlaygroundSupport
 // Then select `PromiseKit.playground` from inside Xcode.
 import PromiseKit
 
+import CancelForPromiseKit
 
-func promise3() -> Promise<Int> {
-    return after(.seconds(1)).map{ 3 }
+func promise3(cancel: CancelContext) -> Promise<Int> {
+    return after(.seconds(1), cancel: cancel).map{ 3 }
 }
 
+let context = CancelContext()
 firstly {
-    Promise.value(1)
-}.map { _ in
+    Promise.value(1, cancel: context)
+}.mapCC { _ in
     2
-}.then { _ in
-    promise3()
-}.done {
+}.thenCC { _ in
+    promise3(cancel: context)
+}.doneCC {
     print($0)  // => 3
 }.ensure {
     PlaygroundPage.current.finishExecution()
-}.catch { error in
+}.catch(policy: .allErrors) { error in
     // only happens for errors
+    print(error)
 }
 
 PlaygroundPage.current.needsIndefiniteExecution = true
+
+context.cancel()

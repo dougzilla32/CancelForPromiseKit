@@ -10,9 +10,9 @@ import PromiseKit
 public class PromiseCancelledError: CancellableError, CustomStringConvertible {
     public private(set) var file: String
     public private(set) var function: String
-    public private(set) var line: Int
+    public private(set) var line: UInt
     
-    init(file: String, function: String, line: Int) {
+    init(file: String, function: String, line: UInt) {
         self.file = URL(fileURLWithPath: file).deletingPathExtension().lastPathComponent
         self.function = function
         self.line = line

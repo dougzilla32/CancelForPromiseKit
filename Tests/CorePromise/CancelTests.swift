@@ -67,7 +67,20 @@ class CancellablePromiseKitTests: XCTestCase {
         wait(for: [exComplete, exCancelComplete, exCancel], timeout: 1)
     }
     
-    func testValue() {
+    func testValueContext() {
+        let context = CancelContext()
+        let exComplete = expectation(description: "after completes")
+        Promise.value("hi", cancel: context).done() { value in
+            XCTFail("value not cancelled")
+        }.catch(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }
+        context.cancel()
+        
+        wait(for: [exComplete], timeout: 1)
+    }
+    
+    func testValueDone() {
         let context = CancelContext()
         let exComplete = expectation(description: "after completes")
         Promise.value("hi").done(cancel: context) { value in
@@ -76,7 +89,22 @@ class CancellablePromiseKitTests: XCTestCase {
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }
         context.cancel()
-
+        
+        wait(for: [exComplete], timeout: 1)
+    }
+    
+    func testValueDoneCC() {
+        let context = CancelContext()
+        let exComplete = expectation(description: "after completes")
+        Promise.value("hi", cancel: context).doneCC() { value in
+            print("done")
+            XCTFail("value not cancelled")
+        }.catch(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }
+        print("cancel")
+        context.cancel()
+        
         wait(for: [exComplete], timeout: 1)
     }
     

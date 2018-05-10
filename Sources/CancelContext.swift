@@ -34,7 +34,7 @@ public class CancelContext {
         }
     }
 
-    public func cancel(file: String = #file, function: String = #function, line: Int = #line) {
+    public func cancel(file: String = #file, function: String = #function, line: UInt = #line) {
         cancelAttempted = true
         cancelledError = PromiseCancelledError(file: file, function: function, line: line)
         for var info in cancelItems {
@@ -52,10 +52,5 @@ public class CancelContext {
             }
         }
         return true
-    }
-    
-    public func reset() {
-        cancelItems.removeAll()
-        cancelAttempted = false
     }
 }

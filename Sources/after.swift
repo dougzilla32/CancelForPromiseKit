@@ -9,14 +9,14 @@ import Foundation
 import PromiseKit
 
 public func after(seconds: TimeInterval, cancel: CancelContext) -> Promise<Void> {
-    return at(when: DispatchTime.now() + seconds, cancel: cancel)
+    return at(time: DispatchTime.now() + seconds, cancel: cancel)
 }
 
 public func after(_ interval: DispatchTimeInterval, cancel: CancelContext) -> Promise<Void> {
-    return at(when: DispatchTime.now() + interval, cancel: cancel)
+    return at(time: DispatchTime.now() + interval, cancel: cancel)
 }
 
-public func at(when: DispatchTime, cancel: CancelContext) -> Promise<Void> {
+public func at(time: DispatchTime, cancel: CancelContext) -> Promise<Void> {
 #if swift(>=4.0)
     var fulfill: ((()) -> Void)?
 #else
@@ -36,7 +36,7 @@ public func at(when: DispatchTime, cancel: CancelContext) -> Promise<Void> {
         fulfill!()
 #endif
     }
-    q.asyncAfter(deadline: when, execute: task)
+    q.asyncAfter(deadline: time, execute: task)
 
     cancel.append(task: task, reject: reject!)
     return promise
