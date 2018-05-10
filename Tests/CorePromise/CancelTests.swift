@@ -70,7 +70,7 @@ class CancellablePromiseKitTests: XCTestCase {
     func testValue() {
         let context = CancelContext()
         let exComplete = expectation(description: "after completes")
-        Promise.value("hi", cancel: context).done { value in
+        Promise.value("hi").done(cancel: context) { value in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -79,4 +79,91 @@ class CancellablePromiseKitTests: XCTestCase {
 
         wait(for: [exComplete], timeout: 1)
     }
+    
+    /*
+    func testCancelForPromise_Then() {
+        let failAndValue: (()) -> Promise<String> = {
+            XCTFail("then not cancelled")
+            return Promise.value("x")
+        }
+        let exComplete = expectation(description: "after completes")
+        let context = CancelContext()
+        
+        let promise = Promise<Void> { seal in
+            sleep(100)
+            seal.fulfill()
+        }
+        promise.then(cancel: context) { value in
+            return failAndValue()
+        }.done(cancel: context) { value in
+            XCTFail("done not cancelled")
+        }.catch(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }
+        
+        context.cancel()
+        
+        wait(for: [exComplete], timeout: 1)
+    }
+
+    func testCancelForPromise_ThenDone() {
+        let exComplete = expectation(description: "done is cancelled")
+        let noopContext = CancelContext()
+        let context = CancelContext()
+
+        let promise = Promise<Void> { seal in
+            sleep(100)
+            seal.fulfill()
+        }
+        promise.then(cancel: noopContext) { value in
+            return Promise.value("x")
+        }.done(cancel: context) { value in
+            XCTFail("done not cancelled")
+        }.catch(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }
+        context.cancel()
+
+        wait(for: [exComplete], timeout: 1)
+    }
+    */
+        
+    func testCancelForPromise_Done() {
+        let exComplete = expectation(description: "after completes")
+        let context = CancelContext()
+        
+        let promise = Promise<Void> { seal in
+            sleep(100)
+            seal.fulfill()
+        }
+        promise.done(cancel: context) { value in
+            XCTFail("done not cancelled")
+        }.catch(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }
+        
+        context.cancel()
+        
+        wait(for: [exComplete], timeout: 1)
+    }
+    
+    func testCancelForGuarantee_Done() {
+        let exComplete = expectation(description: "done is cancelled")
+        let context = CancelContext()
+        
+        after(seconds: 0.1).done(cancel: context) { value in
+            XCTFail("done not cancelled")
+        }.catch(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }
+        context.cancel()
+        
+        wait(for: [exComplete], timeout: 1)
+    }
+    
 }
+
+public enum CancelTestError: Error {
+    case yow
+}
+

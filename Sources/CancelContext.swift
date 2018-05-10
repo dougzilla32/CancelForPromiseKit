@@ -15,6 +15,8 @@ public class CancelContext {
     public private(set) var cancelItems = [CancelItem]()
     
     public private(set) var cancelAttempted = false
+    
+    public private(set) var cancelledError: PromiseCancelledError? = nil
 
     public init() { }
     
@@ -34,10 +36,10 @@ public class CancelContext {
 
     public func cancel(file: String = #file, function: String = #function, line: Int = #line) {
         cancelAttempted = true
-        let cancelledError = PromiseCancelledError(file: file, function: function, line: line)
+        cancelledError = PromiseCancelledError(file: file, function: function, line: line)
         for var info in cancelItems {
             info.task?.cancel()
-            info.reject?(cancelledError)
+            info.reject?(cancelledError!)
             info.reject = nil
             info.cancelAttempted = true
         }
