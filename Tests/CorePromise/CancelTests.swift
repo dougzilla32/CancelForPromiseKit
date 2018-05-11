@@ -1,6 +1,6 @@
 //
-//  CancellablePromiseKitTests.swift
-//  CancellablePromiseKitTests
+//  CancelTests.swift
+//  CPKCoreTests
 //
 //  Created by Doug Stein on 4/30/18.
 //
@@ -9,7 +9,7 @@ import XCTest
 import CancelForPromiseKit
 import PromiseKit
 
-class CancellablePromiseKitTests: XCTestCase {
+class CancelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
