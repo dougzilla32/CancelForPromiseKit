@@ -90,17 +90,18 @@ Pod::Spec.new do |s|
     ss.tvos.deployment_target = '9.0'
   end
 
-#  s.subspec 'CoreLocation' do |ss|
-#    ss.source_files = 'Extensions/CoreLocation/Sources/*'
-#    ss.watchos.source_files = 'Extensions/CoreLocation/Sources/CLGeocoder*'
-#    ss.dependency 'CancelForPromiseKit/CorePromise'
-#    ss.frameworks = 'CoreLocation'
-#
-#    ss.ios.deployment_target = '8.0'
-#    ss.osx.deployment_target = '10.9'
-#    ss.watchos.deployment_target = '3.0'
-#    ss.tvos.deployment_target = '9.0'
-#  end
+  s.subspec 'CoreLocation' do |ss|
+    ss.source_files = 'Extensions/CoreLocation/Sources/*'
+    ss.watchos.source_files = 'Extensions/CoreLocation/Sources/CLGeocoder*'
+    ss.dependency 'PromiseKit/CoreLocation', '~> 6.0'
+    ss.dependency 'CancelForPromiseKit/CorePromise'
+    ss.frameworks = 'CoreLocation'
+
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.9'
+    ss.watchos.deployment_target = '3.0'
+    ss.tvos.deployment_target = '9.0'
+  end
 
   s.subspec 'Foundation' do |ss|
     ss.source_files = Dir['Extensions/Foundation/Sources/*']

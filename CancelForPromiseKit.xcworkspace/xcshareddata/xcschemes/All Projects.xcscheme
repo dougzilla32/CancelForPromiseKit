@@ -57,6 +57,34 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63C7FFA61D5BEE09003BAE60"
+               BuildableName = "CPKCoreLocation.framework"
+               BlueprintName = "CPKCoreLocation"
+               ReferencedContainer = "container:Extensions/CoreLocation/CPKCoreLocation.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "63C7FFF11D5C020D003BAE60"
+               BuildableName = "CPKCLTests.xctest"
+               BlueprintName = "CPKCLTests"
+               ReferencedContainer = "container:Extensions/CoreLocation/CPKCoreLocation.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "63C7FFA61D5BEE09003BAE60"
                BuildableName = "CPKFoundation.framework"
                BlueprintName = "CPKFoundation"
                ReferencedContainer = "container:Extensions/Foundation/CPKFoundation.xcodeproj">
@@ -88,10 +116,30 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "630019011D596292003B4E30"
+               BuildableName = "CPKCoreTests.xctest"
+               BlueprintName = "CPKCoreTests"
+               ReferencedContainer = "container:CancelForPromiseKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "63C7FFF11D5C020D003BAE60"
                BuildableName = "CPKAFTests.xctest"
                BlueprintName = "CPKAFTests"
                ReferencedContainer = "container:Extensions/Alamofire/CPKAlamofire.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "63C7FFF11D5C020D003BAE60"
+               BuildableName = "CPKCLTests.xctest"
+               BlueprintName = "CPKCLTests"
+               ReferencedContainer = "container:Extensions/CoreLocation/CPKCoreLocation.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference

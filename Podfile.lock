@@ -16,6 +16,8 @@ PODS:
   - PromiseKit/Alamofire (6.2.5):
     - Alamofire (~> 4.0)
     - PromiseKit/CorePromise
+  - PromiseKit/CoreLocation (6.2.5):
+    - PromiseKit/CorePromise
   - PromiseKit/CorePromise (6.2.5)
   - PromiseKit/Foundation (6.2.5):
     - PromiseKit/CorePromise
@@ -24,6 +26,7 @@ DEPENDENCIES:
   - Alamofire (~> 4.0)
   - OHHTTPStubs/Swift
   - PromiseKit/Alamofire (~> 6.0)
+  - PromiseKit/CoreLocation (~> 6.0)
   - PromiseKit/CorePromise (~> 6.0)
   - PromiseKit/Foundation (~> 6.0)
 
