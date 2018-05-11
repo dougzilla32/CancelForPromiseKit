@@ -41,7 +41,7 @@ public extension Promise {
              task = DispatchWorkItem() {
                 seal.fulfill(value)
             }
-            DispatchQueue.global(qos: .default).asyncAfter(deadline: DispatchTime.now() /* + 0.01 */, execute: task)
+            DispatchQueue.global(qos: .default).asyncAfter(deadline: DispatchTime.now() + 0.01, execute: task)
         }
 
         let cancelContext = cancel ?? CancelContext()
