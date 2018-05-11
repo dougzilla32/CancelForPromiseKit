@@ -98,11 +98,9 @@ class CancelTests: XCTestCase {
         let exComplete = expectation(description: "after completes")
         
         let promise = Promise.valueCC("hi", cancel: context)
-        promise.thenCC { value in
-            { () -> Promise<String> in 
-                XCTFail("value not cancelled")
-                return Promise.valueCC("bye")
-            }()
+        promise.thenCC { (value: String) -> Promise<String> in
+            XCTFail("value not cancelled")
+            return Promise.valueCC("bye")
         }.doneCC { value in
             XCTFail("value not cancelled")
         }.catchCC(policy: .allErrors) { error in
@@ -113,12 +111,8 @@ class CancelTests: XCTestCase {
         wait(for: [exComplete], timeout: 1)
     }
     
-    /* Always fails because 'thenCC' cannot screen for cancellations (due to inaccessible 'box')
     func testCancelForPromise_Then() {
-        let failAndValue: (()) -> Promise<String> = {
-            XCTFail("then not cancelled")
-            return Promise.value("x")
-        }
+        // TODO: Swift can’t infer the return type of closures with 2+ lines. You’ll have to specify the type of promise you’re returning from the closure.
         let exComplete = expectation(description: "after completes")
         let context = CancelContext()
         
@@ -126,8 +120,11 @@ class CancelTests: XCTestCase {
             usleep(100000)
             seal.fulfill()
         }
-        promise.thenCC { value in
-            return failAndValue()
+        promise.thenCC { () throws -> Promise<String>  in
+            // Always fails because 'thenCC' cannot screen for cancellations (due to inaccessible 'box')
+            // REMIND -- uncomment me when 'thenCC' is fixed:
+            // XCTFail("then not cancelled")
+            return Promise.value("x")
         }.doneCC { value in
             XCTFail("done not cancelled")
         }.catchCC(policy: .allErrors) { error in
@@ -138,7 +135,6 @@ class CancelTests: XCTestCase {
         
         wait(for: [exComplete], timeout: 1)
     }
-     */
 
     func testCancelForPromise_ThenDone() {
         let exComplete = expectation(description: "done is cancelled")
@@ -195,8 +191,3 @@ class CancelTests: XCTestCase {
     }
     
 }
-
-public enum CancelTestError: Error {
-    case yow
-}
-
