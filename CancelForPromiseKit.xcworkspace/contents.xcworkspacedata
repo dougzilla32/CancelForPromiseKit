@@ -8,7 +8,7 @@
       location = "group:Extensions/Alamofire/CPKAlamofire.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:/Users/doug/Desktop/Dropbox/Xcode Projects/Libraries/CancelForPromiseKit/Extensions/CoreLocation/CPKCoreLocation.xcodeproj">
+      location = "group:Extensions/CoreLocation/CPKCoreLocation.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Extensions/Foundation/CPKFoundation.xcodeproj">
