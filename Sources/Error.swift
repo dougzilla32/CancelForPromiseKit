@@ -1,5 +1,5 @@
 //
-//  PromiseCancelledError.swift
+//  Error.swift
 //  CancellablePromiseKit
 //
 //  Created by Doug on 4/28/18.
@@ -13,7 +13,7 @@ public class PromiseCancelledError: CancellableError, CustomStringConvertible {
     public private(set) var line: UInt
     
     init(file: String, function: String, line: UInt) {
-        self.file = URL(fileURLWithPath: file).deletingPathExtension().lastPathComponent
+        self.file = URL(fileURLWithPath: file).lastPathComponent
         self.function = function
         self.line = line
     }
@@ -25,6 +25,6 @@ public class PromiseCancelledError: CancellableError, CustomStringConvertible {
     }
     
     public var description: String {
-        return "PromiseCancelledError at \(file).\(function):\(line)"
+        return "PromiseCancelledError at \(file) \(function):\(line)"
     }
 }

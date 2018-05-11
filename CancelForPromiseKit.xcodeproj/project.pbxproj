@@ -9,11 +9,15 @@
 /* Begin PBXBuildFile section */
 		635D64301D596E8500BC0AF5 /* CancelForPromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B0AC571D595E1B00FA21D9 /* CancelForPromiseKit.framework */; };
 		910B77732097DCB500A893F8 /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B77702097DCB500A893F8 /* after.swift */; };
-		910B77752097DCB500A893F8 /* PromiseExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B77722097DCB500A893F8 /* PromiseExtensions.swift */; };
-		910B77772097DD7500A893F8 /* PromiseCancelledError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B77762097DD7500A893F8 /* PromiseCancelledError.swift */; };
+		910B77752097DCB500A893F8 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B77722097DCB500A893F8 /* Promise.swift */; };
+		910B77772097DD7500A893F8 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B77762097DD7500A893F8 /* Error.swift */; };
 		912F4C1E209BED250037EF4C /* CancellableTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912F4C1D209BED250037EF4C /* CancellableTask.swift */; };
 		91436DB420A0EB19004E99DB /* Pods_CancelForPromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E9F9F85F4A972A4688E45CD /* Pods_CancelForPromiseKit.framework */; };
 		9184A38A209D7AE400B45601 /* CancelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B778A2097E0F300A893F8 /* CancelTests.swift */; };
+		918734D120A565FC00F8D9D3 /* Catchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918734D020A565FC00F8D9D3 /* Catchable.swift */; };
+		918734D320A576A000F8D9D3 /* firstly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918734D220A576A000F8D9D3 /* firstly.swift */; };
+		918734D520A576EF00F8D9D3 /* Guarantee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918734D420A576EF00F8D9D3 /* Guarantee.swift */; };
+		918734D720A5772A00F8D9D3 /* Thenable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918734D620A5772A00F8D9D3 /* Thenable.swift */; };
 		9187EA7B209C24DF00EA1DDF /* CancelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9187EA7A209C24DF00EA1DDF /* CancelContext.swift */; };
 /* End PBXBuildFile section */
 
@@ -38,11 +42,15 @@
 		63B0AC6C1D595E6300FA21D9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sources/Info.plist; sourceTree = "<group>"; };
 		900373EB57217183E1F1FE4E /* Pods-CancelTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CancelTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CancelTests/Pods-CancelTests.release.xcconfig"; sourceTree = "<group>"; };
 		910B77702097DCB500A893F8 /* after.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = after.swift; path = Sources/after.swift; sourceTree = "<group>"; };
-		910B77722097DCB500A893F8 /* PromiseExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PromiseExtensions.swift; path = Sources/PromiseExtensions.swift; sourceTree = "<group>"; };
-		910B77762097DD7500A893F8 /* PromiseCancelledError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PromiseCancelledError.swift; path = Sources/PromiseCancelledError.swift; sourceTree = "<group>"; };
+		910B77722097DCB500A893F8 /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = Sources/Promise.swift; sourceTree = "<group>"; };
+		910B77762097DD7500A893F8 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Error.swift; path = Sources/Error.swift; sourceTree = "<group>"; };
 		910B778A2097E0F300A893F8 /* CancelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CancelTests.swift; sourceTree = "<group>"; };
 		912F4C1D209BED250037EF4C /* CancellableTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CancellableTask.swift; path = Sources/CancellableTask.swift; sourceTree = "<group>"; };
 		91436DBD20A0EC3B004E99DB /* CancelForPromiseKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = CancelForPromiseKit.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		918734D020A565FC00F8D9D3 /* Catchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Catchable.swift; path = Sources/Catchable.swift; sourceTree = "<group>"; };
+		918734D220A576A000F8D9D3 /* firstly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = firstly.swift; path = Sources/firstly.swift; sourceTree = "<group>"; };
+		918734D420A576EF00F8D9D3 /* Guarantee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Guarantee.swift; path = Sources/Guarantee.swift; sourceTree = "<group>"; };
+		918734D620A5772A00F8D9D3 /* Thenable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Thenable.swift; path = Sources/Thenable.swift; sourceTree = "<group>"; };
 		9187EA7A209C24DF00EA1DDF /* CancelContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CancelContext.swift; path = Sources/CancelContext.swift; sourceTree = "<group>"; };
 		9E83A83206BCE319ACDC1739 /* Pods-CancelForPromiseKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CancelForPromiseKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CancelForPromiseKit/Pods-CancelForPromiseKit.debug.xcconfig"; sourceTree = "<group>"; };
 		C03256B5AA0A453FECEB8523 /* Pods-CancellablePromiseKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CancellablePromiseKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-CancellablePromiseKit/Pods-CancellablePromiseKit.release.xcconfig"; sourceTree = "<group>"; };
@@ -126,10 +134,14 @@
 			isa = PBXGroup;
 			children = (
 				910B77702097DCB500A893F8 /* after.swift */,
-				910B77722097DCB500A893F8 /* PromiseExtensions.swift */,
+				918734D020A565FC00F8D9D3 /* Catchable.swift */,
 				912F4C1D209BED250037EF4C /* CancellableTask.swift */,
 				9187EA7A209C24DF00EA1DDF /* CancelContext.swift */,
-				910B77762097DD7500A893F8 /* PromiseCancelledError.swift */,
+				910B77762097DD7500A893F8 /* Error.swift */,
+				918734D220A576A000F8D9D3 /* firstly.swift */,
+				918734D420A576EF00F8D9D3 /* Guarantee.swift */,
+				910B77722097DCB500A893F8 /* Promise.swift */,
+				918734D620A5772A00F8D9D3 /* Thenable.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -274,11 +286,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				910B77752097DCB500A893F8 /* PromiseExtensions.swift in Sources */,
+				918734D720A5772A00F8D9D3 /* Thenable.swift in Sources */,
+				910B77752097DCB500A893F8 /* Promise.swift in Sources */,
 				9187EA7B209C24DF00EA1DDF /* CancelContext.swift in Sources */,
 				910B77732097DCB500A893F8 /* after.swift in Sources */,
-				910B77772097DD7500A893F8 /* PromiseCancelledError.swift in Sources */,
+				910B77772097DD7500A893F8 /* Error.swift in Sources */,
 				912F4C1E209BED250037EF4C /* CancellableTask.swift in Sources */,
+				918734D120A565FC00F8D9D3 /* Catchable.swift in Sources */,
+				918734D520A576EF00F8D9D3 /* Guarantee.swift in Sources */,
+				918734D320A576A000F8D9D3 /* firstly.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

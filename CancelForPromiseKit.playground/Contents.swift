@@ -2,27 +2,26 @@ import PlaygroundSupport
 
 // Is this erroring? If so open the `.xcodeproj` and build the
 // framework for a macOS target (usually labeled: “My Mac”).
-// Then select `PromiseKit.playground` from inside Xcode.
+// Then select `CancelForPromiseKit.playground` from inside Xcode.
 import PromiseKit
-
 import CancelForPromiseKit
 
 func promise3(cancel: CancelContext) -> Promise<Int> {
-    return after(.seconds(1), cancel: cancel).map{ 3 }
+    return afterCC(.seconds(1), cancel: cancel).map{ 3 }
 }
 
 let context = CancelContext()
-firstly {
-    Promise.value(1, cancel: context)
+firstlyCC(cancel: context) {
+    Promise.valueCC(1)
 }.mapCC { _ in
     2
 }.thenCC { _ in
     promise3(cancel: context)
 }.doneCC {
     print($0)  // => 3
-}.ensure {
+}.ensureCC {
     PlaygroundPage.current.finishExecution()
-}.catch(policy: .allErrors) { error in
+}.catchCC(policy: .allErrors) { error in
     // only happens for errors
     print(error)
 }
