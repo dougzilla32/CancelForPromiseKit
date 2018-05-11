@@ -28,7 +28,13 @@ public extension Thenable {
     func thenCC<U: Thenable>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) throws -> U) -> Promise<U.T> {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = "Promise.thenCC: cancel chain broken at \(fileBasename) \(function):\(line)"
+            let message = """
+            Promise.thenCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'thenCC' if the calling promise does not have one, for example:
+                promiseWithoutContext.thenCC(cancel: context) { value in
+                    // body
+                }
+            
+            """
             assert(false, message, file: file, line: line)
             NSLog("*** WARNING *** \(message)")
         }
@@ -73,7 +79,13 @@ public extension Thenable {
     func mapCC<U>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping(T) throws -> U) -> Promise<U> {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = "Promise.mapCC: cancel chain broken at \(fileBasename) \(function):\(line)"
+            let message = """
+            Promise.mapCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'mapCC' if the calling promise does not have one, for example:
+                promiseWithoutContext.mapCC(cancel: context) { value in
+                    // body
+                }
+            
+            """
             assert(false, message, file: file, line: line)
             NSLog("*** WARNING *** \(message)")
         }
@@ -105,7 +117,13 @@ public extension Thenable {
     func compactMapCC<U>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping(T) throws -> U?) -> Promise<U> {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = "Promise.compactMapCC: cancel chain broken at \(fileBasename) \(function):\(line)"
+            let message = """
+            Promise.compactMapCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'compactMapCC' if the calling promise does not have one, for example:
+                promiseWithoutContext.compactMapCC(cancel: context) { value in
+                    // body
+                }
+            
+            """
             assert(false, message, file: file, line: line)
             NSLog("*** WARNING *** \(message)")
         }
@@ -141,7 +159,13 @@ public extension Thenable {
     func doneCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) throws -> Void) -> Promise<Void> {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = "Promise.doneCC: cancel chain broken at \(fileBasename) \(function):\(line)"
+            let message = """
+            Promise.doneCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'doneCC' if the calling promise does not have one, for example:
+                promiseWithoutContext.doneCC(cancel: context) {
+                    // body
+                }
+            
+            """
             assert(false, message, file: file, line: line)
             NSLog("*** WARNING *** \(message)")
         }
@@ -176,7 +200,13 @@ public extension Thenable {
     func getCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (T) throws -> Void) -> Promise<T> {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = "Promise.getCC: cancel chain broken at \(file) \(function):\(line)"
+            let message = """
+            Promise.getCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'getCC' if the calling promise does not have one, for example:
+                promiseWithoutContext.getCC(cancel: context) { value in
+                    // body
+                }
+            
+            """
             assert(false, message, file: file, line: line)
             NSLog("*** WARNING *** \(message)")
         }

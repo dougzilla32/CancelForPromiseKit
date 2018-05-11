@@ -34,7 +34,13 @@ public extension Guarantee {
     func doneCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Void) -> Promise<Void> {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = "Guarantee.doneCC: cancel chain broken at \(fileBasename) \(function):\(line)"
+            let message = """
+            Guarantee.doneCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'doneCC' if the calling guarantee does not have one, for example:
+                guaranteeWithoutContext.doneCC(cancel: context) {
+                    // body
+                }
+            
+            """
             assert(false, message, file: file, line: line)
             NSLog("*** WARNING *** \(message)")
         }
@@ -64,7 +70,13 @@ public extension Guarantee {
     func mapCC<U>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> U) -> Promise<U> {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = "Guarantee.mapCC: cancel chain broken at \(fileBasename) \(function):\(line)"
+            let message = """
+            Guarantee.mapCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'mapCC' if the calling guarantee does not have one, for example:
+                guaranteeWithoutContext.mapCC(cancel: context) { value in
+                    // body
+                }
+            
+            """
             assert(false, message, file: file, line: line)
             NSLog("*** WARNING *** \(message)")
         }
@@ -92,7 +104,13 @@ public extension Guarantee {
     func thenCC<U>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> /* Promise<U> */ {
         if self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = "Guarantee.thenCC: cancel chain broken at \(fileBasename) \(function):\(line)"
+            let message = """
+            Guarantee.thenCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'thenCC' if the calling guarantee does not have one, for example:
+                guaranteeWithoutContext.thenCC(cancel: context) { value in
+                    // body
+                }
+            
+            """
             assert(false, message, file: file, line: line)
             NSLog("*** WARNING *** \(message)")
         }

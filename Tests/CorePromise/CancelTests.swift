@@ -80,7 +80,7 @@ class CancelTests: XCTestCase {
         wait(for: [exComplete], timeout: 1)
     }
     
-    func testValueDoneCC() {
+    func testValueCCDoneCC() {
         let context = CancelContext()
         let exComplete = expectation(description: "after completes")
         Promise.valueCC("hi", cancel: context).doneCC() { value in
@@ -93,12 +93,11 @@ class CancelTests: XCTestCase {
         wait(for: [exComplete], timeout: 1)
     }
     
-    func testValueThenCC() {
+    func testValueCCThenCC() {
         let context = CancelContext()
         let exComplete = expectation(description: "after completes")
         
-        let promise = Promise.valueCC("hi", cancel: context)
-        promise.thenCC { (value: String) -> Promise<String> in
+        Promise.valueCC("hi", cancel: context).thenCC { (value: String) -> Promise<String> in
             XCTFail("value not cancelled")
             return Promise.valueCC("bye")
         }.doneCC { value in
@@ -111,8 +110,37 @@ class CancelTests: XCTestCase {
         wait(for: [exComplete], timeout: 1)
     }
     
-    func testCancelForPromise_Then() {
-        // TODO: Swift can’t infer the return type of closures with 2+ lines. You’ll have to specify the type of promise you’re returning from the closure.
+    func testValueDoneCC() {
+        let context = CancelContext()
+        let exComplete = expectation(description: "after completes")
+        
+        Promise.value("hi").doneCC(cancel: context) { value in
+            XCTFail("value not cancelled")
+        }.catchCC(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }
+        context.cancel()
+        
+        wait(for: [exComplete], timeout: 1)
+    }
+    
+    func testFirstlyValueDoneCC() {
+        let context = CancelContext()
+        let exComplete = expectation(description: "after completes")
+        
+        firstly {
+            Promise.value("hi")
+        }.doneCC(cancel: context) { value in
+            XCTFail("value not cancelled")
+        }.catchCC(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }
+        context.cancel()
+        
+        wait(for: [exComplete], timeout: 1)
+    }
+    
+   func testCancelForPromise_Then() {
         let exComplete = expectation(description: "after completes")
         let context = CancelContext()
         

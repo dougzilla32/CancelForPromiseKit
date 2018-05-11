@@ -12,7 +12,13 @@ public func firstlyCC<U: Thenable>(cancel: CancelContext? = nil, file: StaticStr
         let rv = try body()
         if cancel != nil && rv.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = "firstlyCC 'body' returned a value that has no cancel context at \(fileBasename) \(function):\(line)"
+            let message = """
+            firstlyCC: 'body' returned a value that has no cancel context at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'firstlyCC' if the returned promise does not have one, for example:
+                firstlyCC(cancel: context) {
+                    return MyPromiseWithoutContext()
+                }
+            
+            """
             assert(false, message, file: file, line: line)
             NSLog("*** WARNING *** \(message)")
         }
@@ -31,7 +37,13 @@ public func firstlyCC<T>(cancel: CancelContext? = nil, file: StaticString = #fil
     let rv = body()
     if cancel != nil && rv.cancelContext == nil {
         let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-        let message = "firstlyCC 'body' returned a value that has no cancel context at \(fileBasename) \(function):\(line)"
+        let message = """
+        firstlyCC: 'body' returned a value that has no cancel context at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'firstlyCC' if the returned promise does not have one, for example:
+            firstlyCC(cancel: context) {
+                return MyPromiseWithoutContext()
+            }
+        
+        """
         assert(false, message, file: file, line: line)
         NSLog("*** WARNING *** \(message)")
     }
