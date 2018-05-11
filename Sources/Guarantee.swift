@@ -27,7 +27,10 @@ public extension Guarantee {
         }
     }
     
-    
+    public func cancel() {
+        cancelContext?.cancel()
+    }
+
     func doneCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Void) -> Promise<Void> {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
