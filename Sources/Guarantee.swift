@@ -36,7 +36,7 @@ public extension Guarantee {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
             let message = """
-            Guarantee.doneCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'doneCC' if the calling guarantee does not have one, for example:
+            Guarantee.doneCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'doneCC' if the calling guarantee does not have one, for example:
                 guaranteeWithoutContext.doneCC(cancel: context) {
                     // body
                 }
@@ -72,7 +72,7 @@ public extension Guarantee {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
             let message = """
-            Guarantee.mapCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'mapCC' if the calling guarantee does not have one, for example:
+            Guarantee.mapCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'mapCC' if the calling guarantee does not have one, for example:
                 guaranteeWithoutContext.mapCC(cancel: context) { value in
                     // body
                 }
@@ -107,7 +107,7 @@ public extension Guarantee {
         if self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
             let message = """
-            Guarantee.thenCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'thenCC' if the calling guarantee does not have one, for example:
+            Guarantee.thenCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'thenCC' if the calling guarantee does not have one, for example:
                 guaranteeWithoutContext.thenCC(cancel: context) { value in
                     // body
                 }

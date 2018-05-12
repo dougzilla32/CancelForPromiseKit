@@ -29,7 +29,7 @@ public extension Thenable {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
             let message = """
-            Promise.thenCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'thenCC' if the calling promise does not have one, for example:
+            Promise.thenCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'thenCC' if the calling promise does not have one, for example:
                 promiseWithoutContext.thenCC(cancel: context) { value in
                     // body
                 }
@@ -86,7 +86,7 @@ public extension Thenable {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
             let message = """
-            Promise.mapCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'mapCC' if the calling promise does not have one, for example:
+            Promise.mapCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'mapCC' if the calling promise does not have one, for example:
                 promiseWithoutContext.mapCC(cancel: context) { value in
                     // body
                 }
@@ -124,7 +124,7 @@ public extension Thenable {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
             let message = """
-            Promise.compactMapCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'compactMapCC' if the calling promise does not have one, for example:
+            Promise.compactMapCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'compactMapCC' if the calling promise does not have one, for example:
                 promiseWithoutContext.compactMapCC(cancel: context) { value in
                     // body
                 }
@@ -166,7 +166,7 @@ public extension Thenable {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
             let message = """
-            Promise.doneCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'doneCC' if the calling promise does not have one, for example:
+            Promise.doneCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'doneCC' if the calling promise does not have one, for example:
                 promiseWithoutContext.doneCC(cancel: context) {
                     // body
                 }
@@ -207,7 +207,7 @@ public extension Thenable {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
             let message = """
-            Promise.getCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specifiy a cancel context in 'getCC' if the calling promise does not have one, for example:
+            Promise.getCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'getCC' if the calling promise does not have one, for example:
                 promiseWithoutContext.getCC(cancel: context) { value in
                     // body
                 }

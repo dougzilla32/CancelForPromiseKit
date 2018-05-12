@@ -140,6 +140,54 @@ class CancelTests: XCTestCase {
         wait(for: [exComplete], timeout: 1)
     }
     
+    func testFirstlyCCValueDoneCC() {
+        let context = CancelContext()
+        let exComplete = expectation(description: "after completes")
+        
+        firstlyCC(cancel: context) {
+            Promise.value("hi")
+        }.doneCC { value in
+            XCTFail("value not cancelled")
+        }.catchCC(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }
+        context.cancel()
+        
+        wait(for: [exComplete], timeout: 1)
+    }
+    
+    func testFirstlyValueDifferentContextDone() {
+        let context = CancelContext()
+        let exComplete = expectation(description: "after completes")
+        
+        firstlyCC {
+            Promise.valueCC("hi", cancel: context)
+        }.doneCC { value in
+            XCTFail("value not cancelled")
+        }.catchCC(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }
+        context.cancel()
+        
+        wait(for: [exComplete], timeout: 1)
+    }
+    
+    func testFirstlyValueDoneDifferentContext() {
+        let context = CancelContext()
+        let exComplete = expectation(description: "after completes")
+        
+        firstlyCC {
+            Promise.value("hi")
+        }.doneCC(cancel: context) { value in
+            XCTFail("value not cancelled")
+        }.catchCC(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }
+        context.cancel()
+        
+        wait(for: [exComplete], timeout: 1)
+    }
+    
    func testCancelForPromise_Then() {
         let exComplete = expectation(description: "after completes")
         let context = CancelContext()
