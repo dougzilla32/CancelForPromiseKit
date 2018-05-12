@@ -36,7 +36,7 @@ public extension Thenable {
             
             """
             assert(false, message, file: file, line: line)
-            NSLog("*** WARNING *** \(message)")
+            print("*** ERROR *** \(message)")
         }
 
         // Dangit, box is inaccessible so we just call vanilla 'then'
@@ -62,8 +62,14 @@ public extension Thenable {
                                 cancelContext.append(context: context)
                             }
                             
-                            // Dangit, box is inaccessible otherwise this works great
-                            // rv.pipe(to: rp.1.box.seal)
+                            rv.pipe { (value: Result<U.T>) -> Void in
+                                if let error = cancelContext.cancelledError {
+                                    rp.1.reject(error)
+                                } else {
+                                    // Dangit, box is inaccessible otherwise this works great
+                                    // rp.1.box.seal(value)
+                                }
+                            }
                         } catch {
                             rp.1.reject(error)
                         }
@@ -87,7 +93,7 @@ public extension Thenable {
             
             """
             assert(false, message, file: file, line: line)
-            NSLog("*** WARNING *** \(message)")
+            print("*** ERROR *** \(message)")
         }
 
         let rp: (Promise<U>, Resolver<U>) = Promise.pending()
@@ -125,7 +131,7 @@ public extension Thenable {
             
             """
             assert(false, message, file: file, line: line)
-            NSLog("*** WARNING *** \(message)")
+            print("*** ERROR *** \(message)")
         }
 
         let rp: (Promise<U>, Resolver<U>) = Promise.pending()
@@ -167,7 +173,7 @@ public extension Thenable {
             
             """
             assert(false, message, file: file, line: line)
-            NSLog("*** WARNING *** \(message)")
+            print("*** ERROR *** \(message)")
         }
 
         let rp: (Promise<Void>, Resolver<Void>) = Promise.pending()
@@ -208,7 +214,7 @@ public extension Thenable {
             
             """
             assert(false, message, file: file, line: line)
-            NSLog("*** WARNING *** \(message)")
+            print("*** ERROR *** \(message)")
         }
 
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()

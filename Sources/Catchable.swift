@@ -89,8 +89,14 @@ public extension CatchMixin {
                                     if let context = rv.cancelContext {
                                         cancelContext.append(context: context)
                                     }
-                                    // Dangit, box is inaccessible otherwise this works great
-                                    // rv.pipe(to: rp.0.box.seal)
+                                    rv.pipe { (value: Result<U.T>) -> Void in
+                                        if let error = cancelContext.cancelledError {
+                                            rp.1.reject(error)
+                                        } else {
+                                            // Dangit, box is inaccessible otherwise this works great
+                                            // rp.1.box.seal(value)
+                                        }
+                                    }
                                 } catch {
                                     rp.1.reject(error)
                                 }
@@ -132,8 +138,20 @@ public extension CatchMixin {
                             if let context = rv.cancelContext {
                                 cancelContext.append(context: context)
                             }
-                            // Dangit, box is inaccessible otherwise this works great
-                            // rv.pipe(to: rp.1.box.seal)
+                            rv.pipe { (value: Result<T>) -> Void in
+                                if let error = cancelContext.cancelledError {
+                                    rp.1.reject(error)
+                                } else {
+                                    switch value {
+                                    case .fulfilled(let value):
+                                        // Dangit, box is inaccessible otherwise this works great
+                                        // rp.1.box.seal(value)
+                                        let _ = value
+                                    case .rejected(let error):
+                                        rp.1.reject(error)
+                                    }
+                                }
+                            }
                         }
                     }
                 }

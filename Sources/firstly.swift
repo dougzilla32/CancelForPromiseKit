@@ -20,7 +20,7 @@ public func firstlyCC<U: Thenable>(cancel: CancelContext? = nil, file: StaticStr
             
             """
             assert(false, message, file: file, line: line)
-            NSLog("*** WARNING *** \(message)")
+            print("*** ERROR *** \(message)")
         }
         if let c = cancel, let rvc = rv.cancelContext {
             c.append(context: rvc)
@@ -45,7 +45,7 @@ public func firstlyCC<T>(cancel: CancelContext? = nil, file: StaticString = #fil
         
         """
         assert(false, message, file: file, line: line)
-        NSLog("*** WARNING *** \(message)")
+        print("*** ERROR *** \(message)")
     }
     if let c = cancel, let rvc = rv.cancelContext {
         c.append(context: rvc)

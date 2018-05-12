@@ -31,6 +31,7 @@ public extension Guarantee {
         cancelContext?.cancel()
     }
 
+    @discardableResult
     func doneCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Void) -> Promise<Void> {
         if cancel == nil && self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
@@ -42,7 +43,7 @@ public extension Guarantee {
             
             """
             assert(false, message, file: file, line: line)
-            NSLog("*** WARNING *** \(message)")
+            print("*** ERROR *** \(message)")
         }
 
         let rp: (Promise<Void>, Resolver<Void>) = Promise.pending()
@@ -78,7 +79,7 @@ public extension Guarantee {
             
             """
             assert(false, message, file: file, line: line)
-            NSLog("*** WARNING *** \(message)")
+            print("*** ERROR *** \(message)")
         }
 
         let rp: (Promise<U>, Resolver<U>) = Promise.pending()
@@ -101,6 +102,7 @@ public extension Guarantee {
         return rp.0
     }
     
+    @discardableResult
     func thenCC<U>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> /* Promise<U> */ {
         if self.cancelContext == nil {
             let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
@@ -112,7 +114,7 @@ public extension Guarantee {
             
             """
             assert(false, message, file: file, line: line)
-            NSLog("*** WARNING *** \(message)")
+            print("*** ERROR *** \(message)")
         }
 
         // Dangit, box is inaccessible so we just call vanilla 'then'
@@ -135,8 +137,20 @@ public extension Guarantee {
                         if let context = rv.cancelContext {
                             cancelContext.append(context: context)
                         }
-                        // Dangit, box is inaccessible otherwise this works great
-                        // rv.pipe(to: rp.1.box.seal)
+                        rv.pipe { (value: Result<U>) -> Void in
+                            if let error = cancelContext.cancelledError {
+                                rp.1.reject(error)
+                            } else {
+                                switch value {
+                                case .fulfilled(let value):
+                                    // Dangit, box is inaccessible otherwise this works great
+                                    // rp.1.box.seal(value)
+                                    let _ = value
+                                case .rejected(let error):
+                                    rp.1.reject(error)
+                                }
+                            }
+                        }
                     }
                 }
             case .rejected(let error):
