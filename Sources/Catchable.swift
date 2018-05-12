@@ -10,158 +10,74 @@ import PromiseKit
 
 public extension CatchMixin {
     @discardableResult
-    func catchCC(on: DispatchQueue? = conf.Q.return, policy: CatchPolicy = conf.catchPolicy, cancel: CancelContext? = nil, _ body: @escaping(Error) -> Void) -> CPKFinalizer {
-        let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        let finalizer = CPKFinalizer(cancel: cancelContext)
-        pipe {
-            if let cancelError = cancelContext.cancelledError {
-                if policy == .allErrors || !cancelError.isCancelled {
-                    body(cancelError)
-                    finalizer.pending.resolve(())
-                }
-            } else {
-                switch $0 {
-                case .rejected(let error):
-                    guard policy == .allErrors || !error.isCancelled else {
-                        fallthrough
-                    }
-                    on.async {
-                        if let cancelError = cancelContext.cancelledError {
-                            body(cancelError)
-                            finalizer.pending.resolve(())
-                        } else {
-                            body(error)
-                            finalizer.pending.resolve(())
-                        }
-                    }
-                case .fulfilled:
-                    finalizer.pending.resolve(())
-                }
-            }
+    func catchCC(on: DispatchQueue? = conf.Q.return, policy: CatchPolicy = conf.catchPolicy, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) -> Void) -> PMKFinalizer {
+        if cancel == nil && self.cancelContext == nil {
+            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "catchCC", file: file, function: function, line: line)
         }
-        return finalizer
-    }
-}
-
-public class CPKFinalizer {
-    let pending = Guarantee<Void>.pending()
-    let cancel: CancelContext
-    
-    init(cancel: CancelContext) {
-        self.cancel = cancel
-    }
-    
-    /// `finally` is the same as `ensure`, but it is not chainable
-    public func finally(_ body: @escaping () -> Void) {
-        pending.guarantee.done(body)
-        cancel.done()
+        
+        let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
+        let cancelBody = { (error: Error) -> Void in
+            body(error)
+            cancelContext.done()
+        }
+        
+        return self.catch(on: on, policy: policy, cancelBody)
     }
 }
 
 public extension CatchMixin {
-    func recoverCC<U: Thenable>(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, cancel: CancelContext? = nil, _ body: @escaping(Error) throws -> U) -> Promise<T> where U.T == T {
-
-        // Dangit, box is inaccessible so we just call vanilla 'then'
-        let promise = self.recover(on: on, policy: policy, body)
-        promise.cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        // Use 'true || true' to supress 'code is never executed' compiler warning
-        if true || true { return promise }
+    func recoverCC<U: Thenable>(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) throws -> U) -> Promise<T> where U.T == T {
+        if cancel == nil && self.cancelContext == nil {
+            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "recoverCC", file: file, function: function, line: line)
+        }
         
-        let rp: (Promise<U.T>, Resolver<U.T>) = Promise.pending()
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        rp.0.cancelContext = cancelContext
-        pipe {
-            if let cancelError = cancelContext.cancelledError {
-                rp.1.reject(cancelError)
+        let cancelBody = { (error: Error) throws -> U in
+            if let error = cancelContext.cancelledError {
+                throw error
             } else {
-                switch $0 {
-                case .fulfilled(let value):
-                    rp.1.fulfill(value)
-                case .rejected(let error):
-                    if policy == .allErrors || !error.isCancelled {
-                        on.async {
-                            if let cancelError = cancelContext.cancelledError {
-                                rp.1.reject(cancelError)
-                            } else {
-                                do {
-                                    let rv = try body(error)
-                                    guard rv !== rp.0 else { throw PMKError.returnedSelf }
-                                    if let context = rv.cancelContext {
-                                        cancelContext.append(context: context)
-                                    }
-                                    rv.pipe { (value: Result<U.T>) -> Void in
-                                        if let error = cancelContext.cancelledError {
-                                            rp.1.reject(error)
-                                        } else {
-                                            // Dangit, box is inaccessible otherwise this works great
-                                            // rp.1.box.seal(value)
-                                        }
-                                    }
-                                } catch {
-                                    rp.1.reject(error)
-                                }
-                            }
-                        }
-                    } else {
-                        rp.1.reject(error)
-                    }
+                let rv = try body(error)
+                if let context = rv.cancelContext {
+                    cancelContext.append(context: context)
                 }
+                return rv
             }
         }
-        return rp.0
+        
+        let promise = self.recover(on: on, policy: policy, cancelBody)
+        promise.cancelContext = cancelContext
+        return promise
     }
     
     @discardableResult
-    func recoverCC(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, _ body: @escaping(Error) -> Guarantee<T>) -> Guarantee<T> {
-        // Dangit, box is inaccessible so we just call vanilla 'then'
-        let guarantee = self.recover(on: on, body)
-        guarantee.cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        // Use 'true || true' to supress 'code is never executed' compiler warning
-        if true || true { return guarantee }
+    func recoverCC(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) -> Guarantee<T>) -> Promise<T> {
+        if cancel == nil && self.cancelContext == nil {
+            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "recoverCC", file: file, function: function, line: line)
+        }
         
-        let rp: (Promise<T>, Resolver<T>) = Promise.pending()
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        rp.0.cancelContext = cancelContext
-        pipe { (value: Result<T>) in
-            if let cancelError = cancelContext.cancelledError {
-                rp.1.reject(cancelError)
+        let cancelBody = { (error: Error) throws -> Guarantee<T> in
+            if let error = cancelContext.cancelledError {
+                throw error
             } else {
-                switch value {
-                case .fulfilled(let value):
-                    rp.1.fulfill(value)
-                case .rejected(let error):
-                    on.async {
-                        if let cancelError = cancelContext.cancelledError {
-                            rp.1.reject(cancelError)
-                        } else {
-                            let rv = body(error)
-                            if let context = rv.cancelContext {
-                                cancelContext.append(context: context)
-                            }
-                            rv.pipe { (value: Result<T>) -> Void in
-                                if let error = cancelContext.cancelledError {
-                                    rp.1.reject(error)
-                                } else {
-                                    switch value {
-                                    case .fulfilled(let value):
-                                        // Dangit, box is inaccessible otherwise this works great
-                                        // rp.1.box.seal(value)
-                                        let _ = value
-                                    case .rejected(let error):
-                                        rp.1.reject(error)
-                                    }
-                                }
-                            }
-                        }
-                    }
+                let rv = body(error)
+                if let context = rv.cancelContext {
+                    cancelContext.append(context: context)
                 }
+                return rv
             }
         }
-        // return rp.0
-        return guarantee
+        
+        let promise = self.recover(on: on, cancelBody)
+        promise.cancelContext = cancelContext
+        return promise
     }
     
-    func ensureCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, _ body: @escaping () -> Void) -> Promise<T> {
+    func ensureCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping () -> Void) -> Promise<T> {
+        if cancel == nil && self.cancelContext == nil {
+            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "ensureCC", file: file, function: function, line: line)
+        }
+        
         let rp: (Promise<T>, Resolver<T>) = Promise.pending()
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
         rp.0.cancelContext = cancelContext
@@ -183,7 +99,11 @@ public extension CatchMixin {
         return rp.0
     }
     
-    func ensureThenCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, _ body: @escaping () -> Guarantee<Void>) -> Promise<T> {
+    func ensureThenCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping () -> Guarantee<Void>) -> Promise<T> {
+        if cancel == nil && self.cancelContext == nil {
+            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "ensureThenCC", file: file, function: function, line: line)
+        }
+        
         let rp: (Promise<T>, Resolver<T>) = Promise.pending()
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
         rp.0.cancelContext = cancelContext
@@ -219,72 +139,41 @@ public extension CatchMixin {
 
 public extension CatchMixin where T == Void {
     @discardableResult
-    func recoverCC(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, _ body: @escaping(Error) -> Void) -> Guarantee<Void> {
-        let rg: (Guarantee<Void>, (()) -> Void) = Guarantee.pending()
+    func recoverCC(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) -> Void) -> Promise<Void> {
+        if cancel == nil && self.cancelContext == nil {
+            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "recoverCC", file: file, function: function, line: line)
+        }
+        
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        rg.0.cancelContext = cancelContext
-        pipe {
-            if let cancelError = cancelContext.cancelledError {
-                body(cancelError)
-                rg.1(())
+        let cancelBody = { (error: Error) throws -> Void in
+            if let error = cancelContext.cancelledError {
+                throw error
             } else {
-                switch $0 {
-                case .fulfilled:
-                    rg.1(())
-                case .rejected(let error):
-                    on.async {
-                        if let cancelError = cancelContext.cancelledError {
-                            body(cancelError)
-                            rg.1(())
-                       } else {
-                            body(error)
-                            rg.1(())
-                        }
-                    }
-                }
+                body(error)
             }
         }
-        return rg.0
+        
+        let promise = self.recover(on: on, cancelBody)
+        promise.cancelContext = cancelContext
+        return promise
     }
     
-    func recoverCC(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, cancel: CancelContext? = nil, _ body: @escaping(Error) throws -> Void) -> Promise<Void> {
-        let rp: (Promise<Void>, Resolver<Void>) = Promise.pending()
+    func recoverCC(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) throws -> Void) -> Promise<Void> {
+        if cancel == nil && self.cancelContext == nil {
+            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "recoverCC", file: file, function: function, line: line)
+        }
+        
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        rp.0.cancelContext = cancelContext
-        pipe {
-            if let cancelError = cancelContext.cancelledError {
-                do {
-                    rp.1.fulfill(try body(cancelError))
-                } catch {
-                    rp.1.reject(error)
-                }
+        let cancelBody = { (error: Error) throws -> Void in
+            if let error = cancelContext.cancelledError {
+                throw error
             } else {
-                switch $0 {
-                case .fulfilled:
-                    rp.1.fulfill(())
-                case .rejected(let error):
-                    if policy == .allErrors || !error.isCancelled {
-                        on.async {
-                            if let cancelError = cancelContext.cancelledError {
-                                do {
-                                    rp.1.fulfill(try body(cancelError))
-                                } catch {
-                                    rp.1.reject(error)
-                                }
-                            } else {
-                                do {
-                                    rp.1.fulfill(try body(error))
-                                } catch {
-                                    rp.1.reject(error)
-                                }
-                            }
-                        }
-                    } else {
-                        rp.1.reject(error)
-                    }
-                }
+                try body(error)
             }
         }
-        return rp.0
+        
+        let promise = self.recover(on: on, policy: policy, cancelBody)
+        promise.cancelContext = cancelContext
+        return promise
     }
 }

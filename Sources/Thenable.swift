@@ -27,194 +27,90 @@ public extension Thenable {
 
     func thenCC<U: Thenable>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) throws -> U) -> Promise<U.T> {
         if cancel == nil && self.cancelContext == nil {
-            let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = """
-            Promise.thenCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'thenCC' if the calling promise does not have one, for example:
-                promiseWithoutContext.thenCC(cancel: context) { value in
-                    // body
-                }
-            
-            """
-            assert(false, message, file: file, line: line)
-            print("*** ERROR *** \(message)")
-        }
-
-        // Dangit, box is inaccessible so we just call vanilla 'then'
-        let promise = self.then(on: on, file: file, line: line, body)
-        promise.cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        // Use 'true || true' to supress 'code is never executed' compiler warning
-        if true || true { return promise }
-
-        let rp: (Promise<U.T>, Resolver<U.T>) = Promise.pending()
+            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "thenCC", file: file, function: function, line: line)
+       }
+        
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        rp.0.cancelContext = cancelContext
-        pipe {
-            switch $0 {
-            case .fulfilled(let value):
-                on.async {
-                    if let error = cancelContext.cancelledError {
-                        rp.1.reject(error)
-                    } else {
-                        do {
-                            let rv = try body(value)
-                            guard rv !== rp.0 else { throw PMKError.returnedSelf }
-                            if let context = rv.cancelContext {
-                                cancelContext.append(context: context)
-                            }
-                            
-                            rv.pipe { (value: Result<U.T>) -> Void in
-                                if let error = cancelContext.cancelledError {
-                                    rp.1.reject(error)
-                                } else {
-                                    // Dangit, box is inaccessible otherwise this works great
-                                    // rp.1.box.seal(value)
-                                }
-                            }
-                        } catch {
-                            rp.1.reject(error)
-                        }
-                    }
+        let cancelBody = { (value: T) throws -> U in
+            if let error = cancelContext.cancelledError {
+                throw error
+            } else {
+                let rv = try body(value)
+                if let context = rv.cancelContext {
+                    cancelContext.append(context: context)
                 }
-            case .rejected(let error):
-                rp.1.reject(error)
+                return rv
             }
         }
-        return rp.0
+
+        let promise = self.then(on: on, file: file, line: line, cancelBody)
+        promise.cancelContext = cancelContext
+        return promise
     }
     
     func mapCC<U>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping(T) throws -> U) -> Promise<U> {
         if cancel == nil && self.cancelContext == nil {
-            let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = """
-            Promise.mapCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'mapCC' if the calling promise does not have one, for example:
-                promiseWithoutContext.mapCC(cancel: context) { value in
-                    // body
-                }
-            
-            """
-            assert(false, message, file: file, line: line)
-            print("*** ERROR *** \(message)")
+            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "mapCC", file: file, function: function, line: line)
         }
-
-        let rp: (Promise<U>, Resolver<U>) = Promise.pending()
+        
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        rp.0.cancelContext = cancelContext
-        pipe {
-            switch $0 {
-            case .fulfilled(let value):
-                on.async {
-                    if let error = cancelContext.cancelledError {
-                        rp.1.reject(error)
-                    } else {
-                        do {
-                            rp.1.fulfill(try transform(value))
-                        } catch {
-                            rp.1.reject(error)
-                        }
-                    }
-                }
-            case .rejected(let error):
-                rp.1.reject(error)
+        let cancelTransform = { (value: T) throws -> U in
+            if let error = cancelContext.cancelledError {
+                throw error
+            } else {
+                return try transform(value)
             }
         }
-        return rp.0
+        
+        let promise = self.map(on: on, cancelTransform)
+        promise.cancelContext = cancelContext
+        return promise
     }
     
     func compactMapCC<U>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping(T) throws -> U?) -> Promise<U> {
         if cancel == nil && self.cancelContext == nil {
-            let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = """
-            Promise.compactMapCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'compactMapCC' if the calling promise does not have one, for example:
-                promiseWithoutContext.compactMapCC(cancel: context) { value in
-                    // body
-                }
-            
-            """
-            assert(false, message, file: file, line: line)
-            print("*** ERROR *** \(message)")
+            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "compactMapCC", file: file, function: function, line: line)
         }
-
-        let rp: (Promise<U>, Resolver<U>) = Promise.pending()
+        
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        rp.0.cancelContext = cancelContext
-        pipe {
-            switch $0 {
-            case .fulfilled(let value):
-                on.async {
-                    if let error = cancelContext.cancelledError {
-                        rp.1.reject(error)
-                    } else {
-                        do {
-                            if let rv = try transform(value) {
-                                rp.1.fulfill(rv)
-                            } else {
-                                throw PMKError.compactMap(value, U.self)
-                            }
-                        } catch {
-                            rp.1.reject(error)
-                        }
-                    }
-                }
-            case .rejected(let error):
-                rp.1.reject(error)
+        let cancelTransform = { (value: T) throws -> U? in
+            if let error = cancelContext.cancelledError {
+                throw error
+            } else {
+                return try transform(value)
             }
         }
-        return rp.0
+        
+        let promise = self.compactMap(on: on, cancelTransform)
+        promise.cancelContext = cancelContext
+        return promise
     }
     
     func doneCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) throws -> Void) -> Promise<Void> {
         if cancel == nil && self.cancelContext == nil {
-            let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = """
-            Promise.doneCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'doneCC' if the calling promise does not have one, for example:
-                promiseWithoutContext.doneCC(cancel: context) {
-                    // body
-                }
-            
-            """
-            assert(false, message, file: file, line: line)
-            print("*** ERROR *** \(message)")
+            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "doneCC", file: file, function: function, line: line)
         }
-
-        let rp: (Promise<Void>, Resolver<Void>) = Promise.pending()
+        
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        rp.0.cancelContext = cancelContext
-        pipe {
-            switch $0 {
-            case .fulfilled(let value):
-                on.async {
-                    if let error = cancelContext.cancelledError {
-                        rp.1.reject(error)
-                    } else {
-                        do {
-                            try body(value)
-                            rp.1.fulfill(())
-                        } catch {
-                            rp.1.reject(error)
-                        }
-                    }
-                    cancelContext.done()
-                }
-            case .rejected(let error):
-                rp.1.reject(error)
+        let cancelBody = { (value: T) throws -> Void in
+            defer {
                 cancelContext.done()
             }
+            if let error = cancelContext.cancelledError {
+                throw error
+            } else {
+                try body(value)
+            }
         }
-        return rp.0
+        
+        let promise = self.done(on: on, cancelBody)
+        promise.cancelContext = cancelContext
+        return promise
     }
     
     func getCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (T) throws -> Void) -> Promise<T> {
         if cancel == nil && self.cancelContext == nil {
-            let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = """
-            Promise.getCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'getCC' if the calling promise does not have one, for example:
-                promiseWithoutContext.getCC(cancel: context) { value in
-                    // body
-                }
-            
-            """
-            assert(false, message, file: file, line: line)
-            print("*** ERROR *** \(message)")
+            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "getCC", file: file, function: function, line: line)
         }
 
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()

@@ -30,28 +30,14 @@ public class CancelContext {
             self.cancelAttempted = true
         }
         
-        mutating func done() {
-            switch self.cancellable {
-            case .taskAndReject:
-                self.cancellable = Cancellable.taskAndReject(nil, nil)
-            case .cancelContext:
-                self.cancellable = Cancellable.cancelContext(nil)
-            }
-        }
-        
         var isCancelled: Bool {
             get {
                 switch self.cancellable {
                 case .taskAndReject(let task, _):
-                    if !(task?.isCancelled ?? false) {
-                        return false
-                    }
+                    return task?.isCancelled ?? false
                 case .cancelContext(let context):
-                    if !(context?.isCancelled ?? false) {
-                        return false
-                    }
+                    return context?.isCancelled ?? false
                 }
-                return true
             }
         }
     }
@@ -112,9 +98,7 @@ public class CancelContext {
     }
     
     public func done(file: String = #file, function: String = #function, line: UInt = #line) {
-        for var info in cancelItems {
-            info.done()
-        }
+        cancelItems.removeAll()
     }
 
     public var isCancelled: Bool {

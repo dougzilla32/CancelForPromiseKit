@@ -34,130 +34,66 @@ public extension Guarantee {
     @discardableResult
     func doneCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Void) -> Promise<Void> {
         if cancel == nil && self.cancelContext == nil {
-            let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = """
-            Guarantee.doneCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'doneCC' if the calling guarantee does not have one, for example:
-                guaranteeWithoutContext.doneCC(cancel: context) {
-                    // body
-                }
-            
-            """
-            assert(false, message, file: file, line: line)
-            print("*** ERROR *** \(message)")
+            ErrorConditions.cancelContextMissing(className: "Guarantee", functionName: "doneCC", file: file, function: function, line: line)
         }
-
-        let rp: (Promise<Void>, Resolver<Void>) = Promise.pending()
+        
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        rp.0.cancelContext = cancelContext
-        pipe { (value: Result<T>) in
-            on.async {
-                if let error = cancelContext.cancelledError {
-                    rp.1.reject(error)
-                } else {
-                    switch value {
-                    case .fulfilled(let value):
-                        body(value)
-                        rp.1.fulfill(())
-                    case .rejected(let error):
-                        rp.1.reject(error)
-                    }
-                }
+        let cancelBody = { (value: T) throws -> Void in
+            defer {
                 cancelContext.done()
             }
+            if let error = cancelContext.cancelledError {
+                throw error
+            } else {
+                body(value)
+            }
         }
-        return rp.0
+        
+        let promise = self.done(on: on, cancelBody)
+        promise.cancelContext = cancelContext
+        return promise
     }
     
     func mapCC<U>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> U) -> Promise<U> {
         if cancel == nil && self.cancelContext == nil {
-            let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = """
-            Guarantee.mapCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'mapCC' if the calling guarantee does not have one, for example:
-                guaranteeWithoutContext.mapCC(cancel: context) { value in
-                    // body
-                }
-            
-            """
-            assert(false, message, file: file, line: line)
-            print("*** ERROR *** \(message)")
+            ErrorConditions.cancelContextMissing(className: "Guarantee", functionName: "mapCC", file: file, function: function, line: line)
         }
-
-        let rp: (Promise<U>, Resolver<U>) = Promise.pending()
+        
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        rp.0.cancelContext = cancelContext
-        pipe { (value: Result<T>) in
-            on.async {
-                if let error = cancelContext.cancelledError {
-                    rp.1.reject(error)
-                } else {
-                    switch value {
-                    case .fulfilled(let value):
-                        rp.1.fulfill(body(value))
-                    case .rejected(let error):
-                        rp.1.reject(error)
-                    }
-                }
+        let cancelBody = { (value: T) throws -> U in
+            if let error = cancelContext.cancelledError {
+                throw error
+            } else {
+                return body(value)
             }
         }
-        return rp.0
+        
+        let promise = self.map(on: on, cancelBody)
+        promise.cancelContext = cancelContext
+        return promise
     }
     
     @discardableResult
-    func thenCC<U>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> /* Promise<U> */ {
-        if self.cancelContext == nil {
-            let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-            let message = """
-            Guarantee.thenCC: cancel context is missing in cancel chain at \(fileBasename) \(function):\(line). Specify a cancel context in 'thenCC' if the calling guarantee does not have one, for example:
-                guaranteeWithoutContext.thenCC(cancel: context) { value in
-                    // body
-                }
-            
-            """
-            assert(false, message, file: file, line: line)
-            print("*** ERROR *** \(message)")
+    func thenCC<U>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Guarantee<U>) -> Promise<U> {
+        if cancel == nil && self.cancelContext == nil {
+            ErrorConditions.cancelContextMissing(className: "Guarantee", functionName: "thenCC", file: file, function: function, line: line)
         }
-
-        // Dangit, box is inaccessible so we just call vanilla 'then'
-        let promise = then(on: on, body)
-        promise.cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        // Use 'true || true' to supress 'code is never executed' compiler warning
-        if true || true { return promise }
-
-        let rp: (Promise<U>, Resolver<U>) = Promise.pending()
+        
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        rp.0.cancelContext = cancelContext
-        pipe { (value: Result<T>) in
-            switch value {
-            case .fulfilled(let value):
-                on.async {
-                    if let error = cancelContext.cancelledError {
-                        rp.1.reject(error)
-                    } else {
-                        let rv = body(value)
-                        if let context = rv.cancelContext {
-                            cancelContext.append(context: context)
-                        }
-                        rv.pipe { (value: Result<U>) -> Void in
-                            if let error = cancelContext.cancelledError {
-                                rp.1.reject(error)
-                            } else {
-                                switch value {
-                                case .fulfilled(let value):
-                                    // Dangit, box is inaccessible otherwise this works great
-                                    // rp.1.box.seal(value)
-                                    let _ = value
-                                case .rejected(let error):
-                                    rp.1.reject(error)
-                                }
-                            }
-                        }
-                    }
+        let cancelBody = { (value: T) throws -> Guarantee<U> in
+            if let error = cancelContext.cancelledError {
+                throw error
+            } else {
+                let rv = body(value)
+                if let context = rv.cancelContext {
+                    cancelContext.append(context: context)
                 }
-            case .rejected(let error):
-                rp.1.reject(error)
+                return rv
             }
         }
-        // return rp.0
+        
+        let promise = self.then(on: on, file: file, line: line, cancelBody)
+        promise.cancelContext = cancelContext
         return promise
     }
 }

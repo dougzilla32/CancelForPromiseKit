@@ -197,9 +197,7 @@ class CancelTests: XCTestCase {
             seal.fulfill()
         }
         promise.thenCC { () throws -> Promise<String>  in
-            // Always fails because 'thenCC' cannot screen for cancellations (due to inaccessible 'box')
-            // REMIND -- uncomment me when 'thenCC' is fixed:
-            // XCTFail("then not cancelled")
+            XCTFail("then not cancelled")
             return Promise.value("x")
         }.doneCC { value in
             XCTFail("done not cancelled")
