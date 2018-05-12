@@ -58,7 +58,11 @@ public class CancelContext {
     
     public private(set) var cancelItems = [CancelItem]()
     
-    public private(set) var cancelAttempted = false
+    public var cancelAttempted: Bool {
+        get {
+            return cancelledError != nil
+        }
+    }
     
     public private(set) var cancelledError: PromiseCancelledError? = nil
 
@@ -74,8 +78,17 @@ public class CancelContext {
     
     public func append(context: CancelContext) {
         var item = CancelItem(cancellable: Cancellable.cancelContext(context), cancelAttempted: false)
-        if let error = cancelledError {
-            item.cancel(error)
+        if let parentError = cancelledError {
+            if !context.cancelAttempted {
+                item.cancel(parentError)
+            }
+        } else if let childError = context.cancelledError {
+            if !cancelAttempted {
+                cancelledError = childError
+                for var info in cancelItems {
+                    info.cancel(childError)
+                }
+            }
         }
         cancelItems.append(item)
     }
@@ -92,7 +105,6 @@ public class CancelContext {
     }
 
     public func cancel(file: String = #file, function: String = #function, line: UInt = #line) {
-        cancelAttempted = true
         cancelledError = PromiseCancelledError(file: file, function: function, line: line)
         for var info in cancelItems {
             info.cancel(cancelledError!)
