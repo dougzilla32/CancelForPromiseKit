@@ -8,14 +8,10 @@
 import PromiseKit
 
 public extension Guarantee {
-    public convenience init(cancel: CancelContext, resolver body: (@escaping(T) -> Void) -> Void) {
+    public convenience init(cancel: CancelContext, task: CancellableTask, resolver body: (@escaping(T) -> Void) -> Void) {
         self.init(resolver: body)
         self.cancelContext = cancel
-    }
-    
-    public convenience init(cancel: CancelContext, task: CancellableTask, resolver body: (@escaping(T) -> Void) -> Void) {
-        self.init(cancel: cancel, resolver: body)
-        cancel.replaceLast(task: task)
+        cancel.append(task: task, reject: nil)
     }
     
     public var cancelContext: CancelContext? {

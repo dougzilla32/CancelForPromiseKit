@@ -34,7 +34,7 @@ public extension Promise {
      */
     public class func valueCC(_ value: T, cancel: CancelContext? = nil) -> Promise<T> {
         var task: DispatchWorkItem!
-        var reject: ((Error) -> Void)?
+        var reject: ((Error) -> Void)!
 
         let promise = Promise<T> { seal in
             reject = seal.reject
@@ -50,18 +50,13 @@ public extension Promise {
         return promise
     }
  
-    public convenience init(cancel: CancelContext, resolver body: @escaping (Resolver<T>) throws -> Void) {
-        var reject: ((Error) -> Void)?
+    public convenience init(cancel: CancelContext, task: CancellableTask? = nil, resolver body: @escaping (Resolver<T>) throws -> Void) {
+        var reject: ((Error) -> Void)!
         self.init() { seal in
             reject = seal.reject
             try body(seal)
         }
-        cancel.append(reject: reject)
         self.cancelContext = cancel
-    }
-    
-    public convenience init(cancel: CancelContext, task: CancellableTask, resolver body: @escaping (Resolver<T>) throws -> Void) {
-        self.init(cancel: cancel, resolver: body)
-        cancel.replaceLast(task: task)
+        cancel.append(task: task, reject: reject)
     }
 }

@@ -5,44 +5,45 @@
 //  Created by Doug on 5/3/18.
 //
 
-import Foundation
+import PromiseKit
+
+class CancelItem: Hashable {
+    lazy var hashValue: Int = {
+        return ObjectIdentifier(self).hashValue
+    }()
+    
+    static func == (lhs: CancelItem, rhs: CancelItem) -> Bool {
+        return lhs === rhs
+    }
+    
+    let task: CancellableTask?
+    var reject: ((Error) -> Void)?
+    var cancelAttempted = false
+    
+    init(task: CancellableTask?, reject: ((Error) -> Void)?) {
+        self.task = task
+        self.reject = reject
+    }
+    
+    func cancel(error: Error) {
+        task?.cancel()
+        reject?(error)
+        reject = nil
+        cancelAttempted = true
+    }
+    
+    var isCancelled: Bool {
+        get {
+            return task?.isCancelled ?? cancelAttempted
+        }
+    }
+}
 
 public class CancelContext {
-    public enum Cancellable {
-        case taskAndReject(CancellableTask?, ((Error) -> Void)?)
-        case cancelContext(CancelContext?)
-    }
+    private var cancelItemList = [CancelItem]()
+    private var cancelItemSet = Set<CancelItem>()
     
-    public struct CancelItem {
-        public internal(set) var cancellable: Cancellable
-        public internal(set) var cancelAttempted = false
-        
-        mutating func cancel(_ cancelledError: PromiseCancelledError) {
-            switch self.cancellable {
-            case .taskAndReject(let task, let reject):
-                task?.cancel()
-                reject?(cancelledError)
-                self.cancellable = Cancellable.taskAndReject(task, nil)
-            case .cancelContext(let context):
-                context?.cancel()
-                self.cancellable = Cancellable.cancelContext(nil)
-            }
-            self.cancelAttempted = true
-        }
-        
-        var isCancelled: Bool {
-            get {
-                switch self.cancellable {
-                case .taskAndReject(let task, _):
-                    return task?.isCancelled ?? false
-                case .cancelContext(let context):
-                    return context?.isCancelled ?? false
-                }
-            }
-        }
-    }
-    
-    public private(set) var cancelItems = [CancelItem]()
+    public init() { }
     
     public var cancelAttempted: Bool {
         get {
@@ -50,61 +51,56 @@ public class CancelContext {
         }
     }
     
-    public private(set) var cancelledError: PromiseCancelledError? = nil
-
-    public init() { }
+    public private(set) var cancelledError: Error? = nil
     
-    public func append(task: CancellableTask? = nil, reject: ((Error) -> Void)? = nil) {
-        var item = CancelItem(cancellable: Cancellable.taskAndReject(task, reject), cancelAttempted: false)
+    public func append(task: CancellableTask?, reject: ((Error) -> Void)?) {
+        let item = CancelItem(task: task, reject: reject)
         if let error = cancelledError {
-            item.cancel(error)
+            item.cancel(error: error)
         }
-        cancelItems.append(item)
+        cancelItemList.append(item)
+        cancelItemSet.insert(item)
     }
     
     public func append(context: CancelContext) {
-        var item = CancelItem(cancellable: Cancellable.cancelContext(context), cancelAttempted: false)
+        guard context !== self else {
+            return
+        }
+
         if let parentError = cancelledError {
             if !context.cancelAttempted {
-                item.cancel(parentError)
+                context.cancel(error: parentError)
             }
         } else if let childError = context.cancelledError {
             if !cancelAttempted {
-                cancelledError = childError
-                for var info in cancelItems {
-                    info.cancel(childError)
-                }
+                cancel(error: childError)
             }
         }
-        cancelItems.append(item)
-    }
-    
-    public func replaceLast(task: CancellableTask? = nil, reject: ((Error) -> Void)? = nil) {
-        assert(cancelItems.count != 0, "The context is empty")
-        switch cancelItems[cancelItems.count - 1].cancellable {
-        case .taskAndReject(let lastTask, let lastReject):
-            cancelItems[cancelItems.count - 1].cancellable = Cancellable.taskAndReject(task ?? lastTask, reject ?? lastReject)
-        case .cancelContext:
-            assert(false, "The last item is not a task")
-            break
-        }
-    }
-
-    public func cancel(file: String = #file, function: String = #function, line: UInt = #line) {
-        cancelledError = PromiseCancelledError(file: file, function: function, line: line)
-        for var info in cancelItems {
-            info.cancel(cancelledError!)
+        
+        for childItem in context.cancelItemList {
+            if !cancelItemSet.contains(childItem) {
+                cancelItemList.append(childItem)
+                cancelItemSet.insert(childItem)
+            }
         }
     }
     
-    public func done(file: String = #file, function: String = #function, line: UInt = #line) {
-        cancelItems.removeAll()
+    public func cancel(error: Error? = nil, file: String = #file, function: String = #function, line: UInt = #line) {
+        let cancelledError = error ?? PromiseCancelledError(file: file, function: function, line: line)
+        for item in cancelItemList {
+            item.cancel(error: cancelledError)
+        }
     }
 
     public var isCancelled: Bool {
-        for info in cancelItems where !info.isCancelled {
+        for item in cancelItemList where !item.isCancelled {
             return false
         }
         return true
+    }
+
+    public func done(file: String = #file, function: String = #function, line: UInt = #line) {
+        cancelItemList.removeAll()
+        cancelItemSet.removeAll()
     }
 }
