@@ -87,7 +87,7 @@ public extension CatchMixin {
                     rp.1.reject(error)
                 } else {
                     body()
-                    switch (result) {
+                    switch result {
                     case .fulfilled(let value):
                         rp.1.fulfill(value)
                     case .rejected(let error):
@@ -117,7 +117,7 @@ public extension CatchMixin {
                         cancelContext.append(context: context)
                     }
                     rv.done {
-                        switch (result) {
+                        switch result {
                         case .fulfilled(let value):
                             rp.1.fulfill(value)
                         case .rejected(let error):

@@ -38,7 +38,7 @@ public extension Promise {
 
         let promise = Promise<T> { seal in
             reject = seal.reject
-             task = DispatchWorkItem() {
+             task = DispatchWorkItem {
                 seal.fulfill(value)
             }
             DispatchQueue.global(qos: .default).asyncAfter(deadline: DispatchTime.now() + 0.01, execute: task)
@@ -52,7 +52,7 @@ public extension Promise {
  
     public convenience init(cancel: CancelContext, task: CancellableTask? = nil, resolver body: @escaping (Resolver<T>) throws -> Void) {
         var reject: ((Error) -> Void)!
-        self.init() { seal in
+        self.init { seal in
             reject = seal.reject
             try body(seal)
         }

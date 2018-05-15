@@ -70,7 +70,7 @@ class CancelTests: XCTestCase {
     func testValueContext() {
         let context = CancelContext()
         let exComplete = expectation(description: "after completes")
-        Promise.valueCC("hi", cancel: context).doneCC() { value in
+        Promise.valueCC("hi", cancel: context).doneCC { _ in
             XCTFail("value not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -83,10 +83,10 @@ class CancelTests: XCTestCase {
     func testValueCCDoneCC() {
         let context = CancelContext()
         let exComplete = expectation(description: "after completes")
-        Promise.valueCC("hi", cancel: context).doneCC() { value in
+        Promise.valueCC("hi", cancel: context).doneCC { _ in
             XCTFail("value not cancelled")
-            }.catchCC(policy: .allErrors) { error in
-                error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }.catchCC(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }
         context.cancel()
         
@@ -97,10 +97,10 @@ class CancelTests: XCTestCase {
         let context = CancelContext()
         let exComplete = expectation(description: "after completes")
         
-        Promise.valueCC("hi", cancel: context).thenCC { (value: String) -> Promise<String> in
+        Promise.valueCC("hi", cancel: context).thenCC { (_: String) -> Promise<String> in
             XCTFail("value not cancelled")
             return Promise.valueCC("bye")
-        }.doneCC { value in
+        }.doneCC { _ in
             XCTFail("value not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -114,7 +114,7 @@ class CancelTests: XCTestCase {
         let context = CancelContext()
         let exComplete = expectation(description: "after completes")
         
-        Promise.value("hi").doneCC(cancel: context) { value in
+        Promise.value("hi").doneCC(cancel: context) { _ in
             XCTFail("value not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -130,7 +130,7 @@ class CancelTests: XCTestCase {
         
         firstly {
             Promise.value("hi")
-        }.doneCC(cancel: context) { value in
+        }.doneCC(cancel: context) { _ in
             XCTFail("value not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -146,13 +146,13 @@ class CancelTests: XCTestCase {
         
         firstlyCC(cancel: context) {
             Promise.value("hi")
-        }.doneCC { value in
+        }.doneCC { _ in
             XCTFail("value not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }
         context.cancel()
-        
+
         wait(for: [exComplete], timeout: 1)
     }
     
@@ -162,7 +162,7 @@ class CancelTests: XCTestCase {
         
         firstlyCC {
             Promise.valueCC("hi", cancel: context)
-        }.doneCC { value in
+        }.doneCC { _ in
             XCTFail("value not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -178,7 +178,7 @@ class CancelTests: XCTestCase {
         
         firstlyCC {
             Promise.value("hi")
-        }.doneCC(cancel: context) { value in
+        }.doneCC(cancel: context) { _ in
             XCTFail("value not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -199,7 +199,7 @@ class CancelTests: XCTestCase {
         promise.thenCC { () throws -> Promise<String>  in
             XCTFail("then not cancelled")
             return Promise.value("x")
-        }.doneCC { value in
+        }.doneCC { _ in
             XCTFail("done not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -219,9 +219,9 @@ class CancelTests: XCTestCase {
             usleep(100000)
             seal.fulfill()
         }
-        promise.thenCC(cancel: noopContext) { value in
+        promise.thenCC(cancel: noopContext) { _ in
             return Promise.valueCC("x")
-        }.doneCC(cancel: context) { value in
+        }.doneCC(cancel: context) { _ in
             XCTFail("done not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -239,7 +239,7 @@ class CancelTests: XCTestCase {
             usleep(100000)
             seal.fulfill()
         }
-        promise.doneCC(cancel: context) { value in
+        promise.doneCC(cancel: context) { _ in
             XCTFail("done not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -254,7 +254,7 @@ class CancelTests: XCTestCase {
         let exComplete = expectation(description: "done is cancelled")
         let context = CancelContext()
         
-        after(seconds: 0.1).doneCC(cancel: context) { value in
+        after(seconds: 0.1).doneCC(cancel: context) { _ in
             XCTFail("done not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")

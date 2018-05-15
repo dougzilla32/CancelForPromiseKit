@@ -10,13 +10,11 @@ import PromiseKit
 public class PromiseCancelledError: CancellableError, CustomStringConvertible {
     init(file: String, function: String, line: UInt) {
         let fileBasename = URL(fileURLWithPath: file).lastPathComponent
-        description = "(type(of: self)) at \(fileBasename) \(function):\(line)"
+        description = "<\(type(of: self)) at \(fileBasename) \(function):\(line)>"
     }
     
     public var isCancelled: Bool {
-        get {
-            return true
-        }
+        return true
     }
     
     public var description: String
@@ -64,6 +62,24 @@ class ErrorConditions {
         case .error:
             assert(false, message, file: file, line: line)
             print("*** ERROR *** \(message)")
+        }
+    }
+}
+
+func rawPointerDescription(obj: AnyObject) -> String {
+    let id = ObjectIdentifier(obj)
+    let idDesc = id.debugDescription
+    let pointerString = idDesc.substring(from: idDesc.index(idDesc.startIndex, offsetBy: "\(type(of: id))".count))
+    return "\(type(of: obj))\(pointerString)"
+}
+
+extension Optional {
+    public var optionalDescription: Any {
+        switch self {
+        case .none:
+            return "nil"
+        case let .some(value):
+            return value
         }
     }
 }
