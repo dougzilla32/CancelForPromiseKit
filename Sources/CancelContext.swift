@@ -106,5 +106,6 @@ public class CancelContext: CustomDebugStringConvertible {
     public func done(file: String = #file, function: String = #function, line: UInt = #line) {
         cancelItemList.removeAll()
         cancelItemSet.removeAll()
+        cancelledError = nil
     }
 }
