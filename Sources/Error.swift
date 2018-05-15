@@ -44,26 +44,6 @@ class ErrorConditions {
             print("*** ERROR *** \(message)")
         }
     }
-
-    static func firstlyCancelContextMissing(severity: Severity = .error, file: StaticString, function: StaticString, line: UInt) {
-        let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-        let message = """
-        firstlyCC: cancel context is missing at \(fileBasename) \(function):\(line).
-        Specify a cancel context in 'firstlyCC' if the returned promise does not have one, for example:
-        
-        firstlyCC(cancel: context) { value in
-            return promiseWithoutContext()
-        }
-        
-        """
-        switch severity {
-        case .warning:
-            print("*** WARNING *** \(message)")
-        case .error:
-            assert(false, message, file: file, line: line)
-            print("*** ERROR *** \(message)")
-        }
-    }
 }
 
 func rawPointerDescription(obj: AnyObject) -> String {
