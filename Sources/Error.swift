@@ -49,7 +49,12 @@ class ErrorConditions {
 func rawPointerDescription(obj: AnyObject) -> String {
     let id = ObjectIdentifier(obj)
     let idDesc = id.debugDescription
-    let pointerString = idDesc.substring(from: idDesc.index(idDesc.startIndex, offsetBy: "\(type(of: id))".count))
+    let index = idDesc.index(idDesc.startIndex, offsetBy: "\(type(of: id))".count)
+#if swift(>=3.2)
+    let pointerString = idDesc[index...]
+#else
+    let pointerString = idDesc.substring(from: index)
+#endif
     return "\(type(of: obj))\(pointerString)"
 }
 
