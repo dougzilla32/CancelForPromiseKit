@@ -11,6 +11,8 @@
 		910B77732097DCB500A893F8 /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B77702097DCB500A893F8 /* after.swift */; };
 		910B77752097DCB500A893F8 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B77722097DCB500A893F8 /* Promise.swift */; };
 		910B77772097DD7500A893F8 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B77762097DD7500A893F8 /* Error.swift */; };
+		91195B4520AC134000074F63 /* when.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91195B4220AC134000074F63 /* when.swift */; };
+		91195B4720AC134000074F63 /* race.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91195B4420AC134000074F63 /* race.swift */; };
 		912F4C1E209BED250037EF4C /* CancellableTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912F4C1D209BED250037EF4C /* CancellableTask.swift */; };
 		91436DB420A0EB19004E99DB /* Pods_CancelForPromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E9F9F85F4A972A4688E45CD /* Pods_CancelForPromiseKit.framework */; };
 		9184A38A209D7AE400B45601 /* CancelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B778A2097E0F300A893F8 /* CancelTests.swift */; };
@@ -45,6 +47,9 @@
 		910B77722097DCB500A893F8 /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = Sources/Promise.swift; sourceTree = "<group>"; };
 		910B77762097DD7500A893F8 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Error.swift; path = Sources/Error.swift; sourceTree = "<group>"; };
 		910B778A2097E0F300A893F8 /* CancelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CancelTests.swift; sourceTree = "<group>"; };
+		91195B4220AC134000074F63 /* when.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = when.swift; path = Sources/when.swift; sourceTree = "<group>"; };
+		91195B4420AC134000074F63 /* race.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = race.swift; path = Sources/race.swift; sourceTree = "<group>"; };
+		91195B4820ACB9F500074F63 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; name = .swiftlint.yml; path = Sources/.swiftlint.yml; sourceTree = "<group>"; };
 		912F4C1D209BED250037EF4C /* CancellableTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CancellableTask.swift; path = Sources/CancellableTask.swift; sourceTree = "<group>"; };
 		91436DBD20A0EC3B004E99DB /* CancelForPromiseKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = CancelForPromiseKit.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		918734D020A565FC00F8D9D3 /* Catchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Catchable.swift; path = Sources/Catchable.swift; sourceTree = "<group>"; };
@@ -133,6 +138,7 @@
 		63B0AC601D595E4C00FA21D9 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				91195B4820ACB9F500074F63 /* .swiftlint.yml */,
 				910B77702097DCB500A893F8 /* after.swift */,
 				918734D020A565FC00F8D9D3 /* Catchable.swift */,
 				912F4C1D209BED250037EF4C /* CancellableTask.swift */,
@@ -141,7 +147,9 @@
 				918734D220A576A000F8D9D3 /* firstly.swift */,
 				918734D420A576EF00F8D9D3 /* Guarantee.swift */,
 				910B77722097DCB500A893F8 /* Promise.swift */,
+				91195B4420AC134000074F63 /* race.swift */,
 				918734D620A5772A00F8D9D3 /* Thenable.swift */,
+				91195B4220AC134000074F63 /* when.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -314,6 +322,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91195B4720AC134000074F63 /* race.swift in Sources */,
 				918734D720A5772A00F8D9D3 /* Thenable.swift in Sources */,
 				910B77752097DCB500A893F8 /* Promise.swift in Sources */,
 				9187EA7B209C24DF00EA1DDF /* CancelContext.swift in Sources */,
@@ -323,6 +332,7 @@
 				918734D120A565FC00F8D9D3 /* Catchable.swift in Sources */,
 				918734D520A576EF00F8D9D3 /* Guarantee.swift in Sources */,
 				918734D320A576A000F8D9D3 /* firstly.swift in Sources */,
+				91195B4520AC134000074F63 /* when.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
