@@ -10,7 +10,7 @@ import PromiseKit
 public class PromiseCancelledError: CancellableError, CustomStringConvertible {
     init(file: String, function: String, line: UInt) {
         let fileBasename = URL(fileURLWithPath: file).lastPathComponent
-        description = "<\(type(of: self)) at \(fileBasename) \(function):\(line)>"
+        description = "'\(type(of: self)) at \(fileBasename) \(function):\(line)'"
     }
     
     public var isCancelled: Bool {
