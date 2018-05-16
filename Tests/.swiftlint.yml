@@ -10,4 +10,4 @@ disabled_rules:
   - type_body_length
   - nesting
   - comma
-
+  - type_name

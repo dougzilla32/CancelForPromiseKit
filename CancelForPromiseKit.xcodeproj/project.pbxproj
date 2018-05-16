@@ -21,6 +21,7 @@
 		918734D520A576EF00F8D9D3 /* Guarantee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918734D420A576EF00F8D9D3 /* Guarantee.swift */; };
 		918734D720A5772A00F8D9D3 /* Thenable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918734D620A5772A00F8D9D3 /* Thenable.swift */; };
 		9187EA7B209C24DF00EA1DDF /* CancelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9187EA7A209C24DF00EA1DDF /* CancelContext.swift */; };
+		91940E3B20ACF35500551388 /* CancelChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91940E3A20ACF35500551388 /* CancelChain.swift */; };
 		91A917C920ACD525004067C2 /* hang.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A917C820ACD525004067C2 /* hang.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,8 @@
 		918734D420A576EF00F8D9D3 /* Guarantee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Guarantee.swift; path = Sources/Guarantee.swift; sourceTree = "<group>"; };
 		918734D620A5772A00F8D9D3 /* Thenable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Thenable.swift; path = Sources/Thenable.swift; sourceTree = "<group>"; };
 		9187EA7A209C24DF00EA1DDF /* CancelContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CancelContext.swift; path = Sources/CancelContext.swift; sourceTree = "<group>"; };
+		91940E3920ACDAD500551388 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; name = .swiftlint.yml; path = Tests/.swiftlint.yml; sourceTree = "<group>"; };
+		91940E3A20ACF35500551388 /* CancelChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelChain.swift; sourceTree = "<group>"; };
 		91A917C820ACD525004067C2 /* hang.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = hang.swift; path = Sources/hang.swift; sourceTree = "<group>"; };
 		9E83A83206BCE319ACDC1739 /* Pods-CancelForPromiseKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CancelForPromiseKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CancelForPromiseKit/Pods-CancelForPromiseKit.debug.xcconfig"; sourceTree = "<group>"; };
 		C03256B5AA0A453FECEB8523 /* Pods-CancellablePromiseKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CancellablePromiseKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-CancellablePromiseKit/Pods-CancellablePromiseKit.release.xcconfig"; sourceTree = "<group>"; };
@@ -86,12 +89,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6317518A1D59765700A9DDDC /* Core */ = {
+		6317518A1D59765700A9DDDC /* CorePromise */ = {
 			isa = PBXGroup;
 			children = (
 				910B778A2097E0F300A893F8 /* CancelTests.swift */,
+				91940E3A20ACF35500551388 /* CancelChain.swift */,
 			);
-			name = Core;
+			name = CorePromise;
 			path = Tests/CorePromise;
 			sourceTree = "<group>";
 		};
@@ -110,7 +114,8 @@
 		635D64061D59630200BC0AF5 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				6317518A1D59765700A9DDDC /* Core */,
+				91940E3920ACDAD500551388 /* .swiftlint.yml */,
+				6317518A1D59765700A9DDDC /* CorePromise */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -318,6 +323,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9184A38A209D7AE400B45601 /* CancelTests.swift in Sources */,
+				91940E3B20ACF35500551388 /* CancelChain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
