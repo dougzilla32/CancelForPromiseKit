@@ -93,9 +93,6 @@ public extension Thenable {
         
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
         let cancelBody = { (value: T) throws -> Void in
-            defer {
-                cancelContext.done()
-            }
             if let error = cancelContext.cancelledError {
                 throw error
             } else {

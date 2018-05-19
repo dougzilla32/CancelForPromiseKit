@@ -11,7 +11,7 @@ public extension Guarantee {
     public convenience init(cancel: CancelContext, task: CancellableTask, resolver body: (@escaping(T) -> Void) -> Void) {
         self.init(resolver: body)
         self.cancelContext = cancel
-        cancel.append(task: task, reject: nil)
+        cancel.append(task: task, reject: nil, description: GuaranteeDescription(self))
     }
     
     public var cancelContext: CancelContext? {
@@ -35,9 +35,6 @@ public extension Guarantee {
         
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
         let cancelBody = { (value: T) throws -> Void in
-            defer {
-                cancelContext.done()
-            }
             if let error = cancelContext.cancelledError {
                 throw error
             } else {

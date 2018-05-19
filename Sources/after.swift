@@ -40,7 +40,7 @@ public func at(time: DispatchTime, cancel: CancelContext? = nil) -> Promise<Void
 
     let cancelContext = cancel ?? CancelContext()
     promise.cancelContext = cancelContext
-    cancelContext.append(task: task, reject: reject!)
+    cancelContext.append(task: task, reject: reject!, description: PromiseDescription(promise))
     return promise
 }
 

@@ -11,3 +11,4 @@ disabled_rules:
   - nesting
   - comma
   - type_name
+  - opening_brace

@@ -8,8 +8,8 @@
 import PromiseKit
 
 public class PromiseCancelledError: CancellableError, CustomStringConvertible {
-    init(file: String, function: String, line: UInt) {
-        let fileBasename = URL(fileURLWithPath: file).lastPathComponent
+    init(file: StaticString, function: StaticString, line: UInt) {
+        let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
         description = "'\(type(of: self)) at \(fileBasename) \(function):\(line)'"
     }
     

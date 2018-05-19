@@ -15,13 +15,7 @@ public extension CatchMixin {
             ErrorConditions.cancelContextMissing(className: "Promise", functionName: "catchCC", file: file, function: function, line: line)
         }
         
-        let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        let cancelBody = { (error: Error) -> Void in
-            body(error)
-            cancelContext.done()
-        }
-        
-        return self.catch(on: on, policy: policy, cancelBody)
+        return self.catch(on: on, policy: policy, body)
     }
 }
 
