@@ -121,7 +121,7 @@ class CancelChain: XCTestCase {
                     }
                 }.thenCC { (_: D) -> Promise<A> in
                     ex.d?.fulfill() ?? XCTFail("pD.doneCC")
-                    return c.pA
+                    return c.pA  // Intentional reuse of pA -- causes a loop that CancelContext must detect
                 }
             }.thenCC { (_: A) -> Promise<E> in
                 self.trace("pA.then")
