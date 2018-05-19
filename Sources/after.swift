@@ -1,6 +1,6 @@
 //
 //  after.swift
-//  CancellablePromiseKit
+//  CancelForPromiseKit
 //
 //  Created by Doug on 4/28/18.
 //

@@ -1,3 +1,10 @@
+//
+//  when.swift
+//  CancelForPromiseKit
+//
+//  Created by Doug on 5/16/18.
+//
+
 import Foundation
 import Dispatch
 import PromiseKit

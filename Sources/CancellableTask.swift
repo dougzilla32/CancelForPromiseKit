@@ -1,6 +1,6 @@
 //
 //  CancellableTask.swift
-//  CancellablePromiseKit
+//  CancelForPromiseKit
 //
 //  Created by Doug Stein on 5/3/18.
 //

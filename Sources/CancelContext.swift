@@ -1,6 +1,6 @@
 //
 //  CancelContext.swift
-//  CancellablePromiseKit
+//  CancelForPromiseKit
 //
 //  Created by Doug on 5/3/18.
 //

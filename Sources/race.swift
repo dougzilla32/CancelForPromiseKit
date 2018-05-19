@@ -1,3 +1,10 @@
+//
+//  race.swift
+//  CancelForPromiseKit
+//
+//  Created by Doug on 5/16/18.
+//
+
 import PromiseKit
 
 /**
