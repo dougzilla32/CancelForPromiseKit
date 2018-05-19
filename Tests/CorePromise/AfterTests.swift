@@ -19,8 +19,8 @@ class AfterTests: XCTestCase {
         let afterPromise = after(seconds: 0.01)
         afterPromise.done {
             exComplete.fulfill()
-            }.catch { error in
-                XCTFail("afterPromise failed with error: \(error)")
+        }.catch { error in
+            XCTFail("afterPromise failed with error: \(error)")
         }
         
         let contextIgnore = CancelContext()
@@ -30,8 +30,8 @@ class AfterTests: XCTestCase {
         let cancelIgnoreAfterPromise = afterCC(seconds: 0.1, cancel: contextIgnore)
         cancelIgnoreAfterPromise.doneCC {
             exCancelComplete.fulfill()
-            }.catchCC(policy: .allErrors) { error in
-                XCTFail("cancellableAfterPromise failed with error: \(error)")
+        }.catchCC(policy: .allErrors) { error in
+            XCTFail("cancellableAfterPromise failed with error: \(error)")
         }
         
         let context = CancelContext()
@@ -40,8 +40,8 @@ class AfterTests: XCTestCase {
         let cancellableAfterPromise = afterCC(seconds: 0.1, cancel: context)
         cancellableAfterPromise.doneCC {
             XCTFail("cancellableAfter not cancelled")
-            }.catchCC(policy: .allErrorsExceptCancellation) { error in
-                XCTFail("cancellableAfterPromise failed with error: \(error)")
+        }.catchCC(policy: .allErrorsExceptCancellation) { error in
+            XCTFail("cancellableAfterPromise failed with error: \(error)")
         }
         
         // Test 'afterCC' to ensure it is cancelled and throws a 'CancellableError'
@@ -49,8 +49,8 @@ class AfterTests: XCTestCase {
         let cancellableAfterPromiseWithError = afterCC(seconds: 0.1, cancel: context)
         cancellableAfterPromiseWithError.doneCC {
             XCTFail("cancellableAfterWithError not cancelled")
-            }.catchCC(policy: .allErrors) { error in
-                error.isCancelled ? exCancel.fulfill() : XCTFail("unexpected error \(error)")
+        }.catchCC(policy: .allErrors) { error in
+            error.isCancelled ? exCancel.fulfill() : XCTFail("unexpected error \(error)")
         }
         
         context.cancel()
@@ -67,8 +67,8 @@ class AfterTests: XCTestCase {
         }
         promise.doneCC(cancel: context) { _ in
             XCTFail("done not cancelled")
-            }.catchCC(policy: .allErrors) { error in
-                error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }.catchCC(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }
         
         context.cancel()
@@ -82,8 +82,8 @@ class AfterTests: XCTestCase {
         
         after(seconds: 0.1).doneCC(cancel: context) { _ in
             XCTFail("done not cancelled")
-            }.catchCC(policy: .allErrors) { error in
-                error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
+        }.catchCC(policy: .allErrors) { error in
+            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }
         context.cancel()
         

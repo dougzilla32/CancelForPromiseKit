@@ -14,6 +14,7 @@
 		91195B4520AC134000074F63 /* when.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91195B4220AC134000074F63 /* when.swift */; };
 		91195B4720AC134000074F63 /* race.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91195B4420AC134000074F63 /* race.swift */; };
 		91195B5920AF565100074F63 /* CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91195B5720AF556000074F63 /* CustomStringConvertible.swift */; };
+		91195B5B20AFE9FC00074F63 /* Hooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91195B5A20AFE9FC00074F63 /* Hooks.swift */; };
 		912F4C1E209BED250037EF4C /* CancellableTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912F4C1D209BED250037EF4C /* CancellableTask.swift */; };
 		91436DB420A0EB19004E99DB /* Pods_CancelForPromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E9F9F85F4A972A4688E45CD /* Pods_CancelForPromiseKit.framework */; };
 		9184A38A209D7AE400B45601 /* ValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B778A2097E0F300A893F8 /* ValueTests.swift */; };
@@ -55,6 +56,7 @@
 		91195B4420AC134000074F63 /* race.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = race.swift; path = Sources/race.swift; sourceTree = "<group>"; };
 		91195B4820ACB9F500074F63 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; name = .swiftlint.yml; path = Sources/.swiftlint.yml; sourceTree = "<group>"; };
 		91195B5720AF556000074F63 /* CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomStringConvertible.swift; path = Sources/CustomStringConvertible.swift; sourceTree = "<group>"; };
+		91195B5A20AFE9FC00074F63 /* Hooks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hooks.swift; sourceTree = "<group>"; };
 		912F4C1D209BED250037EF4C /* CancellableTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CancellableTask.swift; path = Sources/CancellableTask.swift; sourceTree = "<group>"; };
 		91436DBD20A0EC3B004E99DB /* CancelForPromiseKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = CancelForPromiseKit.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		918734D020A565FC00F8D9D3 /* Catchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Catchable.swift; path = Sources/Catchable.swift; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 			children = (
 				91940E3C20ACF99900551388 /* AfterTests.swift */,
 				91940E3A20ACF35500551388 /* CancelChain.swift */,
+				91195B5A20AFE9FC00074F63 /* Hooks.swift */,
 				910B778A2097E0F300A893F8 /* ValueTests.swift */,
 			);
 			name = CorePromise;
@@ -328,6 +331,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91195B5B20AFE9FC00074F63 /* Hooks.swift in Sources */,
 				91940E3D20ACF99900551388 /* AfterTests.swift in Sources */,
 				9184A38A209D7AE400B45601 /* ValueTests.swift in Sources */,
 				91940E3B20ACF35500551388 /* CancelChain.swift in Sources */,

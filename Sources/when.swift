@@ -52,7 +52,8 @@ public func whenCC<U: Thenable, V: Thenable, W: Thenable>(fulfilled pu: U, _ pv:
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
 public func whenCC<U: Thenable, V: Thenable, W: Thenable, X: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X, cancel: CancelContext? = nil) -> Promise<(U.T, V.T, W.T, X.T)> {
-    return when(fulfilled: [pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!) }
+    let t = [pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid()]
+    return _whenCC(when(fulfilled: t), fulfilled: t, cancel: cancel).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!) }
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.

@@ -107,7 +107,7 @@ public class CancelContext: Hashable, CustomStringConvertible {
         cancelItemSet.insert(item)
     }
     
-    func append(context childContext: CancelContext, description: CustomStringConvertibleClass? = nil) {
+    public func append(context childContext: CancelContext, description: CustomStringConvertibleClass? = nil) {
         guard childContext !== self else {
             return
         }

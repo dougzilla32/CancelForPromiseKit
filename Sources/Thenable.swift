@@ -7,8 +7,8 @@
 
 import PromiseKit
 
-struct CancelContextKey {
-    static var cancelContext: UInt8 = 0
+public struct CancelContextKey {
+    public static var cancelContext: UInt8 = 0
 }
 
 public extension Thenable {

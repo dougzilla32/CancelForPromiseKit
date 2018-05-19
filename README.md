@@ -3,27 +3,43 @@
 
 ---
 
-CancelForPromiseKit provides clear and concise cancellation extensions for [PromiseKit].
+CancelForPromiseKit provides clear and concise cancellation extensions for [PromiseKit].  While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
 
-While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
+The goals of this project are as follows:
+
+* **A streamlined way to cancel a promise, which rejects the promise and cancels it's associated task(s)**
+
+* **A streamlined way to cancel a promise chain and all it's currently running tasks, and also cancel any nested promise chains**
+
+* **A simple way to define new types of cancellable promises**
+
+* **Cancellable varients for all the PromiseKit extensions (e.g. Foundation, CoreLocation, Alamofire)**
+
+* **Ensure that subsequent code blocks in a promise chain are _NEVER_ called after the chain has been cancelled -- handy for UIs where outdated tasks need to be cancelled (e.g. user is typing in an auto-completion search field)**
+
+* **Provide cancellable Promises and Guarantees -- cancelling a Guarantee ensures it's subsequent code block is not called**
+
+* **Support cancellation for all PromiseKit primitives such as 'after', 'firstly', 'when', 'race'**
+
+CancelForPromiseKit defines it's extensions as methods and functions with the 'CC' (cancel chain) suffix.  By using theses 'CC' methods and functions, all of the above stated goals are met. 
 
 This README has the same structure as the PromiseKit README, with cancellation added to the sample code blocks:
 
 ```swift
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
-let context = CancelContext()
-let fetchImage = URLSession.shared.dataTask(.promise, with: url, cancel: context).compactMap{ UIImage(data: $0.data) }
-let fetchLocation = CLLocationManager.requestLocation(cancel: context).lastValue
+let fetchImage = URLSession.shared.dataTaskCC(.promise, with: url).compactMap{ UIImage(data: $0.data) }
+let fetchLocation = CLLocationManager.requestLocationCC().lastValue
 
-firstly {
-    when(fulfilled: fetchImage, fetchLocation)
-}.done { image, location in
+let context = CancelContext()
+firstlyCC(cancel: context) {
+    whenCC(fulfilled: fetchImage, fetchLocation)
+}.doneCC { image, location in
     self.imageView.image = image
     self.label.text = "\(location)"
-}.ensure {
+}.ensureCC {
     UIApplication.shared.isNetworkActivityIndicatorVisible = false
-}.catch(policy: .allErrors) { error in
+}.catchCC(policy: .allErrors) { error in
     // Will be invoked with a PromiseCancelledError when cancel is called on the context.
     // Use the default policy of .allErrorsExceptCancellation to ignore cancellation errors.
     self.show(UIAlertController(for: error), sender: self)
