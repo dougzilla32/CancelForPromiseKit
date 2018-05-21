@@ -33,33 +33,31 @@ extension Thenable {
                             try CancelHooks.checkCancelled?(cc!)
                         }
                         let rv = try body(value)
-                        guard rv !== rp.0 else { throw PMKError.returnedSelf }
+                        guard rv !== rp.promise else { throw PMKError.returnedSelf }
                         if cc != nil {
                             CancelHooks.append?(cc!, rv)
                         }
                         // Inaccessible: rv.pipe(to: rp.box.seal)
                     } catch {
-                        rp.1.reject(error)
+                        rp.resolver.reject(error)
                     }
                 }
             case .rejected(let error):
-                rp.1.reject(error)
+                rp.resolver.reject(error)
             }
         }
         if cc != nil {
-            CancelHooks.chain?(rp.0, cc!)
+            CancelHooks.chain?(rp.promise, cc!)
         }
-        return rp.0
+        return rp.promise
     }
     
     public func mapTest<U>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping (T) throws -> U) -> Promise<U> {
-        let rp = Promise<U>.pending()
-        return rp.0
+        return Promise<U>.pending().promise
     }
 
     public func compactMapTest<U>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping (T) throws -> U?) -> Promise<U> {
-        let rp = Promise<U>.pending()
-        return rp.0
+        return Promise<U>.pending().promise
     }
 
     public func doneTest(on: DispatchQueue? = conf.Q.map, _ body: @escaping (T) throws -> Void) -> Promise<Void> {
@@ -75,39 +73,35 @@ extension Thenable {
                             try CancelHooks.checkCancelled?(cc!)
                         }
                         try body(value)
-                        rp.1.fulfill()
+                        rp.resolver.fulfill()
                     } catch {
-                        rp.1.reject(error)
+                        rp.resolver.reject(error)
                     }
                 }
             case .rejected(let error):
-                rp.1.reject(error)
+                rp.resolver.reject(error)
             }
         }
         if cc != nil {
             CancelHooks.chain?(rp.0, cc!)
         }
-        return rp.0
+        return rp.promise
     }
 
     public func getTest(on: DispatchQueue? = conf.Q.map, _ body: @escaping (T) throws -> Void) -> Promise<T> {
-        let rp = Promise<T>.pending()
-        return rp.0
+        return Promise<T>.pending().promise
     }
 
 //    public func doneTest(on: DispatchQueue? = conf.Q.map, _ body: @escaping (T) -> Void) -> Promise<Void> {
-//        let rp = Promise<Void>.pending()
-//        return rp.0
+//        return Promise<Void>.pending().promise
 //    }
 
     public func mapTest<U>(on: DispatchQueue? = conf.Q.map, _ body: @escaping (T) -> U) -> Promise<U> {
-        let rp = Promise<U>.pending()
-        return rp.0
+        return Promise<U>.pending().promise
     }
 
     public func thenTest<U>(on: DispatchQueue? = conf.Q.map, _ body: @escaping (T) -> Guarantee<U>) -> Promise<U> {
-        let rp = Promise<U>.pending()
-        return rp.0
+        return Promise<U>.pending().promise
     }
 }
 

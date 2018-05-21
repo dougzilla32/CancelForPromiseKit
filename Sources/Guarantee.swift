@@ -14,12 +14,10 @@ public extension Guarantee {
         cancel.append(task: task, reject: nil, description: GuaranteeDescription(self))
     }
     
-    public convenience init(cancel: CancelContext, task: CancellableTask? = nil) {
-        self.init { _ in }
-        self.cancelContext = cancel
-        cancel.append(task: task, reject: nil, description: GuaranteeDescription(self))
+    public class func pendingCC(cancel: CancelContext? = nil) -> (promise: Promise<T>, resolver: Resolver<T>) {
+        return Promise<T>.pendingCC()
     }
-    
+
     public var cancelContext: CancelContext? {
         get {
             return objc_getAssociatedObject(self, &CancelContextKey.cancelContext) as? CancelContext
@@ -94,5 +92,44 @@ public extension Guarantee {
         let promise = self.then(on: on, file: file, line: line, cancelBody)
         promise.cancelContext = cancelContext
         return promise
+    }
+}
+
+#if swift(>=3.1)
+public extension Guarantee where T == Void {
+    convenience init(cancel: CancelContext, task: CancellableTask? = nil) {
+        self.init()
+        self.cancelContext = cancel
+        cancel.append(task: nil, reject: nil, description: GuaranteeDescription(self))
+    }
+}
+#endif
+
+public extension DispatchQueue {
+    /**
+     Asynchronously executes the provided closure on a dispatch queue.
+
+         DispatchQueue.global().asyncCC(.promise) {
+             md5(input)
+         }.doneCC { md5 in
+             //…
+         }
+
+     - Parameter cancel: The cancel context to use for this promise.
+     - Parameter body: The closure that resolves this promise.
+     - Returns: A new `Guarantee` resolved by the result of the provided closure.
+     */
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
+    final func asyncCC<T>(_: PMKNamespacer, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], cancel: CancelContext? = nil, execute body: @escaping () -> T) -> Promise<T> {
+        let rp = Guarantee<T>.pendingCC()
+        async(group: group, qos: qos, flags: flags) {
+            if let error = rp.promise.cancelContext?.cancelledError {
+                rp.resolver.reject(error)
+            } else {
+                rp.resolver.fulfill(body())
+            }
+        }
+        rp.promise.cancelContext = cancel ?? CancelContext()
+        return rp.promise
     }
 }

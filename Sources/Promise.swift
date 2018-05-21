@@ -8,6 +8,45 @@
 import PromiseKit
 
 public extension Promise {
+    public convenience init(cancel: CancelContext, task: CancellableTask? = nil, resolver body: @escaping (Resolver<T>) throws -> Void) {
+        var reject: ((Error) -> Void)!
+        self.init { seal in
+            reject = seal.reject
+            try body(seal)
+        }
+        self.cancelContext = cancel
+        cancel.append(task: task, reject: reject, description: PromiseDescription(self))
+    }
+
+    public convenience init(cancel: CancelContext, task: CancellableTask? = nil, error: Error) {
+        var reject: ((Error) -> Void)!
+        self.init { seal in
+            reject = seal.reject
+            seal.reject(error)
+        }
+        self.cancelContext = cancel
+        cancel.append(task: task, reject: reject, description: PromiseDescription(self))
+    }
+
+    /*
+    public convenience init(cancel: CancelContext, task: CancellableTask? = nil) {
+        var reject: ((Error) -> Void)!
+        self.init { seal in
+            reject = seal.reject
+        }
+        self.cancelContext = cancel
+        cancel.append(task: task, reject: reject, description: PromiseDescription(self))
+    }
+    */
+    
+    public class func pendingCC(cancel: CancelContext? = nil) -> (promise: Promise<T>, resolver: Resolver<T>) {
+        let rv = pending()
+        let context = cancel ?? CancelContext()
+        rv.promise.cancelContext = context
+        context.append(task: nil, reject: rv.resolver.reject)
+        return rv
+    }
+    
     /**
      The 'valueCC' extension is provided so that 'value' promises can be cancelled.  This is
      useful for situations where a promise chain is invoked quickly in succession with
@@ -44,33 +83,48 @@ public extension Promise {
         promise.cancelContext = cancelContext
         return promise
     }
- 
-    public convenience init(cancel: CancelContext, task: CancellableTask? = nil, resolver body: @escaping (Resolver<T>) throws -> Void) {
-        var reject: ((Error) -> Void)!
-        self.init { seal in
-            reject = seal.reject
-            try body(seal)
-        }
-        self.cancelContext = cancel
-        cancel.append(task: task, reject: reject, description: PromiseDescription(self))
-    }
+}
 
-    public convenience init(cancel: CancelContext, task: CancellableTask? = nil, error: Error) {
-        var reject: ((Error) -> Void)!
-        self.init { seal in
-            reject = seal.reject
-            seal.reject(error)
-        }
-        self.cancelContext = cancel
-        cancel.append(task: task, reject: reject, description: PromiseDescription(self))
-    }
-
+#if swift(>=3.1)
+public extension Promise where T == Void {
+    /// Initializes a new promise fulfilled with `Void`
     public convenience init(cancel: CancelContext, task: CancellableTask? = nil) {
-        var reject: ((Error) -> Void)!
-        self.init { seal in
-            reject = seal.reject
-        }
+        self.init()
         self.cancelContext = cancel
-        cancel.append(task: task, reject: reject, description: PromiseDescription(self))
+        cancel.append(task: nil, reject: nil, description: PromiseDescription(self))
+    }
+}
+#endif
+
+public extension DispatchQueue {
+    /**
+     Asynchronously executes the provided closure on a dispatch queue.
+
+         DispatchQueue.global().async(.promise) {
+             try md5(input)
+         }.done { md5 in
+             //…
+         }
+
+     - Parameter cancel: The cancel context to use for this promise.
+     - Parameter body: The closure that resolves this promise.
+     - Returns: A new `Promise` resolved by the result of the provided closure.
+     */
+    @available(macOS 10.10, iOS 8.0, tvOS 9.0, watchOS 2.0, *)
+    final func asyncCC<T>(_: PMKNamespacer, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], cancel: CancelContext? = nil, execute body: @escaping () throws -> T) -> Promise<T> {
+        let rp = Promise<T>.pending()
+        async(group: group, qos: qos, flags: flags) {
+            if let error = rp.promise.cancelContext?.cancelledError {
+                rp.resolver.reject(error)
+            } else {
+                do {
+                    rp.resolver.fulfill(try body())
+                } catch {
+                    rp.resolver.reject(error)
+                }
+            }
+        }
+        rp.promise.cancelContext = cancel ?? CancelContext()
+        return rp.promise
     }
 }

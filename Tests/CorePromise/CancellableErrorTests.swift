@@ -86,7 +86,7 @@ class CancellationTests: XCTestCase {
     func testFoundationBridging2() {
         let ex = expectation(description: "")
 
-        let p = Promise(cancel: CancelContext()).doneCC {
+        let p = Promise.pendingCC().promise.doneCC {
             XCTFail()
         }
         p.catchCC { _ in

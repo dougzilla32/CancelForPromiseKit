@@ -72,25 +72,25 @@ public extension CatchMixin {
             ErrorConditions.cancelContextMissing(className: "Promise", functionName: "ensureCC", file: file, function: function, line: line)
         }
         
-        let rp: (Promise<T>, Resolver<T>) = Promise.pending()
+        let rp: (promise: Promise<T>, resolver: Resolver<T>) = Promise.pending()
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        rp.0.cancelContext = cancelContext
+        rp.promise.cancelContext = cancelContext
         pipe { result in
             on.async {
                 body()
                 switch result {
                 case .fulfilled(let value):
                     if let error = cancelContext.cancelledError {
-                        rp.1.reject(error)
+                        rp.resolver.reject(error)
                     } else {
-                        rp.1.fulfill(value)
+                        rp.resolver.fulfill(value)
                     }
                 case .rejected(let error):
-                    rp.1.reject(error)
+                    rp.resolver.reject(error)
                 }
             }
         }
-        return rp.0
+        return rp.promise
     }
     
     func ensureThenCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping () -> Guarantee<Void>) -> Promise<T> {
@@ -98,9 +98,9 @@ public extension CatchMixin {
             ErrorConditions.cancelContextMissing(className: "Promise", functionName: "ensureThenCC", file: file, function: function, line: line)
         }
         
-        let rp: (Promise<T>, Resolver<T>) = Promise.pending()
+        let rp: (promise: Promise<T>, resolver: Resolver<T>) = Promise.pending()
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        rp.0.cancelContext = cancelContext
+        rp.promise.cancelContext = cancelContext
         pipe { result in
             on.async {
                 let rv = body()
@@ -111,17 +111,17 @@ public extension CatchMixin {
                     switch result {
                     case .fulfilled(let value):
                         if let error = cancelContext.cancelledError {
-                            rp.1.reject(error)
+                            rp.resolver.reject(error)
                         } else {
-                            rp.1.fulfill(value)
+                            rp.resolver.fulfill(value)
                         }
                     case .rejected(let error):
-                        rp.1.reject(error)
+                        rp.resolver.reject(error)
                     }
                 }
             }
         }
-        return rp.0
+        return rp.promise
     }
     
     func cauterizeCC(cancel: CancelContext? = nil) {

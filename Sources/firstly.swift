@@ -18,7 +18,7 @@ public func firstlyCC<U: Thenable>(cancel: CancelContext? = nil, file: StaticStr
         rp.cancelContext = cancel ?? rv.cancelContext ?? CancelContext()
         return rp
     } catch {
-        return Promise(error: error)
+        return Promise(cancel: cancel ?? CancelContext(), error: error)
     }
 }
 

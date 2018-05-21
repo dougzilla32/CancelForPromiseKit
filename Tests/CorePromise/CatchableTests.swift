@@ -70,7 +70,7 @@ extension CatchableTests {
 
     func test__void_specialized_full_recover__fulfilled_path() {
         let ex = expectation(description: "")
-        Promise(cancel: CancelContext()).recoverCC(fail).doneCC(fail).catchCC(policy: .allErrors, ex.fulfill).cancel()
+        Promise.pendingCC().promise.recoverCC(fail).doneCC(fail).catchCC(policy: .allErrors, ex.fulfill).cancel()
         wait(for: [ex], timeout: 1)
     }
 
@@ -122,7 +122,7 @@ extension CatchableTests {
 
     func test__void_specialized_conditional_recover__fulfilled_path() {
         let ex = expectation(description: "")
-        let p = Promise(cancel: CancelContext()).recoverCC { _ in
+        let p = Promise.pendingCC().promise.recoverCC { _ in
             XCTFail()
         }.catchCC { _ in
             XCTFail()   // this `catch` to ensure we are calling the `recover` variant we think we are
