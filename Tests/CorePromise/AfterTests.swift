@@ -123,11 +123,10 @@ class AfterTests: XCTestCase {
         let exComplete = expectation(description: "done is cancelled")
         let context = CancelContext()
         
-        let promise = Promise<Void> { seal in
-            usleep(1000)
+        let promise = Promise<Void>(cancel: context) { seal in
             seal.fulfill()
         }
-        promise.doneCC(cancel: context) { _ in
+        promise.doneCC { _ in
             XCTFail("done not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -140,14 +139,12 @@ class AfterTests: XCTestCase {
     
     func testCancelForGuarantee_Done() {
         let exComplete = expectation(description: "done is cancelled")
-        let context = CancelContext()
         
-        after(seconds: 0).doneCC(cancel: context) { _ in
+        afterCC(seconds: 0).doneCC { _ in
             XCTFail("done not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
-        }
-        context.cancel()
+        }.cancel()
         
         wait(for: [exComplete], timeout: 1)
     }

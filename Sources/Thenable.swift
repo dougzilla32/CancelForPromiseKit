@@ -25,37 +25,35 @@ public extension Thenable {
         cancelContext?.cancel(error: error, file: file, function: function, line: line)
     }
 
-    func thenCC<U: Thenable>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) throws -> U) -> Promise<U.T> {
-        if cancel == nil && self.cancelContext == nil {
-            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "thenCC", file: file, function: function, line: line)
-       }
-        
-        let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
+    func thenCC<U: Thenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) throws -> U) -> Promise<U.T> {
         let cancelBody = { (value: T) throws -> U in
-            if let error = cancelContext.cancelledError {
+            if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
                 let rv = try body(value)
-                if let context = rv.cancelContext {
-                    cancelContext.append(context: context)
+                if let selfContext = self.cancelContext, let rvContext = rv.cancelContext {
+                    selfContext.append(context: rvContext)
+                } else if let rvContext = rv.cancelContext {
+                    self.cancelContext = rvContext
+                } else {
+                    ErrorConditions.cancelContextMissing(className: "Promise", functionName: "thenCC", file: file, function: function, line: line)
                 }
                 return rv
             }
         }
 
         let promise = self.then(on: on, file: file, line: line, cancelBody)
-        promise.cancelContext = cancelContext
+        promise.cancelContext = self.cancelContext
         return promise
     }
     
-    func mapCC<U>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping(T) throws -> U) -> Promise<U> {
-        if cancel == nil && self.cancelContext == nil {
+    func mapCC<U>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping(T) throws -> U) -> Promise<U> {
+        if self.cancelContext == nil {
             ErrorConditions.cancelContextMissing(className: "Promise", functionName: "mapCC", file: file, function: function, line: line)
         }
         
-        let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
         let cancelTransform = { (value: T) throws -> U in
-            if let error = cancelContext.cancelledError {
+            if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
                 return try transform(value)
@@ -63,18 +61,17 @@ public extension Thenable {
         }
         
         let promise = self.map(on: on, cancelTransform)
-        promise.cancelContext = cancelContext
+        promise.cancelContext = self.cancelContext
         return promise
     }
     
-    func compactMapCC<U>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping(T) throws -> U?) -> Promise<U> {
-        if cancel == nil && self.cancelContext == nil {
+    func compactMapCC<U>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping(T) throws -> U?) -> Promise<U> {
+        if self.cancelContext == nil {
             ErrorConditions.cancelContextMissing(className: "Promise", functionName: "compactMapCC", file: file, function: function, line: line)
         }
         
-        let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
         let cancelTransform = { (value: T) throws -> U? in
-            if let error = cancelContext.cancelledError {
+            if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
                 return try transform(value)
@@ -82,18 +79,17 @@ public extension Thenable {
         }
         
         let promise = self.compactMap(on: on, cancelTransform)
-        promise.cancelContext = cancelContext
+        promise.cancelContext = self.cancelContext
         return promise
     }
     
-    func doneCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) throws -> Void) -> Promise<Void> {
-        if cancel == nil && self.cancelContext == nil {
+    func doneCC(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) throws -> Void) -> Promise<Void> {
+        if self.cancelContext == nil {
             ErrorConditions.cancelContextMissing(className: "Promise", functionName: "doneCC", file: file, function: function, line: line)
         }
         
-        let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
         let cancelBody = { (value: T) throws -> Void in
-            if let error = cancelContext.cancelledError {
+            if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
                 try body(value)
@@ -101,17 +97,16 @@ public extension Thenable {
         }
         
         let promise = self.done(on: on, cancelBody)
-        promise.cancelContext = cancelContext
+        promise.cancelContext = self.cancelContext
         return promise
     }
     
-    func getCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (T) throws -> Void) -> Promise<T> {
-        if cancel == nil && self.cancelContext == nil {
+    func getCC(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (T) throws -> Void) -> Promise<T> {
+        if self.cancelContext == nil {
             ErrorConditions.cancelContextMissing(className: "Promise", functionName: "getCC", file: file, function: function, line: line)
         }
 
-        let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        return mapCC(on: on, cancel: cancelContext) {
+        return mapCC(on: on) {
             try body($0)
             return $0
         }
