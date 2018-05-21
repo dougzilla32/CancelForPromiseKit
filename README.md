@@ -11,13 +11,11 @@ The goals of this project are as follows:
 
 * **A streamlined way to cancel a promise chain and all it's currently running tasks, and also cancel any nested promise chains**
 
-* **A simple way to define new types of cancellable promises**
+* **A simple way to define new varieties of cancellable promises**
 
-* **Cancellable varients for all the PromiseKit extensions (e.g. Foundation, CoreLocation, Alamofire)**
+* **Provide cancellable varients for all the PromiseKit extensions (e.g. Foundation, CoreLocation, Alamofire)**
 
 * **Ensure that subsequent code blocks in a promise chain are _NEVER_ called after the chain has been cancelled -- handy for UIs where outdated tasks need to be cancelled (e.g. user is typing in an auto-completion search field)**
-
-* **Provide cancellable Promises and Guarantees -- cancelling a Guarantee ensures it's subsequent code block is not called**
 
 * **Support cancellation for all PromiseKit primitives such as 'after', 'firstly', 'when', 'race'**
 

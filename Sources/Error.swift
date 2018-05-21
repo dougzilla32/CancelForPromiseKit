@@ -7,17 +7,23 @@
 
 import PromiseKit
 
-public class PromiseCancelledError: CancellableError, CustomStringConvertible {
-    init(file: StaticString, function: StaticString, line: UInt) {
+public class PromiseCancelledError: CancellableError, CustomDebugStringConvertible {
+    public init(file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
         let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-        description = "'\(type(of: self)) at \(fileBasename) \(function):\(line)'"
+        debugDescription = "'\(type(of: self)) at \(fileBasename) \(function):\(line)'"
     }
     
     public var isCancelled: Bool {
         return true
     }
     
-    public var description: String
+    public var debugDescription: String
+}
+
+extension PromiseCancelledError: LocalizedError {
+    public var errorDescription: String? {
+        return debugDescription
+    }
 }
 
 class ErrorConditions {
