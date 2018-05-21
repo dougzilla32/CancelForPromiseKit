@@ -67,19 +67,15 @@ public extension Promise {
           execute body (despited being 'rejected')
      */
     public class func valueCC(_ value: T, cancel: CancelContext? = nil) -> Promise<T> {
-        var task: DispatchWorkItem!
         var reject: ((Error) -> Void)!
 
         let promise = Promise<T> { seal in
             reject = seal.reject
-            task = DispatchWorkItem {
-                seal.fulfill(value)
-            }
-            DispatchQueue.global(qos: .default).asyncAfter(deadline: DispatchTime.now(), execute: task)
+            seal.fulfill(value)
         }
 
         let cancelContext = cancel ?? CancelContext()
-        cancelContext.append(task: task, reject: reject, description: PromiseDescription(promise))
+        cancelContext.append(task: nil, reject: reject, description: PromiseDescription(promise))
         promise.cancelContext = cancelContext
         return promise
     }
