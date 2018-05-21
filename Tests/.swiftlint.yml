@@ -12,3 +12,4 @@ disabled_rules:
   - comma
   - type_name
   - opening_brace
+  - xctfail_message

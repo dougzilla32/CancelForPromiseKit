@@ -8,8 +8,14 @@
 import PromiseKit
 
 public extension Guarantee {
-    public convenience init(cancel: CancelContext, task: CancellableTask, resolver body: (@escaping(T) -> Void) -> Void) {
+    public convenience init(cancel: CancelContext, task: CancellableTask? = nil, resolver body: (@escaping(T) -> Void) -> Void) {
         self.init(resolver: body)
+        self.cancelContext = cancel
+        cancel.append(task: task, reject: nil, description: GuaranteeDescription(self))
+    }
+    
+    public convenience init(cancel: CancelContext, task: CancellableTask? = nil) {
+        self.init { _ in }
         self.cancelContext = cancel
         cancel.append(task: task, reject: nil, description: GuaranteeDescription(self))
     }
@@ -23,10 +29,10 @@ public extension Guarantee {
         }
     }
     
-    public func cancel() {
-        cancelContext?.cancel()
+    public func cancel(error: Error? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+        cancelContext?.cancel(error: error, file: file, function: function, line: line)
     }
-
+    
     @discardableResult
     func doneCC(on: DispatchQueue? = conf.Q.return, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Void) -> Promise<Void> {
         if cancel == nil && self.cancelContext == nil {

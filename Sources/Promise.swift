@@ -54,4 +54,23 @@ public extension Promise {
         self.cancelContext = cancel
         cancel.append(task: task, reject: reject, description: PromiseDescription(self))
     }
+
+    public convenience init(cancel: CancelContext, task: CancellableTask? = nil, error: Error) {
+        var reject: ((Error) -> Void)!
+        self.init { seal in
+            reject = seal.reject
+            seal.reject(error)
+        }
+        self.cancelContext = cancel
+        cancel.append(task: task, reject: reject, description: PromiseDescription(self))
+    }
+
+    public convenience init(cancel: CancelContext, task: CancellableTask? = nil) {
+        var reject: ((Error) -> Void)!
+        self.init { seal in
+            reject = seal.reject
+        }
+        self.cancelContext = cancel
+        cancel.append(task: task, reject: reject, description: PromiseDescription(self))
+    }
 }

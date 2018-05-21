@@ -95,10 +95,10 @@ extension Thenable {
         return rp.0
     }
 
-    public func doneTest(on: DispatchQueue? = conf.Q.map, _ body: @escaping (T) -> Void) -> Promise<Void> {
-        let rp = Promise<Void>.pending()
-        return rp.0
-    }
+//    public func doneTest(on: DispatchQueue? = conf.Q.map, _ body: @escaping (T) -> Void) -> Promise<Void> {
+//        let rp = Promise<Void>.pending()
+//        return rp.0
+//    }
 
     public func mapTest<U>(on: DispatchQueue? = conf.Q.map, _ body: @escaping (T) -> U) -> Promise<U> {
         let rp = Promise<U>.pending()

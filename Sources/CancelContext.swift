@@ -137,6 +137,10 @@ public class CancelContext: Hashable, CustomStringConvertible {
             item.cancel(error: cancelledError!, visited: visited, file: file, function: function, line: line)
         }
     }
+    
+    func recover(file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+        cancelledError = nil
+    }
 
     public var isCancelled: Bool {
         for item in cancelItemList where !item.isCancelled {

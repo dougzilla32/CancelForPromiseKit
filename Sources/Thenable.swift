@@ -21,8 +21,8 @@ public extension Thenable {
         }
     }
     
-    public func cancel() {
-        cancelContext?.cancel()
+    public func cancel(error: Error? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+        cancelContext?.cancel(error: error, file: file, function: function, line: line)
     }
 
     func thenCC<U: Thenable>(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) throws -> U) -> Promise<U.T> {

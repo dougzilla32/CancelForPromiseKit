@@ -10,12 +10,33 @@ import PromiseKit
 
 public extension CatchMixin {
     @discardableResult
-    func catchCC(on: DispatchQueue? = conf.Q.return, policy: CatchPolicy = conf.catchPolicy, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) -> Void) -> PMKFinalizer {
+    func catchCC(on: DispatchQueue? = conf.Q.return, policy: CatchPolicy = conf.catchPolicy, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) -> Void) -> CPKFinalizer {
         if cancel == nil && self.cancelContext == nil {
             ErrorConditions.cancelContextMissing(className: "Promise", functionName: "catchCC", file: file, function: function, line: line)
         }
         
-        return self.catch(on: on, policy: policy, body)
+        return CPKFinalizer(self.catch(on: on, policy: policy, body), cancel: cancelContext)
+    }
+}
+
+public class CPKFinalizer {
+    let pmkFinalizer: PMKFinalizer
+    let cancelContext: CancelContext
+    
+    init(_ pmkFinalizer: PMKFinalizer, cancel: CancelContext? = nil) {
+        self.pmkFinalizer = pmkFinalizer
+        self.cancelContext = cancel ?? CancelContext()
+    }
+    
+    /// `finallyCC` is the same as `ensureCC`, but it is not chainable
+    @discardableResult
+    public func finallyCC(_ body: @escaping () -> Void) -> CancelContext {
+        pmkFinalizer.finally(body)
+        return cancelContext
+    }
+    
+    public func cancel(error: Error? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+        cancelContext.cancel(error: error, file: file, function: function, line: line)
     }
 }
 
@@ -27,42 +48,21 @@ public extension CatchMixin {
         
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
         let cancelBody = { (error: Error) throws -> U in
-            if let error = cancelContext.cancelledError {
-                throw error
-            } else {
-                let rv = try body(error)
-                if let context = rv.cancelContext {
-                    cancelContext.append(context: context)
+            if let cancelledError = cancelContext.cancelledError {
+                if policy == .allErrorsExceptCancellation {
+                    throw cancelledError
+                } else {
+                    cancelContext.recover()
                 }
-                return rv
             }
+            let rv = try body(error)
+            if let context = rv.cancelContext {
+                cancelContext.append(context: context)
+            }
+            return rv
         }
         
         let promise = self.recover(on: on, policy: policy, cancelBody)
-        promise.cancelContext = cancelContext
-        return promise
-    }
-    
-    @discardableResult
-    func recoverCC(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) -> Guarantee<T>) -> Promise<T> {
-        if cancel == nil && self.cancelContext == nil {
-            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "recoverCC", file: file, function: function, line: line)
-        }
-        
-        let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        let cancelBody = { (error: Error) throws -> Guarantee<T> in
-            if let error = cancelContext.cancelledError {
-                throw error
-            } else {
-                let rv = body(error)
-                if let context = rv.cancelContext {
-                    cancelContext.append(context: context)
-                }
-                return rv
-            }
-        }
-        
-        let promise = self.recover(on: on, cancelBody)
         promise.cancelContext = cancelContext
         return promise
     }
@@ -77,16 +77,16 @@ public extension CatchMixin {
         rp.0.cancelContext = cancelContext
         pipe { result in
             on.async {
-                if let error = cancelContext.cancelledError {
-                    rp.1.reject(error)
-                } else {
-                    body()
-                    switch result {
-                    case .fulfilled(let value):
-                        rp.1.fulfill(value)
-                    case .rejected(let error):
+                body()
+                switch result {
+                case .fulfilled(let value):
+                    if let error = cancelContext.cancelledError {
                         rp.1.reject(error)
+                    } else {
+                        rp.1.fulfill(value)
                     }
+                case .rejected(let error):
+                    rp.1.reject(error)
                 }
             }
         }
@@ -103,20 +103,20 @@ public extension CatchMixin {
         rp.0.cancelContext = cancelContext
         pipe { result in
             on.async {
-                if let error = cancelContext.cancelledError {
-                    rp.1.reject(error)
-                } else {
-                    let rv = body()
-                    if let context = rv.cancelContext {
-                        cancelContext.append(context: context)
-                    }
-                    rv.done {
-                        switch result {
-                        case .fulfilled(let value):
-                            rp.1.fulfill(value)
-                        case .rejected(let error):
+                let rv = body()
+                if let context = rv.cancelContext {
+                    cancelContext.append(context: context)
+                }
+                rv.done {
+                    switch result {
+                    case .fulfilled(let value):
+                        if let error = cancelContext.cancelledError {
                             rp.1.reject(error)
+                        } else {
+                            rp.1.fulfill(value)
                         }
+                    case .rejected(let error):
+                        rp.1.reject(error)
                     }
                 }
             }
@@ -132,26 +132,6 @@ public extension CatchMixin {
 }
 
 public extension CatchMixin where T == Void {
-    @discardableResult
-    func recoverCC(on: DispatchQueue? = conf.Q.map, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) -> Void) -> Promise<Void> {
-        if cancel == nil && self.cancelContext == nil {
-            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "recoverCC", file: file, function: function, line: line)
-        }
-        
-        let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
-        let cancelBody = { (error: Error) throws -> Void in
-            if let error = cancelContext.cancelledError {
-                throw error
-            } else {
-                body(error)
-            }
-        }
-        
-        let promise = self.recover(on: on, cancelBody)
-        promise.cancelContext = cancelContext
-        return promise
-    }
-    
     func recoverCC(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) throws -> Void) -> Promise<Void> {
         if cancel == nil && self.cancelContext == nil {
             ErrorConditions.cancelContextMissing(className: "Promise", functionName: "recoverCC", file: file, function: function, line: line)
@@ -159,7 +139,7 @@ public extension CatchMixin where T == Void {
         
         let cancelContext = cancel ?? self.cancelContext ?? CancelContext()
         let cancelBody = { (error: Error) throws -> Void in
-            if let error = cancelContext.cancelledError {
+            if let error = cancelContext.cancelledError, policy == .allErrorsExceptCancellation {
                 throw error
             } else {
                 try body(error)

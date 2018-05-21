@@ -31,8 +31,7 @@ UIApplication.shared.isNetworkActivityIndicatorVisible = true
 let fetchImage = URLSession.shared.dataTaskCC(.promise, with: url).compactMap{ UIImage(data: $0.data) }
 let fetchLocation = CLLocationManager.requestLocationCC().lastValue
 
-let context = CancelContext()
-firstlyCC(cancel: context) {
+let chain = firstlyCC {
     whenCC(fulfilled: fetchImage, fetchLocation)
 }.doneCC { image, location in
     self.imageView.image = image
@@ -47,8 +46,8 @@ firstlyCC(cancel: context) {
 
 //…
 
-// Cancel all tasks in the context and fail all promises with PromiseCancelledError
-context.cancel()
+// Cancel currently active tasks and reject all promises with PromiseCancelledError
+chain.cancel()
 ```
 
 # Quick Start
