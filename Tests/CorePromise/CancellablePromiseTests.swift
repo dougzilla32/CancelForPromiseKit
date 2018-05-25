@@ -60,21 +60,36 @@ class CancellablePromiseTests: XCTestCase {
         wait(for: [ex], timeout: 1)
     }
     
-    // TODO: FIX ME!!
-//    func testThenMap() {
-//        let ex = expectation(description: "")
-//        firstly {
-//            CancellablePromise.value([1,2,3])
-//        }.thenMap { (integer: Int) -> CancellablePromise<Int> in
-//            XCTFail()
-//            return CancellablePromise.value(integer * 2)
-//        }.done { _ in
-//            // $0 => [2,4,6]
-//        }.catch(policy: .allErrors) {
-//            $0.isCancelled ? ex.fulfill() : XCTFail()
-//        }.cancel()
-//        waitForExpectations(timeout: 1)
-//    }
+    func testThenMapSuccess() {
+        let ex = expectation(description: "")
+        firstly {
+            CancellablePromise.value([1,2,3])
+        }.thenMap { (integer: Int) -> CancellablePromise<Int> in
+            return CancellablePromise.value(integer * 2)
+        }.done { _ in
+            ex.fulfill()
+            // $0 => [2,4,6]
+        }.catch(policy: .allErrors) { _ in
+            XCTFail()
+        }
+        waitForExpectations(timeout: 1)
+    }
+    
+    func testThenMapCancel() {
+        let ex = expectation(description: "")
+        firstly {
+            CancellablePromise.value([1,2,3])
+        }.thenMap { (integer: Int) -> CancellablePromise<Int> in
+            XCTFail()
+            return CancellablePromise.value(integer * 2)
+        }.done { _ in
+            XCTFail()
+            // $0 => [2,4,6]
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+        waitForExpectations(timeout: 1)
+    }
     
     func testChain() {
         let ex = expectation(description: "")

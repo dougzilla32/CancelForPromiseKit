@@ -166,13 +166,11 @@ public extension CancellableThenable where U.T: Sequence {
              // $0 => [2,4,6]
          }
      */
-//    func thenMap<U: Thenable>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) throws -> U) -> Promise<[U.T]> {
-    // TODO: FIX ME!!!
-//    func thenMap<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.U.T]> {
-//        return then(on: on) { (val: U.T) -> CancellablePromise<[V.U.T]>
-//            when(fulfilled: try $0.map(transform))
-//        }
-//    }
+    func thenMap<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.U.T]> {
+        return then(on: on) {
+            when(fulfilled: try $0.map(transform))
+        }
+    }
 
     /**
      `CancellablePromise<[T]>` => `T` -> `CancellablePromise<[U]>` => `CancellablePromise<[U]>`
@@ -185,14 +183,13 @@ public extension CancellableThenable where U.T: Sequence {
              // $0 => [1,1,2,2,3,3]
          }
      */
-    // TODO: FIX ME!!!
-//    func thenFlatMap<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.U.T.Iterator.Element]> where V.U.T: Sequence {
-//        return then(on: on) {
-//            when(fulfilled: try $0.map(transform))
-//        }.map(on: nil) {
-//            $0.flatMap { $0 }
-//        }
-//    }
+    func thenFlatMap<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.U.T.Iterator.Element]> where V.U.T: Sequence {
+        return then(on: on) {
+            when(fulfilled: try $0.map(transform))
+        }.map(on: nil) {
+            $0.flatMap { $0 }
+        }
+    }
 
     /**
      `CancellablePromise<[T]>` => `T` -> Bool => `CancellablePromise<[U]>`
@@ -240,6 +237,6 @@ public extension CancellableThenable where U.T: Collection {
 public extension CancellableThenable where U.T: Sequence, U.T.Iterator.Element: Comparable {
     /// - Returns: a promise fulfilled with the sorted values of this `Sequence`.
     func sortedValues(on: DispatchQueue? = conf.Q.map) -> CancellablePromise<[U.T.Iterator.Element]> {
-        return map(on: on){ $0.sorted() }
+        return map(on: on) { $0.sorted() }
     }
 }
