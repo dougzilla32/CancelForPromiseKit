@@ -31,15 +31,27 @@ class ErrorConditions {
         case warning, error
     }
 
-    static func cancelContextMissing(className: String, functionName: String, severity: Severity = .error, file: StaticString, function: StaticString, line: UInt) {
+    static func cancelContextMissingInChain(className: String, functionName: String, severity: Severity = .error, file: StaticString, function: StaticString, line: UInt) {
         let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
         let message = """
-        \(className).\(functionName): cancel context is missing in cancel chain at \(fileBasename) \(function):\(line).
-        Specify a cancel context in '\(functionName)' if the calling promise does not have one, for example:
+        \(className).\(functionName): the cancel context is missing from the previous link in the cancel chain at \(fileBasename) \(function):\(line).
+        Be sure to use the 'CC' varient for all PromiseKit functions in the cancel chain, and for custom Promises be sure to specify the 'cancel: CancelContext' initializer parameter.
         
-        \(className.lowercased())WithoutContext.\(functionName)(cancel: context) { value in
-            // body
+        """
+        switch severity {
+        case .warning:
+            print("*** WARNING *** \(message)")
+        case .error:
+            assert(false, message, file: file, line: line)
+            print("*** ERROR *** \(message)")
         }
+    }
+
+    static func cancelContextMissingFromBody(className: String, functionName: String, severity: Severity = .error, file: StaticString, function: StaticString, line: UInt) {
+        let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
+        let message = """
+        \(className).\(functionName): the cancel context is missing from the promise returned by the closure at \(fileBasename) \(function):\(line).
+        Be sure to use the 'CC' varient for all PromiseKit functions in the cancel chain, and for custom Promises be sure to specify the 'cancel: CancelContext' initializer parameter.
         
         """
         switch severity {

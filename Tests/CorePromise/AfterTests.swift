@@ -7,7 +7,7 @@
 
 import XCTest
 import PromiseKit
-import CancelForPromiseKit
+@testable import CancelForPromiseKit
 
 extension XCTestExpectation {
     open func fulfill(error: Error) {

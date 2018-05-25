@@ -5,27 +5,27 @@ import XCTest
 
 class PromiseTests: XCTestCase {
     func testIsPending() {
-        XCTAssertTrue(Promise<Void>.pendingCC().promise.isPending)
-        XCTAssertFalse(Promise(cancel: CancelContext()).isPending)
-        XCTAssertFalse(Promise<Void>(cancel: CancelContext(), error: Error.dummy).isPending)
+        XCTAssertTrue(CancellablePromise<Void>.pending().promise.promise.isPending)
+        XCTAssertFalse(CancellablePromise().promise.isPending)
+        XCTAssertFalse(CancellablePromise<Void>(error: Error.dummy).promise.isPending)
     }
 
     func testIsResolved() {
-        XCTAssertFalse(Promise<Void>.pending().promise.isResolved)
-        XCTAssertTrue(Promise(cancel: CancelContext()).isResolved)
-        XCTAssertTrue(Promise<Void>(error: Error.dummy).isResolved)
+        XCTAssertFalse(CancellablePromise<Void>.pending().promise.promise.isResolved)
+        XCTAssertTrue(CancellablePromise().promise.isResolved)
+        XCTAssertTrue(CancellablePromise<Void>(error: Error.dummy).promise.isResolved)
     }
 
     func testIsFulfilled() {
-        XCTAssertFalse(Promise<Void>.pendingCC().promise.isFulfilled)
-        XCTAssertTrue(Promise(cancel: CancelContext()).isFulfilled)
-        XCTAssertFalse(Promise<Void>(cancel: CancelContext(), error: Error.dummy).isFulfilled)
+        XCTAssertFalse(CancellablePromise<Void>.pending().promise.promise.isFulfilled)
+        XCTAssertTrue(CancellablePromise().promise.isFulfilled)
+        XCTAssertFalse(CancellablePromise<Void>(error: Error.dummy).promise.isFulfilled)
     }
 
     func testIsRejected() {
-        XCTAssertFalse(Promise<Void>.pendingCC().promise.isRejected)
-        XCTAssertTrue(Promise<Void>(cancel: CancelContext(), error: Error.dummy).isRejected)
-        XCTAssertFalse(Promise(cancel: CancelContext()).isRejected)
+        XCTAssertFalse(CancellablePromise<Void>.pending().promise.promise.isRejected)
+        XCTAssertTrue(CancellablePromise<Void>(error: Error.dummy).promise.isRejected)
+        XCTAssertFalse(CancellablePromise().promise.isRejected)
     }
 
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
@@ -36,10 +36,10 @@ class PromiseTests: XCTestCase {
             usleep(100000)
             XCTAssertFalse(Thread.isMainThread)
             return 1
-        }.doneCC { one in
+        }.done { one in
             XCTFail()
             XCTAssertEqual(one, 1)
-        }.catchCC(policy: .allErrors) {
+        }.catch(policy: .allErrors) {
             print($0)
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
@@ -53,9 +53,9 @@ class PromiseTests: XCTestCase {
 
         DispatchQueue.global().asyncCC(.promise) { () -> Int in
             throw Error.dummy
-        }.doneCC { _ in
+        }.done { _ in
             XCTFail()
-        }.catchCC {
+        }.catch {
             $0.isCancelled ? XCTFail() : ex.fulfill()
         }.cancel()
 
@@ -63,35 +63,35 @@ class PromiseTests: XCTestCase {
     }
 
     func testCustomStringConvertible() {
-        XCTAssertEqual(Promise<Int>.pendingCC().promise.debugDescription, "Promise<Int>.pending(handlers: 0)")
-        XCTAssertEqual(Promise(cancel: CancelContext()).debugDescription, "Promise<()>.fulfilled(())")
-        XCTAssertEqual(Promise<String>(cancel: CancelContext(), error: Error.dummy).debugDescription, "Promise<String>.rejected(Error.dummy)")
+        XCTAssertEqual(CancellablePromise<Int>.pending().promise.promise.debugDescription, "Promise<Int>.pending(handlers: 0)")
+        XCTAssertEqual(CancellablePromise().promise.debugDescription, "Promise<()>.fulfilled(())")
+        XCTAssertEqual(CancellablePromise<String>(error: Error.dummy).promise.debugDescription, "Promise<String>.rejected(Error.dummy)")
 
-        XCTAssertEqual("\(Promise<Int>.pendingCC().promise)", "Promise(…Int)")
-        XCTAssertEqual("\(Promise.valueCC(3))", "Promise(3)")
-        XCTAssertEqual("\(Promise<Void>(cancel: CancelContext(), error: Error.dummy))", "Promise(dummy)")
+        XCTAssertEqual("\(CancellablePromise<Int>.pending().promise.promise)", "Promise(…Int)")
+        XCTAssertEqual("\(CancellablePromise.value(3).promise)", "Promise(3)")
+        XCTAssertEqual("\(CancellablePromise<Void>(error: Error.dummy).promise)", "Promise(dummy)")
     }
 
     func testCannotFulfillWithError() {
 
         // sadly this test proves the opposite :(
-        // left here so maybe one day we can prevent instantiation of `Promise<Error>`
+        // left here so maybe one day we can prevent instantiation of `CancellablePromise<Error>`
 
-        _ = Promise(cancel: CancelContext()) { seal in
+        _ = CancellablePromise { seal in
             seal.fulfill(Error.dummy)
         }
 
-        _ = Promise<Error>.pendingCC()
+        _ = CancellablePromise<Error>.pending()
 
-        _ = Promise.valueCC(Error.dummy)
+        _ = CancellablePromise.value(Error.dummy)
 
-        _ = Promise(cancel: CancelContext()).mapCC { Error.dummy }
+        _ = CancellablePromise().map { Error.dummy }
     }
 
 #if swift(>=3.1)
     func testCanMakeVoidPromise() {
-        _ = Promise(cancel: CancelContext())
-        _ = Guarantee(cancel: CancelContext())
+        _ = CancellablePromise()
+        _ = Guarantee()
     }
 #endif
 
@@ -100,20 +100,20 @@ class PromiseTests: XCTestCase {
     }
 
     func testThrowInInitializer() {
-        let p = Promise<Void>(cancel: CancelContext()) { _ in
+        let p = CancellablePromise<Void> { _ in
             throw Error.dummy
         }
         p.cancel()
-        XCTAssertTrue(p.isRejected)
-        guard let err = p.error, case Error.dummy = err else { return XCTFail() }
+        XCTAssertTrue(p.promise.isRejected)
+        guard let err = p.promise.error, case Error.dummy = err else { return XCTFail() }
     }
 
     func testThrowInFirstly() {
         let ex = expectation(description: "")
 
-        firstlyCC { () -> Promise<Int> in
+        firstly { () -> CancellablePromise<Int> in
             throw Error.dummy
-        }.catchCC {
+        }.catch {
             XCTAssertEqual($0 as? Error, Error.dummy)
             ex.fulfill()
         }.cancel()
@@ -122,7 +122,7 @@ class PromiseTests: XCTestCase {
     }
 
     func testWait() throws {
-        let p = afterCC(.milliseconds(100)).thenCC(on: nil){ Promise.valueCC(1) }
+        let p = afterCP(.milliseconds(100)).then(on: nil){ CancellablePromise.value(1) }
         p.cancel()
         do {
             _ = try p.wait()
@@ -132,7 +132,7 @@ class PromiseTests: XCTestCase {
         }
 
         do {
-            let p = afterCC(.milliseconds(100)).mapCC(on: nil){ throw Error.dummy }
+            let p = afterCP(.milliseconds(100)).map(on: nil){ throw Error.dummy }
             p.cancel()
             try p.wait()
             XCTFail()
@@ -143,10 +143,10 @@ class PromiseTests: XCTestCase {
 
     func testPipeForResolved() {
         let ex = expectation(description: "")
-        Promise.valueCC(1).doneCC {
+        CancellablePromise.value(1).done {
             XCTFail()
             XCTAssertEqual(1, $0)
-        }.catchCC(policy: .allErrors) {
+        }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
         }.cancel()
         wait(for: [ex], timeout: 1)

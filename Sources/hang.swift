@@ -7,6 +7,10 @@
 
 import PromiseKit
 
-public func hangCC<T>(_ promise: Promise<T>) throws -> T {
+public func hang<T>(_ promise: CancellablePromise<T>) throws -> T {
+    return try hang(promise.promise)
+}
+
+func hangCC<T>(_ promise: Promise<T>) throws -> T {
     return try hang(promise)
 }

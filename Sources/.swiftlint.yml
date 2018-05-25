@@ -11,3 +11,4 @@ disabled_rules:
   - nesting
   - comma
   - large_tuple
+  - type_name

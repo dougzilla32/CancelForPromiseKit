@@ -8,15 +8,23 @@
 import Foundation
 import PromiseKit
 
-public func afterCC(seconds: TimeInterval, cancel: CancelContext? = nil) -> Promise<Void> {
+public func afterCP(seconds: TimeInterval) -> CancellablePromise<Void> {
+    return CancellablePromise(at(time: DispatchTime.now() + seconds))
+}
+
+public func afterCP(_ interval: DispatchTimeInterval) -> CancellablePromise<Void> {
+    return CancellablePromise(at(time: DispatchTime.now() + interval))
+}
+
+func afterCC(seconds: TimeInterval, cancel: CancelContext? = nil) -> Promise<Void> {
     return at(time: DispatchTime.now() + seconds, cancel: cancel)
 }
 
-public func afterCC(_ interval: DispatchTimeInterval, cancel: CancelContext? = nil) -> Promise<Void> {
+func afterCC(_ interval: DispatchTimeInterval, cancel: CancelContext? = nil) -> Promise<Void> {
     return at(time: DispatchTime.now() + interval, cancel: cancel)
 }
 
-public func at(time: DispatchTime, cancel: CancelContext? = nil) -> Promise<Void> {
+func at(time: DispatchTime, cancel: CancelContext? = nil) -> Promise<Void> {
 #if swift(>=4.0)
     var fulfill: ((()) -> Void)?
 #else

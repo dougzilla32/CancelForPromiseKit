@@ -1,5 +1,5 @@
 import PromiseKit
-import CancelForPromiseKit
+@testable import CancelForPromiseKit
 import XCTest
 
 class GuaranteeTests: XCTestCase {

@@ -8,10 +8,10 @@
 import PromiseKit
 
 /**
- Resolves with the first resolving promise from a set of promises. Calling 'cancel' on the
+ Resolves with the first resolving cancellable promise from a set of cancellable promises. Calling 'cancel' on the
  race promise cancels all pending promises.
 
-     let racePromise = raceCC(promise1, promise2, promise3).thenCC { winner in
+     let racePromise = race(promise1, promise2, promise3).then { winner in
          //…
      }
  
@@ -23,14 +23,8 @@ import PromiseKit
  - Warning: If any of the provided promises reject, the returned promise is rejected.
  - Warning: aborts if the array is empty.
 */
-public func raceCC<U: Thenable>(_ thenables: U..., cancel: CancelContext? = nil) -> Promise<U.T> {
-    let promise = race(thenables)
-    let cancelContext = cancel ?? CancelContext()
-    promise.cancelContext = cancelContext
-    for p in thenables where p.cancelContext != nil {
-        cancelContext.append(context: p.cancelContext!)
-    }
-    return promise
+public func race<V: CancellableThenable>(_ thenables: V...) -> CancellablePromise<V.U.T> {
+    return CancellablePromise(raceCC(asThenables(thenables)))
 }
 
 /**
@@ -49,19 +43,15 @@ public func raceCC<U: Thenable>(_ thenables: U..., cancel: CancelContext? = nil)
  - Warning: If any of the provided promises reject, the returned promise is rejected.
  - Remark: Returns promise rejected with PMKError.badInput if empty array provided
 */
-public func raceCC<U: Thenable>(_ thenables: [U], cancel: CancelContext? = nil) -> Promise<U.T> {
-    guard !thenables.isEmpty else {
-        return Promise(error: PMKError.badInput)
-    }
-
-    return raceCC(thenables)
+public func race<V: CancellableThenable>(_ thenables: [V]) -> CancellablePromise<V.U.T> {
+    return CancellablePromise(raceCC(asThenables(thenables)))
 }
 
 /**
- Resolves with the first resolving Guarantee from a set of promises. Calling 'cancel' on the
- race promise cancels all pending promises.
+ Resolves with the first resolving Guarantee from a set of cancellable guarantees. Calling 'cancel' on the
+ race promise cancels all pending guarantees.
 
-     let racePromise = raceCC(promise1, promise2, promise3).thenCC { winner in
+     let racePromise = race(guarantee1, guarantee2, guarantee3).then { winner in
          //…
      }
  
@@ -73,7 +63,29 @@ public func raceCC<U: Thenable>(_ thenables: [U], cancel: CancelContext? = nil) 
  - Warning: If any of the provided promises reject, the returned promise is rejected.
  - Remark: Returns promise rejected with PMKError.badInput if empty array provided
 */
-public func raceCC<T>(_ guarantees: Guarantee<T>..., cancel: CancelContext? = nil) -> Promise<T> {
+public func race<T>(_ guarantees: CancellableGuarantee<T>...) -> CancellablePromise<T> {
+    return CancellablePromise(raceCC(asGuarantees(guarantees)))
+}
+
+func raceCC<U: Thenable>(_ thenables: U..., cancel: CancelContext? = nil) -> Promise<U.T> {
+    return raceCC(thenables, cancel: cancel)
+}
+
+func raceCC<U: Thenable>(_ thenables: [U], cancel: CancelContext? = nil) -> Promise<U.T> {
+    guard !thenables.isEmpty else {
+        return Promise(cancel: CancelContext(), error: PMKError.badInput)
+    }
+
+    let promise = race(thenables)
+    let cancelContext = cancel ?? CancelContext()
+    promise.cancelContext = cancelContext
+    for p in thenables where p.cancelContext != nil {
+        cancelContext.append(context: p.cancelContext!)
+    }
+    return promise
+}
+
+func raceCC<T>(_ guarantees: Guarantee<T>..., cancel: CancelContext? = nil) -> Promise<T> {
     let guarantee = race(guarantees)
     let cancelContext = cancel ?? CancelContext()
     guarantee.cancelContext = cancelContext

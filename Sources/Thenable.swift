@@ -7,12 +7,12 @@
 
 import PromiseKit
 
-public struct CancelContextKey {
+struct CancelContextKey {
     public static var cancelContext: UInt8 = 0
 }
 
-public extension Thenable {
-    public var cancelContext: CancelContext? {
+extension Thenable {
+    var cancelContext: CancelContext? {
         get {
             return objc_getAssociatedObject(self, &CancelContextKey.cancelContext) as? CancelContext
         }
@@ -21,23 +21,39 @@ public extension Thenable {
         }
     }
     
-    public func cancel(error: Error? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+    func cancel(error: Error? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
         cancelContext?.cancel(error: error, file: file, function: function, line: line)
+    }
+    
+    var isCancelled: Bool {
+        return cancelContext?.isCancelled ?? false
+    }
+    
+    var cancelAttempted: Bool {
+        return cancelContext?.cancelAttempted ?? false
+    }
+    
+    var cancelledError: Error? {
+        return cancelContext?.cancelledError
     }
 
     func thenCC<U: Thenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) throws -> U) -> Promise<U.T> {
+        if self.cancelContext == nil {
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: "thenCC", file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
+        }
+        
         let cancelBody = { (value: T) throws -> U in
             if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
                 let rv = try body(value)
-                if let selfContext = self.cancelContext, let rvContext = rv.cancelContext {
-                    selfContext.append(context: rvContext)
-                } else if let rvContext = rv.cancelContext {
-                    self.cancelContext = rvContext
+                if let rvContext = rv.cancelContext {
+                    self.cancelContext?.append(context: rvContext)
                 } else {
-                    ErrorConditions.cancelContextMissing(className: "Promise", functionName: "thenCC", file: file, function: function, line: line)
+                    ErrorConditions.cancelContextMissingFromBody(className: "Promise", functionName: "thenCC", file: file, function: function, line: line)
                 }
+                // TODO: remove the CancelItem for this promise from the CancelContext
                 return rv
             }
         }
@@ -49,13 +65,15 @@ public extension Thenable {
     
     func mapCC<U>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping(T) throws -> U) -> Promise<U> {
         if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "mapCC", file: file, function: function, line: line)
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: "mapCC", file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
         }
         
         let cancelTransform = { (value: T) throws -> U in
             if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
+                // TODO: remove the CancelItem for this promise from the CancelContext
                 return try transform(value)
             }
         }
@@ -67,13 +85,15 @@ public extension Thenable {
     
     func compactMapCC<U>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping(T) throws -> U?) -> Promise<U> {
         if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "compactMapCC", file: file, function: function, line: line)
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: "compactMapCC", file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
         }
         
         let cancelTransform = { (value: T) throws -> U? in
             if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
+                // TODO: remove the CancelItem for this promise from the CancelContext
                 return try transform(value)
             }
         }
@@ -85,13 +105,15 @@ public extension Thenable {
     
     func doneCC(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) throws -> Void) -> Promise<Void> {
         if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "doneCC", file: file, function: function, line: line)
-        }
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: "doneCC", file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
+       }
         
         let cancelBody = { (value: T) throws -> Void in
             if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
+                // TODO: remove the CancelItem for this promise from the CancelContext
                 try body(value)
             }
         }
@@ -103,7 +125,8 @@ public extension Thenable {
     
     func getCC(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (T) throws -> Void) -> Promise<T> {
         if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissing(className: "Promise", functionName: "getCC", file: file, function: function, line: line)
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: "getCC", file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
         }
 
         return mapCC(on: on) {

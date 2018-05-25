@@ -7,7 +7,7 @@
 
 import XCTest
 import PromiseKit
-import CancelForPromiseKit
+@testable import CancelForPromiseKit
 
 class CancelHooks {
     static var validate: ((Any, String) -> CancelContext)?

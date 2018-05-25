@@ -7,9 +7,9 @@
 
 import XCTest
 import PromiseKit
-import CancelForPromiseKit
+@testable import CancelForPromiseKit
 
-class CancelChain: XCTestCase {
+class CancelChainCC: XCTestCase {
     // Using a distinct type for each promise so we can tell which promise is which when using trace messages inside Thenable
     struct A { }
     struct B { }
@@ -18,68 +18,68 @@ class CancelChain: XCTestCase {
     struct E { }
     
     struct Chain {
-        let pA: CancellablePromise<A>
-        let pB: CancellablePromise<B>
-        let pC: CancellablePromise<C>
-        let pD: CancellablePromise<D>
-        let pE: CancellablePromise<E>
+        let pA: Promise<A>
+        let pB: Promise<B>
+        let pC: Promise<C>
+        let pD: Promise<D>
+        let pE: Promise<E>
     }
     
     func trace(_ message: String) {
         // print(message)
     }
     
-    func cancelChainPromises() -> Chain {
-        let pA = CancellablePromise<A> { seal in
+    func cancelChainPromises(cancel context: CancelContext) -> Chain {
+        let pA: Promise<A> = Promise<A>(cancel: context) { seal in
             self.trace("A IN")
-            afterCP(seconds: 0.05).done {
+            afterCC(seconds: 0.05).doneCC {
                 self.trace("A FULFILL")
                 seal.fulfill(A())
-            }.catch(policy: .allErrors) {
+            }.catchCC(policy: .allErrors) {
                 self.trace("A ERR")
                 seal.reject($0)
             }
         }
         
-        let pB = CancellablePromise<B> { seal in
+        let pB: Promise<B> = Promise<B>(cancel: CancelContext()) { seal in
             self.trace("B IN")
-            afterCP(seconds: 0.1).done {
+            afterCC(seconds: 0.1).doneCC {
                 self.trace("B FULFILL")
                 seal.fulfill(B())
-            }.catch(policy: .allErrors) {
+            }.catchCC(policy: .allErrors) {
                 self.trace("B ERR")
                 seal.reject($0)
             }
         }
         
-        let pC = CancellablePromise<C> { seal in
+        let pC: Promise<C> = Promise<C>(cancel: CancelContext()) { seal in
             self.trace("C IN")
-            afterCP(seconds: 0.15).done {
+            afterCC(seconds: 0.15).doneCC {
                 self.trace("C FULFILL")
                 seal.fulfill(C())
-           }.catch(policy: .allErrors) {
+           }.catchCC(policy: .allErrors) {
                 self.trace("C ERR")
                 seal.reject($0)
             }
         }
         
-        let pD = CancellablePromise<D> { seal in
+        let pD: Promise<D> = Promise<D>(cancel: CancelContext()) { seal in
             self.trace("D IN")
-            afterCP(seconds: 0.2).done {
+            afterCC(seconds: 0.2).doneCC {
                 self.trace("D FULFILL")
                 seal.fulfill(D())
-            }.catch(policy: .allErrors) {
+            }.catchCC(policy: .allErrors) {
                 self.trace("D ERR")
                 seal.reject($0)
             }
         }
         
-        let pE = CancellablePromise<E> { seal in
+        let pE: Promise<E> = Promise<E>(cancel: CancelContext()) { seal in
             self.trace("E IN")
-            afterCP(seconds: 0.25).done {
+            afterCC(seconds: 0.25).doneCC {
                 self.trace("E FULFILL")
                 seal.fulfill(E())
-            }.catch(policy: .allErrors) {
+            }.catchCC(policy: .allErrors) {
                 self.trace("E ERR")
                 seal.reject($0)
             }
@@ -99,36 +99,38 @@ class CancelChain: XCTestCase {
     
     func cancelChainSetup(waitTime: TimeInterval, ex: exABCDE) {
         {
-            let c = cancelChainPromises()
+            let context = CancelContext()
+            let c = cancelChainPromises(cancel: context)
+            context.descriptionClass = PromiseDescription(c.pA)
         
-            c.pA.then { (_: A) -> CancellablePromise<A> in
+            c.pA.thenCC { (_: A) -> Promise<A> in
                 self.trace("pA.then")
-                return firstly { () -> CancellablePromise<B> in
+                return firstlyCC { () -> Promise<B> in
                     self.trace("pB.firstly")
                     return c.pB
-                }.then { (_: B) -> CancellablePromise<D> in
+                }.thenCC { (_: B) -> Promise<D> in
                     self.trace("pB.then")
-                    return firstly { () -> CancellablePromise<C> in
+                    return firstlyCC { () -> Promise<C> in
                         self.trace("pC.firstly")
                         ex.b?.fulfill() ?? XCTFail("pB.thenCC")
                         return c.pC
-                    }.then { (_: C) -> CancellablePromise<D> in
+                    }.thenCC { (_: C) -> Promise<D> in
                         ex.c?.fulfill() ?? XCTFail("pC.thenCC")
                         self.trace("pC.then")
                         return c.pD
                     }
-                }.then { (_: D) -> CancellablePromise<A> in
+                }.thenCC { (_: D) -> Promise<A> in
                     ex.d?.fulfill() ?? XCTFail("pD.doneCC")
                     return c.pA  // Intentional reuse of pA -- causes a loop that CancelContext must detect
                 }
-            }.then { (_: A) -> CancellablePromise<E> in
+            }.thenCC { (_: A) -> Promise<E> in
                 self.trace("pA.then")
                 ex.a?.fulfill() ?? XCTFail("pA completed")
                 return c.pE
-            }.done { _ in
+            }.doneCC { _ in
                 ex.e?.fulfill() ?? XCTFail("pE completed")
                 self.trace("pE.done")
-            }.catch(policy: .allErrors) {
+            }.catchCC(policy: .allErrors) {
                 self.trace("Error: \($0)")
                 $0.isCancelled ? ex.cancelled?.fulfill() : print("Error: \($0)")
             }
@@ -138,7 +140,7 @@ class CancelChain: XCTestCase {
             let exCancelCalled = expectation(description: "cancel called")
             after(seconds: waitTime).done {
                 self.trace("CANCEL")
-                c.pA.cancel()
+                context.cancel()
                 exCancelCalled.fulfill()
             }
             

@@ -7,8 +7,8 @@
 
 import PromiseKit
 
-public extension Promise {
-    public convenience init(cancel: CancelContext, task: CancellableTask? = nil, resolver body: @escaping (Resolver<T>) throws -> Void) {
+extension Promise {
+    convenience init(cancel: CancelContext, task: CancellableTask? = nil, resolver body: @escaping (Resolver<T>) throws -> Void) {
         var reject: ((Error) -> Void)!
         self.init { seal in
             reject = seal.reject
@@ -18,7 +18,7 @@ public extension Promise {
         cancel.append(task: task, reject: reject, description: PromiseDescription(self))
     }
 
-    public convenience init(cancel: CancelContext, task: CancellableTask? = nil, error: Error) {
+    convenience init(cancel: CancelContext, task: CancellableTask? = nil, error: Error) {
         var reject: ((Error) -> Void)!
         self.init { seal in
             reject = seal.reject
@@ -28,7 +28,7 @@ public extension Promise {
         cancel.append(task: task, reject: reject, description: PromiseDescription(self))
     }
 
-    public class func pendingCC(cancel: CancelContext? = nil) -> (promise: Promise<T>, resolver: Resolver<T>) {
+    class func pendingCC(cancel: CancelContext? = nil) -> (promise: Promise<T>, resolver: Resolver<T>) {
         let rv = pending()
         let context = cancel ?? CancelContext()
         rv.promise.cancelContext = context
@@ -55,7 +55,7 @@ public extension Promise {
         Thenable.done:
           execute body (despited being 'rejected')
      */
-    public class func valueCC(_ value: T, cancel: CancelContext? = nil) -> Promise<T> {
+    static func valueCC(_ value: T, cancel: CancelContext? = nil) -> Promise<T> {
         var reject: ((Error) -> Void)!
 
         let promise = Promise<T> { seal in
@@ -71,9 +71,9 @@ public extension Promise {
 }
 
 #if swift(>=3.1)
-public extension Promise where T == Void {
+extension Promise where T == Void {
     /// Initializes a new promise fulfilled with `Void`
-    public convenience init(cancel: CancelContext, task: CancellableTask? = nil) {
+    convenience init(cancel: CancelContext, task: CancellableTask? = nil) {
         self.init()
         self.cancelContext = cancel
         cancel.append(task: nil, reject: nil, description: PromiseDescription(self))
@@ -81,7 +81,7 @@ public extension Promise where T == Void {
 }
 #endif
 
-public extension DispatchQueue {
+extension DispatchQueue {
     /**
      Asynchronously executes the provided closure on a dispatch queue.
 

@@ -1,5 +1,5 @@
 import PromiseKit
-import CancelForPromiseKit
+@testable import CancelForPromiseKit
 import XCTest
 
 class CatchableTests: XCTestCase {
@@ -172,7 +172,7 @@ extension CatchableTests {
                 }
                 guard x < 1 else { throw err }
                 x += 1
-                return .value(x)
+                return .valueCC(x)
             }.doneCC { _ in
                 (policy == .allErrorsExceptCancellation) ? XCTFail() : ex.fulfill()
             }.catchCC(policy: .allErrors) { error in
@@ -241,25 +241,31 @@ extension CatchableTests {
     func testEnsureThen_Error() {
         let ex = expectation(description: "")
 
-        Promise.valueCC(1).doneCC {
+        let p = Promise.valueCC(1).doneCC {
+            print("DONE")
             XCTAssertEqual($0, 1)
             throw Error.dummy
         }.ensureThenCC {
-            after(seconds: 0.01)
+            print("ENSURE THEN")
+            return afterCC(seconds: 0.01)
         }.catchCC(policy: .allErrors) {
+            print("CATCH")
             XCTAssert($0 is PromiseCancelledError)
         }.finallyCC {
+            print("FINALLY")
             ex.fulfill()
-        }.cancel()
+        }
+        print("CANCEL")
+        p.cancel()
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 1)
     }
 
     func testEnsureThen_Value() {
         let ex = expectation(description: "")
 
         Promise.valueCC(1).ensureThenCC {
-            after(seconds: 0.01)
+            afterCC(seconds: 0.01)
         }.doneCC { _ in
             XCTFail()
         }.catchCC(policy: .allErrors) {
@@ -270,7 +276,7 @@ extension CatchableTests {
             ex.fulfill()
         }.cancel()
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 1)
     }
 }
 

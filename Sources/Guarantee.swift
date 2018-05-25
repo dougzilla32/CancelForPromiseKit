@@ -7,34 +7,22 @@
 
 import PromiseKit
 
-public extension Guarantee {
-    public convenience init(cancel: CancelContext, task: CancellableTask? = nil, resolver body: (@escaping(T) -> Void) -> Void) {
+extension Guarantee {
+    convenience init(cancel: CancelContext, task: CancellableTask? = nil, resolver body: (@escaping(T) -> Void) -> Void) {
         self.init(resolver: body)
         self.cancelContext = cancel
         cancel.append(task: task, reject: nil, description: GuaranteeDescription(self))
     }
     
-    public class func pendingCC(cancel: CancelContext? = nil) -> (promise: Promise<T>, resolver: Resolver<T>) {
-        return Promise<T>.pendingCC()
-    }
-
-    public var cancelContext: CancelContext? {
-        get {
-            return objc_getAssociatedObject(self, &CancelContextKey.cancelContext) as? CancelContext
-        }
-        set(newValue) {
-            objc_setAssociatedObject(self, &CancelContextKey.cancelContext, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    public func cancel(error: Error? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
-        cancelContext?.cancel(error: error, file: file, function: function, line: line)
+    class func pendingCC(cancel: CancelContext? = nil) -> (guarantee: Guarantee<T>, resolver: Resolver<T>) {
+        return Guarantee<T>.pendingCC()
     }
     
     @discardableResult
     func doneCC(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Void) -> Promise<Void> {
         if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissing(className: "Guarantee", functionName: "doneCC", file: file, function: function, line: line)
+            ErrorConditions.cancelContextMissingInChain(className: "Guarantee", functionName: "doneCC", file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
         }
         
         let cancelBody = { (value: T) throws -> Void in
@@ -52,8 +40,9 @@ public extension Guarantee {
     
     func mapCC<U>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> U) -> Promise<U> {
         if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissing(className: "Guarantee", functionName: "mapCC", file: file, function: function, line: line)
-        }
+            ErrorConditions.cancelContextMissingInChain(className: "Guarantee", functionName: "mapCC", file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
+       }
         
         let cancelBody = { (value: T) throws -> U in
             if let error = self.cancelContext?.cancelledError {
@@ -70,17 +59,20 @@ public extension Guarantee {
     
     @discardableResult
     func thenCC<U>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Guarantee<U>) -> Promise<U> {        
+        if self.cancelContext == nil {
+            ErrorConditions.cancelContextMissingInChain(className: "Guarantee", functionName: "thenCC", file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
+        }
+
         let cancelBody = { (value: T) throws -> Guarantee<U> in
             if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
                 let rv = body(value)
-                if let selfContext = self.cancelContext, let rvContext = rv.cancelContext {
-                    selfContext.append(context: rvContext)
-                } else if let rvContext = rv.cancelContext {
-                    self.cancelContext = rvContext
+                if let rvContext = rv.cancelContext {
+                    self.cancelContext?.append(context: rvContext)
                 } else {
-                    ErrorConditions.cancelContextMissing(className: "Guarantee", functionName: "thenCC", file: file, function: function, line: line)
+                    ErrorConditions.cancelContextMissingFromBody(className: "Guarantee", functionName: "thenCC", file: file, function: function, line: line)
                 }
                 return rv
             }
@@ -93,7 +85,7 @@ public extension Guarantee {
 }
 
 #if swift(>=3.1)
-public extension Guarantee where T == Void {
+extension Guarantee where T == Void {
     convenience init(cancel: CancelContext, task: CancellableTask? = nil) {
         self.init()
         self.cancelContext = cancel
@@ -102,7 +94,7 @@ public extension Guarantee where T == Void {
 }
 #endif
 
-public extension DispatchQueue {
+extension DispatchQueue {
     /**
      Asynchronously executes the provided closure on a dispatch queue.
 
@@ -118,7 +110,7 @@ public extension DispatchQueue {
      */
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
     final func asyncCC<T>(_: PMKNamespacer, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], cancel: CancelContext? = nil, execute body: @escaping () -> T) -> Promise<T> {
-        let rp = Guarantee<T>.pendingCC()
+        let rp = Promise<T>.pendingCC()
         async(group: group, qos: qos, flags: flags) {
             if let error = rp.promise.cancelContext?.cancelledError {
                 rp.resolver.reject(error)

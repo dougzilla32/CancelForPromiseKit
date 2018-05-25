@@ -8,7 +8,7 @@
 
 import class Foundation.Thread
 import PromiseKit
-import CancelForPromiseKit
+@testable import CancelForPromiseKit
 import Dispatch
 import XCTest
 
