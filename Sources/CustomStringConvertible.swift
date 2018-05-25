@@ -16,6 +16,10 @@ public class PromiseDescription<T>: CustomStringConvertibleClass {
         self.promise = promise
     }
 
+    public init(_ promise: CancellablePromise<T>) {
+        self.promise = promise.promise
+    }
+    
     public var description: String {
         return promise?.description ?? "nil<Promise>"
     }
@@ -42,6 +46,10 @@ public class GuaranteeDescription<T>: CustomStringConvertibleClass {
         self.guarantee = guarantee
     }
 
+    public init(_ guarantee: CancellableGuarantee<T>) {
+        self.guarantee = guarantee.guarantee
+    }
+    
     public var description: String {
         return guarantee?.description ?? "nil<Guarantee>"
     }

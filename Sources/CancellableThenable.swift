@@ -14,7 +14,7 @@ public protocol CancellableThenable: class {
 }
 
 public extension CancellableThenable {
-    var cancelContext: CancelContext? {
+    var cancelContext: CancelContext! {
         return thenable.cancelContext
     }
     
