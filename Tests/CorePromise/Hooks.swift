@@ -149,7 +149,7 @@ class Scratch: XCTestCase {
     func testExtensionHooks() {
         let exComplete = expectation(description: "test completes")
         
-        afterCC(seconds: 0.1).doneTest { value in
+        afterCC(seconds: 0.1, cancel: CancelContext()).doneTest { value in
             print("hi \(value)")
             exComplete.fulfill()
         }.catchCC(policy: .allErrors) { error in

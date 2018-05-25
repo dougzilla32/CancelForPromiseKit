@@ -6,7 +6,7 @@ class HangTests: XCTestCase {
     func test() {
         let ex = expectation(description: "block executed")
         do {
-            let p = afterCC(seconds: 0.02).thenCC { _ -> Promise<Int> in
+            let p = afterCC(seconds: 0.02, cancel: CancelContext()).thenCC { _ -> Promise<Int> in
                 XCTFail()
                 return .value(1)
             }
@@ -27,7 +27,7 @@ class HangTests: XCTestCase {
     func testError() {
         var value = 0
         do {
-            let p = afterCC(seconds: 0.02).doneCC {
+            let p = afterCC(seconds: 0.02, cancel: CancelContext()).doneCC {
                 XCTFail()
                 value = 1
                 throw Error.test

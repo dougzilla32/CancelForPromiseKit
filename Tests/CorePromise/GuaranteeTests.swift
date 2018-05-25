@@ -19,7 +19,7 @@ class GuaranteeTests: XCTestCase {
     func testWait() {
         let ex = expectation(description: "")
         do {
-            let p = afterCC(.milliseconds(100)).mapCC(on: nil){ 1 }
+            let p = afterCC(.milliseconds(100), cancel: CancelContext()).mapCC(on: nil){ 1 }
             p.cancel()
             let value = try p.wait()
             XCTAssertEqual(value, 1)

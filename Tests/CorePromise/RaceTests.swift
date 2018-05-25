@@ -5,8 +5,8 @@ import PromiseKit
 class RaceTests: XCTestCase {
     func test1() {
         let ex = expectation(description: "")
-        let after1 = afterCC(.milliseconds(10))
-        let after2 = afterCC(seconds: 1)
+        let after1 = afterCC(.milliseconds(10), cancel: CancelContext())
+        let after2 = afterCC(seconds: 1, cancel: CancelContext())
         raceCC(after1.thenCC{ Promise.valueCC(1) }, after2.mapCC{ 2 }).doneCC { index in
             XCTFail()
             XCTAssertEqual(index, 1)
@@ -22,8 +22,8 @@ class RaceTests: XCTestCase {
     
     func test2() {
         let ex = expectation(description: "")
-        let after1 = afterCC(seconds: 1).mapCC{ 1 }
-        let after2 = afterCC(.milliseconds(10)).mapCC{ 2 }
+        let after1 = afterCC(seconds: 1, cancel: CancelContext()).mapCC{ 1 }
+        let after2 = afterCC(.milliseconds(10), cancel: CancelContext()).mapCC{ 2 }
         raceCC(after1, after2).doneCC { index in
             XCTFail()
             XCTAssertEqual(index, 2)
@@ -39,7 +39,7 @@ class RaceTests: XCTestCase {
 
     func test1Array() {
         let ex = expectation(description: "")
-        let promises = [afterCC(.milliseconds(10)).mapCC{ 1 }, afterCC(seconds: 1).mapCC{ 2 }]
+        let promises = [afterCC(.milliseconds(10), cancel: CancelContext()).mapCC{ 1 }, afterCC(seconds: 1, cancel: CancelContext()).mapCC{ 2 }]
         raceCC(promises).doneCC { index in
             XCTAssertEqual(index, 1)
             ex.fulfill()
@@ -55,8 +55,8 @@ class RaceTests: XCTestCase {
     
     func test2Array() {
         let ex = expectation(description: "")
-        let after1 = afterCC(seconds: 1).mapCC{ 1 }
-        let after2 = afterCC(.milliseconds(10)).mapCC{ 2 }
+        let after1 = afterCC(seconds: 1, cancel: CancelContext()).mapCC{ 1 }
+        let after2 = afterCC(.milliseconds(10), cancel: CancelContext()).mapCC{ 2 }
         raceCC(after1, after2).doneCC { index in
             XCTFail()
             XCTAssertEqual(index, 2)

@@ -20,12 +20,12 @@ class AfterTests: XCTestCase {
     
     func testZero() {
         let ex2 = expectation(description: "")
-        let cc2 = afterCC(seconds: 0).doneCC(fail).catchCC(policy: .allErrors, ex2.fulfill)
+        let cc2 = afterCC(seconds: 0, cancel: CancelContext()).doneCC(fail).catchCC(policy: .allErrors, ex2.fulfill)
         cc2.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
         let ex3 = expectation(description: "")
-        let cc3 = afterCC(.seconds(0)).doneCC(fail).catchCC(policy: .allErrors, ex3.fulfill)
+        let cc3 = afterCC(.seconds(0), cancel: CancelContext()).doneCC(fail).catchCC(policy: .allErrors, ex3.fulfill)
         cc3.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
@@ -38,12 +38,12 @@ class AfterTests: XCTestCase {
     
     func testNegative() {
         let ex2 = expectation(description: "")
-        let cc2 = afterCC(seconds: -1).doneCC(fail).catchCC(policy: .allErrors, ex2.fulfill)
+        let cc2 = afterCC(seconds: -1, cancel: CancelContext()).doneCC(fail).catchCC(policy: .allErrors, ex2.fulfill)
         cc2.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
         let ex3 = expectation(description: "")
-        let cc3 = afterCC(.seconds(-1)).doneCC(fail).catchCC(policy: .allErrors, ex3.fulfill)
+        let cc3 = afterCC(.seconds(-1), cancel: CancelContext()).doneCC(fail).catchCC(policy: .allErrors, ex3.fulfill)
         cc3.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
@@ -56,12 +56,12 @@ class AfterTests: XCTestCase {
     
     func testPositive() {
         let ex2 = expectation(description: "")
-        let cc2 = afterCC(seconds: 1).doneCC(fail).catchCC(policy: .allErrors, ex2.fulfill)
+        let cc2 = afterCC(seconds: 1, cancel: CancelContext()).doneCC(fail).catchCC(policy: .allErrors, ex2.fulfill)
         cc2.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
         let ex3 = expectation(description: "")
-        let cc3 = afterCC(.seconds(1)).doneCC(fail).catchCC(policy: .allErrors, ex3.fulfill)
+        let cc3 = afterCC(.seconds(1), cancel: CancelContext()).doneCC(fail).catchCC(policy: .allErrors, ex3.fulfill)
         cc3.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
@@ -140,7 +140,7 @@ class AfterTests: XCTestCase {
     func testCancelForGuarantee_Done() {
         let exComplete = expectation(description: "done is cancelled")
         
-        afterCC(seconds: 0).doneCC { _ in
+        afterCC(seconds: 0, cancel: CancelContext()).doneCC { _ in
             XCTFail("done not cancelled")
         }.catchCC(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")

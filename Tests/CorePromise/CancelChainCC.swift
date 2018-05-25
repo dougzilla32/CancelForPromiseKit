@@ -32,7 +32,7 @@ class CancelChainCC: XCTestCase {
     func cancelChainPromises(cancel context: CancelContext) -> Chain {
         let pA: Promise<A> = Promise<A>(cancel: context) { seal in
             self.trace("A IN")
-            afterCC(seconds: 0.05).doneCC {
+            afterCC(seconds: 0.05, cancel: CancelContext()).doneCC {
                 self.trace("A FULFILL")
                 seal.fulfill(A())
             }.catchCC(policy: .allErrors) {
@@ -43,7 +43,7 @@ class CancelChainCC: XCTestCase {
         
         let pB: Promise<B> = Promise<B>(cancel: CancelContext()) { seal in
             self.trace("B IN")
-            afterCC(seconds: 0.1).doneCC {
+            afterCC(seconds: 0.1, cancel: CancelContext()).doneCC {
                 self.trace("B FULFILL")
                 seal.fulfill(B())
             }.catchCC(policy: .allErrors) {
@@ -54,7 +54,7 @@ class CancelChainCC: XCTestCase {
         
         let pC: Promise<C> = Promise<C>(cancel: CancelContext()) { seal in
             self.trace("C IN")
-            afterCC(seconds: 0.15).doneCC {
+            afterCC(seconds: 0.15, cancel: CancelContext()).doneCC {
                 self.trace("C FULFILL")
                 seal.fulfill(C())
            }.catchCC(policy: .allErrors) {
@@ -65,7 +65,7 @@ class CancelChainCC: XCTestCase {
         
         let pD: Promise<D> = Promise<D>(cancel: CancelContext()) { seal in
             self.trace("D IN")
-            afterCC(seconds: 0.2).doneCC {
+            afterCC(seconds: 0.2, cancel: CancelContext()).doneCC {
                 self.trace("D FULFILL")
                 seal.fulfill(D())
             }.catchCC(policy: .allErrors) {
@@ -76,7 +76,7 @@ class CancelChainCC: XCTestCase {
         
         let pE: Promise<E> = Promise<E>(cancel: CancelContext()) { seal in
             self.trace("E IN")
-            afterCC(seconds: 0.25).doneCC {
+            afterCC(seconds: 0.25, cancel: CancelContext()).doneCC {
                 self.trace("E FULFILL")
                 seal.fulfill(E())
             }.catchCC(policy: .allErrors) {

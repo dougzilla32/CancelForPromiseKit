@@ -122,7 +122,7 @@ class PromiseTests: XCTestCase {
     }
 
     func testWait() throws {
-        let p = afterCP(.milliseconds(100)).then(on: nil){ CancellablePromise.value(1) }
+        let p = afterCC(.milliseconds(100)).then(on: nil){ CancellablePromise.value(1) }
         p.cancel()
         do {
             _ = try p.wait()
@@ -132,7 +132,7 @@ class PromiseTests: XCTestCase {
         }
 
         do {
-            let p = afterCP(.milliseconds(100)).map(on: nil){ throw Error.dummy }
+            let p = afterCC(.milliseconds(100)).map(on: nil){ throw Error.dummy }
             p.cancel()
             try p.wait()
             XCTFail()

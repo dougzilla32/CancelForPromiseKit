@@ -8,7 +8,7 @@ class CatchableTests: XCTestCase {
         func helper(error: Error) {
             let ex = (expectation(description: "ex0"), expectation(description: "ex1"))
             var x = 0
-            let p = afterCC(seconds: 0.01).catchCC(policy: .allErrors) { _ in
+            let p = afterCC(seconds: 0.01, cancel: CancelContext()).catchCC(policy: .allErrors) { _ in
                 XCTAssertEqual(x, 0)
                 x += 1
                 ex.0.fulfill()
@@ -247,7 +247,7 @@ extension CatchableTests {
             throw Error.dummy
         }.ensureThenCC {
             print("ENSURE THEN")
-            return afterCC(seconds: 0.01)
+            return afterCC(seconds: 0.01, cancel: CancelContext())
         }.catchCC(policy: .allErrors) {
             print("CATCH")
             XCTAssert($0 is PromiseCancelledError)
@@ -265,7 +265,7 @@ extension CatchableTests {
         let ex = expectation(description: "")
 
         Promise.valueCC(1).ensureThenCC {
-            afterCC(seconds: 0.01)
+            afterCC(seconds: 0.01, cancel: CancelContext())
         }.doneCC { _ in
             XCTFail()
         }.catchCC(policy: .allErrors) {

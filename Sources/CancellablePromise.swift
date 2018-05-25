@@ -44,11 +44,13 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
         self.init(Promise(resolver: body))
     }
     
-    convenience init(task: CancellableTask, resolver body: @escaping (Resolver<T>) throws -> Void) {
+    /// Initialize a new cancellable promise with a cancellable task that can be resolved with the provided `Resolver`.
+    public convenience init(task: CancellableTask, resolver body: @escaping (Resolver<T>) throws -> Void) {
         self.init(Promise(cancel: CancelContext(), task: task, resolver: body))
     }
     
-    convenience init(task: CancellableTask, error: Error) {
+    /// Initialize a new cancellable promise with a cancellable task and rejected with the provided error.
+    public convenience init(task: CancellableTask, error: Error) {
         self.init(Promise(cancel: CancelContext(), task: task, error: error))
     }
 

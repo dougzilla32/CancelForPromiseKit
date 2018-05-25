@@ -32,7 +32,7 @@ class CancelChain: XCTestCase {
     func cancelChainPromises() -> Chain {
         let pA = CancellablePromise<A> { seal in
             self.trace("A IN")
-            afterCP(seconds: 0.05).done {
+            afterCC(seconds: 0.05).done {
                 self.trace("A FULFILL")
                 seal.fulfill(A())
             }.catch(policy: .allErrors) {
@@ -43,7 +43,7 @@ class CancelChain: XCTestCase {
         
         let pB = CancellablePromise<B> { seal in
             self.trace("B IN")
-            afterCP(seconds: 0.1).done {
+            afterCC(seconds: 0.1).done {
                 self.trace("B FULFILL")
                 seal.fulfill(B())
             }.catch(policy: .allErrors) {
@@ -54,7 +54,7 @@ class CancelChain: XCTestCase {
         
         let pC = CancellablePromise<C> { seal in
             self.trace("C IN")
-            afterCP(seconds: 0.15).done {
+            afterCC(seconds: 0.15).done {
                 self.trace("C FULFILL")
                 seal.fulfill(C())
            }.catch(policy: .allErrors) {
@@ -65,7 +65,7 @@ class CancelChain: XCTestCase {
         
         let pD = CancellablePromise<D> { seal in
             self.trace("D IN")
-            afterCP(seconds: 0.2).done {
+            afterCC(seconds: 0.2).done {
                 self.trace("D FULFILL")
                 seal.fulfill(D())
             }.catch(policy: .allErrors) {
@@ -76,7 +76,7 @@ class CancelChain: XCTestCase {
         
         let pE = CancellablePromise<E> { seal in
             self.trace("E IN")
-            afterCP(seconds: 0.25).done {
+            afterCC(seconds: 0.25).done {
                 self.trace("E FULFILL")
                 seal.fulfill(E())
             }.catch(policy: .allErrors) {
