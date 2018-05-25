@@ -8,37 +8,37 @@
 import PromiseKit
 
 public func firstly<V: CancellableThenable>(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, execute body: () throws -> V) -> CancellablePromise<V.U.T> {
-    return CancellablePromise(firstlyCC(file: file, function: function, line: line) { () throws -> V.U in
+    return CancellablePromise(firstlyCC(cancel: CancelContext(), file: file, function: function, line: line) { () throws -> V.U in
         return try body().thenable
     })
 }
 
-public func firstly<U: Thenable>(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, execute body: () throws -> U) -> CancellablePromise<U.T> {
-    return CancellablePromise(firstlyCC(file: file, function: function, line: line, execute: body))
+public func firstlyCC<U: Thenable>(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, execute body: () throws -> U) -> CancellablePromise<U.T> {
+    return CancellablePromise(firstlyCC(cancel: CancelContext(), file: file, function: function, line: line, execute: body))
 }
 
-func firstlyCC<U: Thenable>(cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, execute body: () throws -> U) -> Promise<U.T> {
+func firstlyCC<U: Thenable>(cancel: CancelContext, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, execute body: () throws -> U) -> Promise<U.T> {
     do {
         let rv = try body()
-        if let c = cancel, let rvc = rv.cancelContext {
-            c.append(context: rvc)
+        if let rvc = rv.cancelContext {
+            cancel.append(context: rvc)
         }
         
         let rp = Promise<U.T>(rv)
-        rp.cancelContext = cancel ?? rv.cancelContext ?? CancelContext()
+        rp.cancelContext = cancel
         return rp
     } catch {
-        return Promise(cancel: cancel ?? CancelContext(), error: error)
+        return Promise(cancel: cancel, error: error)
     }
 }
 
-func firstlyCC<T>(cancel: CancelContext? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, execute body: () -> Guarantee<T>) -> Promise<T> {
+func firstlyCC<T>(cancel: CancelContext, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, execute body: () -> Guarantee<T>) -> Promise<T> {
     let rv = body()
-    if let c = cancel, let rvc = rv.cancelContext {
-        c.append(context: rvc)
+    if let rvc = rv.cancelContext {
+        cancel.append(context: rvc)
     }
 
     let rp = Promise<T>(rv)
-    rp.cancelContext = cancel ?? rv.cancelContext ?? CancelContext()
+    rp.cancelContext = cancel
     return rp
 }

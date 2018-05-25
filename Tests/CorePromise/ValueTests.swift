@@ -11,166 +11,144 @@ import CancelForPromiseKit
 
 class ValueTests: XCTestCase {
     func testValueContext() {
-        let context = CancelContext()
         let exComplete = expectation(description: "after completes")
-        Promise.valueCC("hi", cancel: context).doneCC { _ in
+        CancellablePromise.value("hi").done { _ in
             XCTFail("value not cancelled")
-        }.catchCC(policy: .allErrors) { error in
+        }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
-        }
-        context.cancel()
+        }.cancel()
         
         wait(for: [exComplete], timeout: 1)
     }
     
-    func testValueCCDoneCC() {
-        let context = CancelContext()
+    func testValueDone() {
         let exComplete = expectation(description: "after completes")
-        Promise.valueCC("hi", cancel: context).doneCC { _ in
+        CancellablePromise.value("hi").done { _ in
             XCTFail("value not cancelled")
-        }.catchCC(policy: .allErrors) { error in
+        }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
-        }
-        context.cancel()
+        }.cancel()
         
         wait(for: [exComplete], timeout: 1)
     }
     
-    func testValueCCThenCC() {
-        let context = CancelContext()
+    func testValueThen() {
         let exComplete = expectation(description: "after completes")
         
-        Promise.valueCC("hi", cancel: context).thenCC { (_: String) -> Promise<String> in
+        CancellablePromise.value("hi").then { (_: String) -> CancellablePromise<String> in
             XCTFail("value not cancelled")
-            return Promise.valueCC("bye")
-        }.doneCC { _ in
+            return CancellablePromise.value("bye")
+        }.done { _ in
             XCTFail("value not cancelled")
-        }.catchCC(policy: .allErrors) { error in
+        }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
-        }
-        context.cancel()
+        }.cancel()
         
         wait(for: [exComplete], timeout: 1)
     }
     
-    func testValueDoneCC() {
-        let context = CancelContext()
-        let exComplete = expectation(description: "after completes")
-        
-        Promise.value("hi").doneCC(cancel: context) { _ in
-            XCTFail("value not cancelled")
-        }.catchCC(policy: .allErrors) { error in
-            error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
-        }
-        context.cancel()
-        
-        wait(for: [exComplete], timeout: 1)
-    }
-    
-    func testFirstlyValueDoneCC() {
-        let context = CancelContext()
+    func testFirstlyValueDone() {
         let exComplete = expectation(description: "after completes")
         
         firstly {
-            Promise.value("hi")
-        }.doneCC(cancel: context) { _ in
+            CancellablePromise.value("hi")
+        }.done { _ in
             XCTFail("value not cancelled")
-        }.catchCC(policy: .allErrors) { error in
+        }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
-        }
-        context.cancel()
+        }.cancel()
         
         wait(for: [exComplete], timeout: 1)
     }
     
-    func testFirstlyCCValueDoneCC() {
-        let context = CancelContext()
+    func testFirstlyThenValueDone() {
         let exComplete = expectation(description: "after completes")
         
-        firstlyCC(cancel: context) {
+        firstlyCC {
             Promise.value("hi")
-        }.doneCC { _ in
-            XCTFail("value not cancelled")
-        }.catchCC(policy: .allErrors) { error in
+        }.then { (_: String) -> CancellablePromise<String> in
+            XCTFail("'hi' not cancelled")
+            return CancellablePromise.value("there")
+        }.done { _ in
+            XCTFail("'there' not cancelled")
+        }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
-        }
-        context.cancel()
+        }.cancel()
 
         wait(for: [exComplete], timeout: 1)
     }
     
     func testFirstlyValueDifferentContextDone() {
-        let context = CancelContext()
         let exComplete = expectation(description: "after completes")
         
-        firstlyCC {
-            Promise.valueCC("hi", cancel: context)
-        }.doneCC { _ in
+        let p = firstly { () -> CancellablePromise<String> in
+            let v = CancellablePromise.value("hi")
+            v.cancelContext = CancelContext()
+            return v
+        }.done { _ in
             XCTFail("value not cancelled")
-        }.catchCC(policy: .allErrors) { error in
+        }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }
-        context.cancel()
+        p.cancel()
         
         wait(for: [exComplete], timeout: 1)
     }
     
     func testFirstlyValueDoneDifferentContext() {
-        let context = CancelContext()
         let exComplete = expectation(description: "after completes")
         
         firstlyCC {
             Promise.value("hi")
-        }.doneCC(cancel: context) { _ in
+        }.done { _ in
             XCTFail("value not cancelled")
-        }.catchCC(policy: .allErrors) { error in
+        }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
-        }
-        context.cancel()
+        }.cancel()
         
         wait(for: [exComplete], timeout: 1)
     }
     
-   func testCancelForPromise_Then() {
+    func testCancelForPromise_Then() {
         let exComplete = expectation(description: "after completes")
-        let context = CancelContext()
         
-        let promise = Promise<Void>(cancel: context) { seal in
+        let promise = CancellablePromise<Void> { seal in
             usleep(100000)
             seal.fulfill()
         }
-        promise.thenCC { () throws -> Promise<String>  in
+        promise.then { () throws -> Promise<String> in
             XCTFail("then not cancelled")
             return Promise.value("x")
-        }.doneCC { _ in
+        }.done { _ in
             XCTFail("done not cancelled")
-        }.catchCC(policy: .allErrors) { error in
+        }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
-        }
-        
-        context.cancel()
+        }.cancel()
         
         wait(for: [exComplete], timeout: 1)
     }
 
     func testCancelForPromise_ThenDone() {
+        let exThen = expectation(description: "then is not cancelled")
         let exComplete = expectation(description: "done is cancelled")
-        let noopContext = CancelContext()
         let context = CancelContext()
 
-        let promise = Promise<Void>(cancel: context) { seal in
+        let promise = CancellablePromise<Void> { seal in
             usleep(100000)
             seal.fulfill()
         }
-        promise.thenCC(cancel: noopContext) { _ in
-            return Promise.valueCC("x")
-        }.doneCC(cancel: context) { _ in
+        promise.then { _ -> CancellablePromise<String> in
+            exThen.fulfill()
+            let v = CancellablePromise.value("x")
+            v.cancelContext = context
+            return v
+        }.done { _ in
             XCTFail("done not cancelled")
-        }.catchCC(policy: .allErrors) { error in
+        }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }
         context.cancel()
 
-        wait(for: [exComplete], timeout: 1)
+        wait(for: [exThen, exComplete], timeout: 1)
     }
 }

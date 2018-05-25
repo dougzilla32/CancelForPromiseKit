@@ -46,7 +46,7 @@ class CancellablePromiseTests: XCTestCase {
     
     func testFirstlyWithPromise() {
         let ex = expectation(description: "")
-        firstly {
+        firstlyCC {
             return Promise.value(3)
         }.then { (_: Int) -> CancellablePromise<String> in
             XCTFail()

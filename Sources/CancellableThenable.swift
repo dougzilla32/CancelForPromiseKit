@@ -15,7 +15,13 @@ public protocol CancellableThenable: class {
 
 public extension CancellableThenable {
     var cancelContext: CancelContext! {
-        return thenable.cancelContext
+        get {
+            return thenable.cancelContext
+        }
+        
+        set {
+            thenable.cancelContext = newValue
+        }
     }
     
     func cancel(error: Error? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
@@ -37,6 +43,12 @@ public extension CancellableThenable {
     func then<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.U.T> {
         return CancellablePromise(thenable.thenCC(on: on, file: file, function: function, line: line) { (value: U.T) throws -> Promise<V.U.T> in
             return try body(value).thenable as! Promise<V.U.T>
+        })
+    }
+    
+    func then<V: Thenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
+        return CancellablePromise(thenable.thenCC(on: on, file: file, function: function, line: line) { (value: U.T) throws -> Promise<V.T> in
+            return try body(value) as! Promise<V.T>
         })
     }
     
@@ -172,6 +184,12 @@ public extension CancellableThenable where U.T: Sequence {
         }
     }
 
+    func thenMap<V: Thenable>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.T]> {
+        return then(on: on) {
+            when(fulfilled: try $0.map(transform))
+        }
+    }
+    
     /**
      `CancellablePromise<[T]>` => `T` -> `CancellablePromise<[U]>` => `CancellablePromise<[U]>`
 
@@ -191,6 +209,14 @@ public extension CancellableThenable where U.T: Sequence {
         }
     }
 
+    func thenFlatMap<V: Thenable>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.T.Iterator.Element]> where V.T: Sequence {
+        return then(on: on) {
+            when(fulfilled: try $0.map(transform))
+        }.map(on: nil) {
+            $0.flatMap { $0 }
+        }
+    }
+    
     /**
      `CancellablePromise<[T]>` => `T` -> Bool => `CancellablePromise<[U]>`
 

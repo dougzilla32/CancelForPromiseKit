@@ -105,12 +105,12 @@ class CancelChainCC: XCTestCase {
         
             c.pA.thenCC { (_: A) -> Promise<A> in
                 self.trace("pA.then")
-                return firstlyCC { () -> Promise<B> in
+                return firstlyCC(cancel: CancelContext()) { () -> Promise<B> in
                     self.trace("pB.firstly")
                     return c.pB
                 }.thenCC { (_: B) -> Promise<D> in
                     self.trace("pB.then")
-                    return firstlyCC { () -> Promise<C> in
+                    return firstlyCC(cancel: CancelContext()) { () -> Promise<C> in
                         self.trace("pC.firstly")
                         ex.b?.fulfill() ?? XCTFail("pB.thenCC")
                         return c.pC
