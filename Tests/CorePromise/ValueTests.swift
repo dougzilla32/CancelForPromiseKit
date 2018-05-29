@@ -81,10 +81,8 @@ class ValueTests: XCTestCase {
     func testFirstlyValueDifferentContextDone() {
         let exComplete = expectation(description: "after completes")
         
-        let p = firstly { () -> CancellablePromise<String> in
-            let v = CancellablePromise.value("hi")
-            v.cancelContext = CancelContext()
-            return v
+        let p = firstly {
+            return CancellablePromise.value("hi")
         }.done { _ in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
@@ -131,7 +129,6 @@ class ValueTests: XCTestCase {
     func testCancelForPromise_ThenDone() {
         let exThen = expectation(description: "then is not cancelled")
         let exComplete = expectation(description: "done is cancelled")
-        let context = CancelContext()
 
         let promise = CancellablePromise<Void> { seal in
             usleep(100000)
@@ -139,15 +136,12 @@ class ValueTests: XCTestCase {
         }
         promise.then { _ -> CancellablePromise<String> in
             exThen.fulfill()
-            let v = CancellablePromise.value("x")
-            v.cancelContext = context
-            return v
+            return CancellablePromise.value("x")
         }.done { _ in
             XCTFail("done not cancelled")
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
-        }
-        context.cancel()
+        }.cancel()
 
         wait(for: [exThen, exComplete], timeout: 1)
     }

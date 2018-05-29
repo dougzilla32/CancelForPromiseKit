@@ -15,13 +15,7 @@ public protocol CancellableThenable: class {
 
 public extension CancellableThenable {
     var cancelContext: CancelContext! {
-        get {
-            return thenable.cancelContext
-        }
-        
-        set {
-            thenable.cancelContext = newValue
-        }
+        return thenable.cancelContext
     }
     
     func appendCancellableTask(task: CancellableTask?, reject: ((Error) -> Void)?) {
