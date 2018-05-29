@@ -26,11 +26,11 @@ func afterCC(_ interval: DispatchTimeInterval, cancel: CancelContext) -> Promise
 
 func at(time: DispatchTime, cancel: CancelContext? = nil) -> Promise<Void> {
 #if swift(>=4.0)
-    var fulfill: ((()) -> Void)?
+    var fulfill: ((()) -> Void)!
 #else
-    var fulfill: (() -> Void)?
+    var fulfill: (() -> Void)!
 #endif
-    var reject: ((Error) -> Void)?
+    var reject: ((Error) -> Void)!
 
     let promise = Promise<Void> { seal in
         fulfill = seal.fulfill
@@ -39,16 +39,15 @@ func at(time: DispatchTime, cancel: CancelContext? = nil) -> Promise<Void> {
     
     let task = DispatchWorkItem {
 #if swift(>=4.0)
-        fulfill!(())
+        fulfill(())
 #else
-        fulfill!()
+        fulfill()
 #endif
     }
     q.asyncAfter(deadline: time, execute: task)
 
-    let cancelContext = cancel ?? CancelContext()
-    promise.cancelContext = cancelContext
-    cancelContext.append(task: task, reject: reject!, description: PromiseDescription(promise))
+    promise.cancelContext = cancel ?? CancelContext()
+    promise.appendCancellableTask(task: task, reject: reject)
     return promise
 }
 

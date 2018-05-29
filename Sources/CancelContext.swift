@@ -18,19 +18,27 @@ class CancelItem: Hashable, CustomStringConvertible {
     
     let task: CancellableTask?
     var reject: ((Error) -> Void)?
-    weak var context: CancelContext?
+    var context: CancelContext?
     var cancelAttempted = false
     
-    init(task: CancellableTask?, reject: ((Error) -> Void)?, description: CustomStringConvertibleClass? = nil) {
+    init<Z: Thenable>(task: CancellableTask?, reject: ((Error) -> Void)?, thenable: Z) {
         self.task = task
         self.reject = reject
-        self.descriptionClass = description
+        self.descriptionCSC = CancelItem.createDescription(thenable)
     }
     
-    init(context: CancelContext, description: CustomStringConvertibleClass? = nil) {
+    init<Z: Thenable>(context: CancelContext, thenable: Z) {
         self.task = nil
         self.context = context
-        self.descriptionClass = description
+        self.descriptionCSC = CancelItem.createDescription(thenable)
+    }
+    
+    static func createDescription<Z: Thenable>(_ thenable: Z) -> CustomStringConvertible {
+        if let promise = thenable as? Promise<Z.T> {
+            return PromiseDescription(promise)
+        } else {
+            return GuaranteeDescription(thenable as! Guarantee<Z.T>)
+        }
     }
     
     func cancel(error: Error, visited: Set<CancelContext>? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
@@ -54,19 +62,22 @@ class CancelItem: Hashable, CustomStringConvertible {
 
     // MARK: CanceItem description
     
-    var descriptionOfClass: String?
+    var cachedDescription: String?
     
-    public var descriptionClass: CustomStringConvertibleClass? {
+    var descriptionCSC: CustomStringConvertible {
         didSet {
-            self.descriptionOfClass = descriptionClass != nil ? descriptionClass!.description : nil
+#if DEBUG
+            self.cachedDescription = descriptionCSC.description
+#endif
         }
     }
     
-    public var description: String {
+    var description: String {
         var rv = rawPointerDescription(obj: self)
-        if let desc = descriptionClass?.description, desc != "" {
+        let desc = descriptionCSC.description
+        if desc != "" {
             rv += "  \(desc) "
-        } else if let desc = descriptionOfClass, desc != "" {
+        } else if let desc = cachedDescription, desc != "" {
             rv += " [\(desc)]"
         }
         
@@ -76,7 +87,31 @@ class CancelItem: Hashable, CustomStringConvertible {
         if let r = reject {
             rv += " reject=\(r)"
         }
+        if let c = context {
+            rv += " context=\(c)"
+        }
         return rv
+    }
+}
+
+class CancelItemList {
+    fileprivate var items = [CancelItem]()
+    
+    init() {}
+    
+    func append(_ item: CancelItem) {
+        items.append(item)
+    }
+    
+    func append(contentsOf list: CancelItemList, clearList: Bool) {
+        items.append(contentsOf: list.items)
+        if clearList {
+            list.removeAll()
+        }
+    }
+    
+    func removeAll() {
+        items.removeAll()
     }
 }
 
@@ -98,16 +133,45 @@ public class CancelContext: Hashable, CustomStringConvertible {
     
     public private(set) var cancelledError: Error?
     
-    public func append(task: CancellableTask?, reject: ((Error) -> Void)?, description: CustomStringConvertibleClass? = nil) {
-        let item = CancelItem(task: task, reject: reject, description: description)
+    init(description: CustomStringConvertible? = nil) {
+        self.descriptionCSC = description
+    }
+    
+    var cachedDescription: String?
+    
+    var descriptionCSC: CustomStringConvertible? {
+        didSet {
+#if DEBUG
+            self.cachedDescription = descriptionCSC?.description
+#endif
+        }
+    }
+    
+    public var description: String {
+        var rv = rawPointerDescription(obj: self)
+        if let desc = descriptionCSC?.description, desc != "" {
+            rv += "  \(desc) "
+        } else if let desc = cachedDescription, desc != "" {
+            rv += " [\(desc)]"
+        }
+        return rv
+    }
+
+    func append<Z: Thenable>(task: CancellableTask?, reject: ((Error) -> Void)?, thenable: Z) {
+        let item = CancelItem(task: task, reject: reject, thenable: thenable)
         if let error = cancelledError {
             item.cancel(error: error)
         }
         cancelItemList.append(item)
         cancelItemSet.insert(item)
+        thenable.cancelItems.append(item)
     }
     
-    public func append(context childContext: CancelContext, description: CustomStringConvertibleClass? = nil) {
+    func append<Z: CancellableThenable>(task: CancellableTask?, reject: ((Error) -> Void)?, thenable: Z) {
+        append(task: task, reject: reject, thenable: thenable.thenable)
+    }
+    
+    func append<Z: Thenable>(context childContext: CancelContext, thenable: Z) {
         guard childContext !== self else {
             return
         }
@@ -122,9 +186,15 @@ public class CancelContext: Hashable, CustomStringConvertible {
             }
         }
         
-        let item = CancelItem(context: childContext, description: description)
+        let item = CancelItem(context: childContext, thenable: thenable)
         cancelItemList.append(item)
         cancelItemSet.insert(item)
+
+        thenable.cancelItems.append(item)
+    }
+    
+    func append<Z: CancellableThenable>(context childContext: CancelContext, thenable: Z) {
+        append(context: childContext, thenable: thenable.thenable)
     }
     
     public func cancel(error: Error? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
@@ -138,38 +208,51 @@ public class CancelContext: Hashable, CustomStringConvertible {
         }
     }
     
-    func recover(file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
-        cancelledError = nil
-    }
-
     public var isCancelled: Bool {
         for item in cancelItemList where !item.isCancelled {
             return false
         }
         return true
     }
-    
-    // MARK: CancelContext description
 
-    public init(description: CustomStringConvertibleClass? = nil) {
-        self.descriptionClass = description
-    }
-
-    var descriptionOfClass: String?
-    
-    public var descriptionClass: CustomStringConvertibleClass? {
-        didSet {
-            self.descriptionOfClass = descriptionClass != nil ? descriptionClass!.description : nil
-        }
+    func recover(file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+        cancelledError = nil
     }
     
-    public var description: String {
-        var rv = rawPointerDescription(obj: self)
-        if let desc = descriptionClass?.description, desc != "" {
-            rv += "  \(desc) "
-        } else if let desc = descriptionOfClass, desc != "" {
-            rv += " [\(desc)]"
+    func removeItems(_ list: CancelItemList, clearList: Bool, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+        guard list.items.count != 0 else {
+            return
         }
-        return rv
+        
+        defer {
+            if clearList {
+                list.removeAll()
+            }
+        }
+        
+        var currentIndex = 1
+        // The 'list' parameter should match a block of items in the cancelItemList, remove them from the cancelItemList
+        // in one operation for efficiency
+        if cancelItemSet.remove(list.items[0]) != nil {
+            let removeIndex = cancelItemList.index(of: list.items[0])!
+            while currentIndex < list.items.count {
+                let item = list.items[currentIndex]
+                if item != cancelItemList[removeIndex + currentIndex] {
+                    break
+                }
+                cancelItemSet.remove(item)
+                currentIndex += 1
+            }
+            cancelItemList.removeSubrange(removeIndex..<(removeIndex+currentIndex))
+        }
+        
+        // Remove whatever falls outside of the block
+        while currentIndex < list.items.count {
+            let item = list.items[currentIndex]
+            if cancelItemSet.remove(item) != nil {
+                cancelItemList.remove(at: cancelItemList.index(of: item)!)
+            }
+            currentIndex += 1
+        }
     }
 }

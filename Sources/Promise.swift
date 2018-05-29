@@ -7,6 +7,10 @@
 
 import PromiseKit
 
+class PromiseHolder<T> {
+    weak var promise: Promise<T>!
+}
+
 extension Promise {
     convenience init(cancel: CancelContext, task: CancellableTask? = nil, resolver body: @escaping (Resolver<T>) throws -> Void) {
         var reject: ((Error) -> Void)!
@@ -15,7 +19,7 @@ extension Promise {
             try body(seal)
         }
         self.cancelContext = cancel
-        cancel.append(task: task, reject: reject, description: PromiseDescription(self))
+        self.appendCancellableTask(task: task, reject: reject)
     }
 
     convenience init(cancel: CancelContext, task: CancellableTask? = nil, error: Error) {
@@ -25,14 +29,13 @@ extension Promise {
             seal.reject(error)
         }
         self.cancelContext = cancel
-        cancel.append(task: task, reject: reject, description: PromiseDescription(self))
+        self.appendCancellableTask(task: task, reject: reject)
     }
 
     class func pendingCC(cancel: CancelContext? = nil) -> (promise: Promise<T>, resolver: Resolver<T>) {
         let rv = pending()
-        let context = cancel ?? CancelContext()
-        rv.promise.cancelContext = context
-        context.append(task: nil, reject: rv.resolver.reject)
+        rv.promise.cancelContext = cancel ?? CancelContext()
+        rv.promise.appendCancellableTask(task: nil, reject: rv.resolver.reject)
         return rv
     }
     
@@ -63,9 +66,8 @@ extension Promise {
             seal.fulfill(value)
         }
 
-        let cancelContext = cancel ?? CancelContext()
-        cancelContext.append(task: nil, reject: reject, description: PromiseDescription(promise))
-        promise.cancelContext = cancelContext
+        promise.cancelContext = cancel ?? CancelContext()
+        promise.appendCancellableTask(task: nil, reject: reject)
         return promise
     }
 }
@@ -76,7 +78,7 @@ extension Promise where T == Void {
     convenience init(cancel: CancelContext, task: CancellableTask? = nil) {
         self.init()
         self.cancelContext = cancel
-        cancel.append(task: nil, reject: nil, description: PromiseDescription(self))
+        self.appendCancellableTask(task: task, reject: nil)
     }
 }
 #endif

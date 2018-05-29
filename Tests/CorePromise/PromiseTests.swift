@@ -55,7 +55,7 @@ class PromiseTests: XCTestCase {
             throw Error.dummy
         }.done { _ in
             XCTFail()
-        }.catch {
+        }.catch(policy: .allErrors) {
             $0.isCancelled ? XCTFail() : ex.fulfill()
         }.cancel()
 

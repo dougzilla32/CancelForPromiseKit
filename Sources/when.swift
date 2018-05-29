@@ -119,9 +119,7 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
             return nil
         }
         if let root = rootPromise {
-            if let cc = promise.cancelContext {
-                root.cancelContext?.append(context: cc)
-            }
+            root.appendCancelContext(from: promise)
         } else {
             generatedPromises.append(promise)
         }
@@ -130,10 +128,9 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
     
     rootPromise = when(fulfilled: generator, concurrently: concurrently)
     
-    let cancelContext = CancelContext()
-    rootPromise.cancelContext = cancelContext
+    rootPromise.cancelContext = CancelContext()
     for p in generatedPromises where p.cancelContext != nil {
-        cancelContext.append(context: p.cancelContext!)
+        rootPromise.appendCancelContext(from: p)
     }
     return CancellablePromise(rootPromise)
 }
@@ -185,20 +182,18 @@ public func when(guarantees: [CancellableGuarantee<Void>]) -> CancellableGuarant
 // MARK: whenCC
 
 private func _whenCC<U: Thenable>(_ whenPromise: Promise<Void>, fulfilled promises: [U], cancel: CancelContext? = nil) -> Promise<Void> {
-    let cancelContext = cancel ?? CancelContext()
-    whenPromise.cancelContext = cancelContext
-    for p in promises where p.cancelContext != nil {
-        cancelContext.append(context: p.cancelContext!)
+    whenPromise.cancelContext = cancel ?? CancelContext()
+    for p in promises {
+        whenPromise.appendCancelContext(from: p)
     }
     return whenPromise
 }
 
 func whenCC<U: Thenable>(fulfilled thenables: [U], cancel: CancelContext? = nil) -> Promise<[U.T]> {
     let rp: Promise<[U.T]> = when(fulfilled: thenables)
-    let cancelContext = cancel ?? CancelContext()
-    rp.cancelContext = cancelContext
+    rp.cancelContext = cancel ?? CancelContext()
     for t in thenables where t.cancelContext != nil {
-        cancelContext.append(context: t.cancelContext!)
+        rp.appendCancelContext(from: t)
     }
     return rp
 }
@@ -245,9 +240,7 @@ func whenCC<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrently: I
             return nil
         }
         if let root = rootPromise {
-            if let cc = promise.cancelContext {
-                root.cancelContext?.append(context: cc)
-            }
+            root.appendCancelContext(from: promise)
         } else {
             generatedPromises.append(promise)
         }
@@ -256,10 +249,9 @@ func whenCC<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrently: I
     
     rootPromise = when(fulfilled: generator, concurrently: concurrently)
 
-    let cancelContext = cancel ?? CancelContext()
-    rootPromise.cancelContext = cancelContext
-    for p in generatedPromises where p.cancelContext != nil {
-        cancelContext.append(context: p.cancelContext!)
+    rootPromise.cancelContext = cancel ?? CancelContext()
+    for p in generatedPromises {
+        rootPromise.appendCancelContext(from: p)
     }
     return rootPromise
 }
@@ -274,10 +266,9 @@ func whenCC<T>(resolved promises: [Promise<T>], cancel: CancelContext? = nil) ->
     }
 
     let rg = when(resolved: promises)
-    let cancelContext = cancel ?? CancelContext()
-    rg.cancelContext = cancelContext
-    for p in promises where p.cancelContext != nil {
-        cancelContext.append(context: p.cancelContext!)
+    rg.cancelContext = cancel ?? CancelContext()
+    for p in promises {
+        rg.appendCancelContext(from: p)
     }
     return rg
 }
@@ -288,10 +279,9 @@ func whenCC(_ guarantees: Guarantee<Void>..., cancel: CancelContext? = nil) -> G
 
 func whenCC(guarantees: [Guarantee<Void>], cancel: CancelContext? = nil) -> Guarantee<Void> {
     let rg = whenCC(fulfilled: guarantees, cancel: cancel)
-    let cancelContext = cancel ?? CancelContext()
-    rg.cancelContext = cancelContext
-    for g in guarantees where g.cancelContext != nil {
-        cancelContext.append(context: g.cancelContext!)
+    rg.cancelContext = cancel ?? CancelContext()
+    for g in guarantees {
+        rg.appendCancelContext(from: g)
     }
     return rg.recover { _ in }.asVoid()
 }

@@ -6,25 +6,25 @@ import PlaygroundSupport
 import PromiseKit
 import CancelForPromiseKit
 
-func promise3(cancel: CancelContext) -> Promise<Int> {
-    return afterCC(.seconds(1), cancel: cancel).map{ 3 }
+func promise3() ->
+    CancellablePromise<Int> {
+    return afterCC(.seconds(1)).map{ 3 }
 }
 
-let context = CancelContext()
-firstlyCC(cancel: context) {
-    Promise.valueCC(1)
-}.mapCC { _ in
+let context = firstly {
+    CancellablePromise.value(1)
+}.map { _ in
     2
-}.thenCC { _ in
-    promise3(cancel: context)
-}.doneCC {
+}.then { _ in
+    promise3()
+}.done {
     print($0)  // => 3
-}.ensureCC {
+}.ensure {
     PlaygroundPage.current.finishExecution()
-}.catchCC(policy: .allErrors) { error in
+}.catch(policy: .allErrors) { error in
     // only happens for errors
     print(error)
-}
+}.cancelContext
 
 PlaygroundPage.current.needsIndefiniteExecution = true
 

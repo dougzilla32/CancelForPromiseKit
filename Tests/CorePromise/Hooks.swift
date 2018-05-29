@@ -130,7 +130,7 @@ class Scratch: XCTestCase {
         
         CancelHooks.append = { context, childPromise in
             if let childContext = objc_getAssociatedObject(childPromise, &CancelContextKey.cancelContext) as? CancelContext {
-                context.append(context: childContext)
+                context.append(context: childContext, thenable: childPromise as! Promise<String>)
             }
         }
 

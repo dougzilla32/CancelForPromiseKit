@@ -67,6 +67,7 @@ extension CatchMixin {
             self.cancelContext = CancelContext()
         }
         
+        let promiseHolder = PromiseHolder<U.T>()
         let cancelBody = { (error: Error) throws -> U in
             if let cancelledError = self.cancelContext?.cancelledError {
                 if policy == .allErrorsExceptCancellation {
@@ -75,16 +76,27 @@ extension CatchMixin {
                     self.cancelContext?.recover()
                 }
             }
+
+            self.cancelContext?.removeItems(self.cancelItems, clearList: true)
+
             let rv = try body(error)
-            if let context = rv.cancelContext {
-                self.cancelContext?.append(context: context)
-            } else {
+            if rv.cancelContext == nil {
                 ErrorConditions.cancelContextMissingFromBody(className: "Promise", functionName: "recoverCC", file: file, function: function, line: line)
+            }
+            
+            // TODO: eliminate promiseHolder!!
+            if let p = promiseHolder.promise {
+                p.appendCancelContext(from: rv)
+            } else {
+                // TODO: REMOVE ME!!
+                print("NIL Promise in promiseHolder!! \(#file) \(#function) \(#line)")
+                self.cancelContext?.append(context: rv.cancelContext!, thenable: self)
             }
             return rv
         }
         
         let promise = self.recover(on: on, policy: policy, cancelBody)
+        promiseHolder.promise = promise
         promise.cancelContext = self.cancelContext
         return promise
     }
@@ -126,11 +138,11 @@ extension CatchMixin {
         pipe { result in
             on.async {
                 let rv = body()
-                if let context = rv.cancelContext {
-                    self.cancelContext?.append(context: context)
-                } else {
+                if rv.cancelContext == nil {
                     ErrorConditions.cancelContextMissingFromBody(className: "Promise", functionName: "ensureThenCC", file: file, function: function, line: line)
                 }
+                rp.promise.appendCancelContext(from: rv)
+
                 rv.doneCC {
                     switch result {
                     case .fulfilled(let value):
@@ -142,7 +154,7 @@ extension CatchMixin {
                     case .rejected(let error):
                         rp.resolver.reject(error)
                     }
-                }.catchCC {
+                }.catchCC(policy: .allErrors) {
                     rp.resolver.reject($0)
                 }
             }
@@ -156,7 +168,7 @@ extension CatchMixin {
             self.cancelContext = CancelContext()
         }
 
-        self.catchCC {
+        self.catchCC(policy: .allErrors) {
             Swift.print("PromiseKit:cauterized-error:", $0)
         }
     }

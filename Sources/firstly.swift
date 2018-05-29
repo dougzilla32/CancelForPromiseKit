@@ -20,12 +20,9 @@ public func firstlyCC<U: Thenable>(file: StaticString = #file, function: StaticS
 func firstlyCC<U: Thenable>(cancel: CancelContext, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, execute body: () throws -> U) -> Promise<U.T> {
     do {
         let rv = try body()
-        if let rvc = rv.cancelContext {
-            cancel.append(context: rvc)
-        }
-        
         let rp = Promise<U.T>(rv)
         rp.cancelContext = cancel
+        rp.appendCancelContext(from: rv)
         return rp
     } catch {
         return Promise(cancel: cancel, error: error)
@@ -34,11 +31,8 @@ func firstlyCC<U: Thenable>(cancel: CancelContext, file: StaticString = #file, f
 
 func firstlyCC<T>(cancel: CancelContext, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, execute body: () -> Guarantee<T>) -> Promise<T> {
     let rv = body()
-    if let rvc = rv.cancelContext {
-        cancel.append(context: rvc)
-    }
-
     let rp = Promise<T>(rv)
     rp.cancelContext = cancel
+    rp.appendCancelContext(from: rv)
     return rp
 }

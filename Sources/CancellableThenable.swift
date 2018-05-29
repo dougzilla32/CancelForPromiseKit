@@ -24,6 +24,10 @@ public extension CancellableThenable {
         }
     }
     
+    func appendCancellableTask(task: CancellableTask?, reject: ((Error) -> Void)?) {
+        thenable.cancelContext?.append(task: task, reject: reject, thenable: thenable)
+    }
+    
     func cancel(error: Error? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
         cancelContext?.cancel(error: error, file: file, function: function, line: line)
     }

@@ -7,9 +7,19 @@
 
 import PromiseKit
 
-public protocol CustomStringConvertibleClass: class, CustomStringConvertible { }
+public protocol ThenableDescription: class, CustomStringConvertible {
+    associatedtype U: Thenable
+    
+    var thenable: U? { get }
+}
 
-public class PromiseDescription<T>: CustomStringConvertibleClass {
+public class PromiseDescription<T>: ThenableDescription {
+    public typealias U = Promise<T>
+    
+    public weak var thenable: Promise<T>? {
+        return promise
+    }
+    
     weak var promise: Promise<T>?
     
     public init(_ promise: Promise<T>) {
@@ -21,7 +31,7 @@ public class PromiseDescription<T>: CustomStringConvertibleClass {
     }
     
     public var description: String {
-        return promise?.description ?? "nil<Promise>"
+        return promise?.description ?? ""
     }
 }
 
@@ -39,7 +49,13 @@ extension Guarantee: CustomStringConvertible {
     }
 }
 
-public class GuaranteeDescription<T>: CustomStringConvertibleClass {
+public class GuaranteeDescription<T>: ThenableDescription {
+    public typealias U = Guarantee<T>
+    
+    public weak var thenable: Guarantee<T>? {
+        return guarantee
+    }
+    
     weak var guarantee: Guarantee<T>?
     
     public init(_ guarantee: Guarantee<T>) {
@@ -51,6 +67,6 @@ public class GuaranteeDescription<T>: CustomStringConvertibleClass {
     }
     
     public var description: String {
-        return guarantee?.description ?? "nil<Guarantee>"
+        return guarantee?.description ?? ""
     }
 }

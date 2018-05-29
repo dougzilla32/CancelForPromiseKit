@@ -77,20 +77,18 @@ func raceCC<U: Thenable>(_ thenables: [U], cancel: CancelContext? = nil) -> Prom
     }
 
     let promise = race(thenables)
-    let cancelContext = cancel ?? CancelContext()
-    promise.cancelContext = cancelContext
-    for p in thenables where p.cancelContext != nil {
-        cancelContext.append(context: p.cancelContext!)
+    promise.cancelContext = cancel ?? CancelContext()
+    for t in thenables {
+        promise.appendCancelContext(from: t)
     }
     return promise
 }
 
 func raceCC<T>(_ guarantees: Guarantee<T>..., cancel: CancelContext? = nil) -> Promise<T> {
     let guarantee = race(guarantees)
-    let cancelContext = cancel ?? CancelContext()
-    guarantee.cancelContext = cancelContext
-    for g in guarantees where g.cancelContext != nil {
-        cancelContext.append(context: g.cancelContext!)
+    guarantee.cancelContext = cancel ?? CancelContext()
+    for g in guarantees {
+        guarantee.appendCancelContext(from: g)
     }
     return guarantee
 }

@@ -9,6 +9,7 @@ import PromiseKit
 
 struct CancelContextKey {
     public static var cancelContext: UInt8 = 0
+    public static var cancelItems: UInt8 = 0
 }
 
 extension Thenable {
@@ -18,6 +19,34 @@ extension Thenable {
         }
         set(newValue) {
             objc_setAssociatedObject(self, &CancelContextKey.cancelContext, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    var cancelItems: CancelItemList {
+        get {
+            var list: CancelItemList! = objc_getAssociatedObject(self, &CancelContextKey.cancelItems) as? CancelItemList
+            if list == nil {
+                list = CancelItemList()
+                self.cancelItems = list
+            }
+            return list
+        }
+        set(newValue) {
+            objc_setAssociatedObject(self, &CancelContextKey.cancelItems, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    func appendCancelItem(_ item: CancelItem) {
+        cancelItems.append(item)
+    }
+    
+    func appendCancellableTask(task: CancellableTask?, reject: ((Error) -> Void)?) {
+        self.cancelContext?.append(task: task, reject: reject, thenable: self)
+    }
+    
+    func appendCancelContext<Z: Thenable>(from: Z) {
+        if let context = from.cancelContext {
+            self.cancelContext?.append(context: context, thenable: self)
         }
     }
     
@@ -43,29 +72,38 @@ extension Thenable {
             self.cancelContext = CancelContext()
         }
         
+        let promiseHolder = PromiseHolder<U.T>()
         let cancelBody = { (value: T) throws -> U in
             if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
+                self.cancelContext?.removeItems(self.cancelItems, clearList: true)
+
                 let rv = try body(value)
-                if let rvContext = rv.cancelContext {
-                    self.cancelContext?.append(context: rvContext)
-                } else {
-                    ErrorConditions.cancelContextMissingFromBody(className: "Promise", functionName: "thenCC", file: file, function: function, line: line)
+                if rv.cancelContext == nil {
+                    ErrorConditions.cancelContextMissingFromBody(className: "Promise", functionName: #function, file: file, function: function, line: line)
                 }
-                // TODO: remove the CancelItem for this promise from the CancelContext
+                
+                // TODO: FIXME promiseHolder!
+                if let p = promiseHolder.promise {
+                    p.appendCancelContext(from: rv)
+                } else {
+                    print("NIL Promise in promiseHolder!! \(#file) \(#function) \(#line)")
+                    self.cancelContext?.append(context: rv.cancelContext!, thenable: self)
+                }
                 return rv
             }
         }
 
         let promise = self.then(on: on, file: file, line: line, cancelBody)
+        promiseHolder.promise = promise
         promise.cancelContext = self.cancelContext
         return promise
     }
     
     func mapCC<U>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping(T) throws -> U) -> Promise<U> {
         if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: "mapCC", file: file, function: function, line: line)
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
             self.cancelContext = CancelContext()
         }
         
@@ -73,7 +111,7 @@ extension Thenable {
             if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
-                // TODO: remove the CancelItem for this promise from the CancelContext
+                self.cancelContext?.removeItems(self.cancelItems, clearList: true)
                 return try transform(value)
             }
         }
@@ -85,7 +123,7 @@ extension Thenable {
     
     func compactMapCC<U>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping(T) throws -> U?) -> Promise<U> {
         if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: "compactMapCC", file: file, function: function, line: line)
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
             self.cancelContext = CancelContext()
         }
         
@@ -93,7 +131,7 @@ extension Thenable {
             if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
-                // TODO: remove the CancelItem for this promise from the CancelContext
+                self.cancelContext?.removeItems(self.cancelItems, clearList: true)
                 return try transform(value)
             }
         }
@@ -105,7 +143,7 @@ extension Thenable {
     
     func doneCC(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) throws -> Void) -> Promise<Void> {
         if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: "doneCC", file: file, function: function, line: line)
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
             self.cancelContext = CancelContext()
        }
         
@@ -113,7 +151,7 @@ extension Thenable {
             if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
-                // TODO: remove the CancelItem for this promise from the CancelContext
+                self.cancelContext?.removeItems(self.cancelItems, clearList: true)
                 try body(value)
             }
         }
@@ -125,7 +163,7 @@ extension Thenable {
     
     func getCC(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (T) throws -> Void) -> Promise<T> {
         if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: "getCC", file: file, function: function, line: line)
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
             self.cancelContext = CancelContext()
         }
 

@@ -101,7 +101,7 @@ class CancelChainCC: XCTestCase {
         {
             let context = CancelContext()
             let c = cancelChainPromises(cancel: context)
-            context.descriptionClass = PromiseDescription(c.pA)
+            context.descriptionCSC = PromiseDescription(c.pA)
         
             c.pA.thenCC { (_: A) -> Promise<A> in
                 self.trace("pA.then")
@@ -155,10 +155,10 @@ class CancelChainCC: XCTestCase {
                 XCTAssert(!(c.pE.cancelContext?.cancelAttempted ?? true))
             } else {
                 XCTAssert(c.pA.cancelContext?.cancelAttempted ?? false)
-                XCTAssert(ex.a == nil || c.pB.cancelContext?.cancelAttempted ?? false)
-                XCTAssert(ex.b == nil || c.pC.cancelContext?.cancelAttempted ?? false)
-                XCTAssert(ex.c == nil || c.pD.cancelContext?.cancelAttempted ?? false)
-                XCTAssert(ex.d == nil || c.pE.cancelContext?.cancelAttempted ?? false)
+                XCTAssert(ex.a == nil || isFulfilled(c.pB) || c.pB.cancelContext?.cancelAttempted ?? false)
+                XCTAssert(ex.b == nil || isFulfilled(c.pC) || c.pC.cancelContext?.cancelAttempted ?? false)
+                XCTAssert(ex.c == nil || isFulfilled(c.pD) || c.pD.cancelContext?.cancelAttempted ?? false)
+                XCTAssert(ex.d == nil || isFulfilled(c.pE) || c.pE.cancelContext?.cancelAttempted ?? false)
             }
             
             wait(for: [exCancelCalled], timeout: 1)
@@ -167,6 +167,18 @@ class CancelChainCC: XCTestCase {
         self.trace("DONE")
 
         return
+    }
+    
+    func isFulfilled<T>(_ p: Promise<T>) -> Bool {
+        if let result = p.result {
+            if case .fulfilled = result {
+                return true
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
     }
     
     func testCancelChainPB() {

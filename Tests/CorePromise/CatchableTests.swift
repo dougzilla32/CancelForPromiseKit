@@ -242,20 +242,15 @@ extension CatchableTests {
         let ex = expectation(description: "")
 
         let p = Promise.valueCC(1).doneCC {
-            print("DONE")
             XCTAssertEqual($0, 1)
             throw Error.dummy
         }.ensureThenCC {
-            print("ENSURE THEN")
             return afterCC(seconds: 0.01, cancel: CancelContext())
         }.catchCC(policy: .allErrors) {
-            print("CATCH")
             XCTAssert($0 is PromiseCancelledError)
         }.finallyCC {
-            print("FINALLY")
             ex.fulfill()
         }
-        print("CANCEL")
         p.cancel()
 
         wait(for: [ex], timeout: 1)

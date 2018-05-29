@@ -11,7 +11,7 @@ extension Guarantee {
     convenience init(cancel: CancelContext, task: CancellableTask? = nil, resolver body: (@escaping(T) -> Void) -> Void) {
         self.init(resolver: body)
         self.cancelContext = cancel
-        cancel.append(task: task, reject: nil, description: GuaranteeDescription(self))
+        self.appendCancellableTask(task: task, reject: nil)
     }
     
     class func pendingCC(cancel: CancelContext? = nil) -> (guarantee: Guarantee<T>, resolver: Resolver<T>) {
@@ -29,6 +29,7 @@ extension Guarantee {
             if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
+                self.cancelContext?.removeItems(self.cancelItems, clearList: true)
                 body(value)
             }
         }
@@ -48,6 +49,7 @@ extension Guarantee {
             if let error = self.cancelContext?.cancelledError {
                 throw error
             } else {
+                self.cancelContext?.removeItems(self.cancelItems, clearList: true)
                 return body(value)
             }
         }
@@ -69,11 +71,10 @@ extension Guarantee {
                 throw error
             } else {
                 let rv = body(value)
-                if let rvContext = rv.cancelContext {
-                    self.cancelContext?.append(context: rvContext)
-                } else {
+                if rv.cancelContext == nil {
                     ErrorConditions.cancelContextMissingFromBody(className: "Guarantee", functionName: "thenCC", file: file, function: function, line: line)
                 }
+                self.appendCancelContext(from: rv)
                 return rv
             }
         }
@@ -89,7 +90,7 @@ extension Guarantee where T == Void {
     convenience init(cancel: CancelContext, task: CancellableTask? = nil) {
         self.init()
         self.cancelContext = cancel
-        cancel.append(task: nil, reject: nil, description: GuaranteeDescription(self))
+        self.appendCancellableTask(task: task, reject: nil)
     }
 }
 #endif

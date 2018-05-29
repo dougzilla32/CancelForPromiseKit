@@ -23,6 +23,7 @@
 		916DAD7520B4B493001AF0D7 /* CancellableThenable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DAD7420B4B493001AF0D7 /* CancellableThenable.swift */; };
 		916DAD7720B4B6FE001AF0D7 /* CancellableCatchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DAD7620B4B6FE001AF0D7 /* CancellableCatchable.swift */; };
 		916DAD7920B68C1C001AF0D7 /* CancelChainCC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DAD7820B68C1C001AF0D7 /* CancelChainCC.swift */; };
+		916DAD7B20B9C73B001AF0D7 /* ListOfItemsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DAD7A20B9C73B001AF0D7 /* ListOfItemsTest.swift */; };
 		9184A38A209D7AE400B45601 /* ValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B778A2097E0F300A893F8 /* ValueTests.swift */; };
 		918734D120A565FC00F8D9D3 /* Catchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918734D020A565FC00F8D9D3 /* Catchable.swift */; };
 		918734D320A576A000F8D9D3 /* firstly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918734D220A576A000F8D9D3 /* firstly.swift */; };
@@ -88,6 +89,7 @@
 		916DAD7420B4B493001AF0D7 /* CancellableThenable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CancellableThenable.swift; path = Sources/CancellableThenable.swift; sourceTree = "<group>"; };
 		916DAD7620B4B6FE001AF0D7 /* CancellableCatchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CancellableCatchable.swift; path = Sources/CancellableCatchable.swift; sourceTree = "<group>"; };
 		916DAD7820B68C1C001AF0D7 /* CancelChainCC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelChainCC.swift; sourceTree = "<group>"; };
+		916DAD7A20B9C73B001AF0D7 /* ListOfItemsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListOfItemsTest.swift; sourceTree = "<group>"; };
 		918734D020A565FC00F8D9D3 /* Catchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Catchable.swift; path = Sources/Catchable.swift; sourceTree = "<group>"; };
 		918734D220A576A000F8D9D3 /* firstly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = firstly.swift; path = Sources/firstly.swift; sourceTree = "<group>"; };
 		918734D420A576EF00F8D9D3 /* Guarantee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Guarantee.swift; path = Sources/Guarantee.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				91940E4020B0D2DF00551388 /* GuaranteeTests.swift */,
 				91940E4220B0D2DF00551388 /* HangTests.swift */,
 				91195B5A20AFE9FC00074F63 /* Hooks.swift */,
+				916DAD7A20B9C73B001AF0D7 /* ListOfItemsTest.swift */,
 				91940E4620B0D2E000551388 /* PromiseTests.swift */,
 				91940E4F20B0D2E200551388 /* RaceTests.swift */,
 				91940E4920B0D2E100551388 /* RegressionTests.swift */,
@@ -423,6 +426,7 @@
 				91940E5020B0D2E200551388 /* CatchableTests.swift in Sources */,
 				91940E5220B0D2E200551388 /* WhenConcurrentTests.swift in Sources */,
 				91940E5520B0D2E200551388 /* WhenTests.swift in Sources */,
+				916DAD7B20B9C73B001AF0D7 /* ListOfItemsTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
