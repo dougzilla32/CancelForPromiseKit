@@ -144,6 +144,27 @@ public class CancelContext: Hashable, CustomStringConvertible {
     }
 }
 
+public class CancelItemList {
+    fileprivate var items = [CancelItem]()
+    
+    init() {}
+    
+    func append(_ item: CancelItem) {
+        items.append(item)
+    }
+    
+    func append(contentsOf list: CancelItemList, clearList: Bool) {
+        items.append(contentsOf: list.items)
+        if clearList {
+            list.removeAll()
+        }
+    }
+    
+    func removeAll() {
+        items.removeAll()
+    }
+}
+
 class CancelItem: Hashable, CustomStringConvertible {
     lazy var hashValue: Int = {
         return ObjectIdentifier(self).hashValue
@@ -229,26 +250,5 @@ class CancelItem: Hashable, CustomStringConvertible {
             rv += " context=\(c)"
         }
         return rv
-    }
-}
-
-class CancelItemList {
-    fileprivate var items = [CancelItem]()
-    
-    init() {}
-    
-    func append(_ item: CancelItem) {
-        items.append(item)
-    }
-    
-    func append(contentsOf list: CancelItemList, clearList: Bool) {
-        items.append(contentsOf: list.items)
-        if clearList {
-            list.removeAll()
-        }
-    }
-    
-    func removeAll() {
-        items.removeAll()
     }
 }

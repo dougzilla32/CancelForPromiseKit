@@ -146,17 +146,17 @@ class CancelChain: XCTestCase {
             wait(for: expectations, timeout: 1)
             
             if ex.cancelled == nil {
-                XCTAssert(!(c.pA.cancelContext?.cancelAttempted ?? true))
-                XCTAssert(!(c.pB.cancelContext?.cancelAttempted ?? true))
-                XCTAssert(!(c.pC.cancelContext?.cancelAttempted ?? true))
-                XCTAssert(!(c.pD.cancelContext?.cancelAttempted ?? true))
-                XCTAssert(!(c.pE.cancelContext?.cancelAttempted ?? true))
+                XCTAssert(!c.pA.cancelContext.cancelAttempted)
+                XCTAssert(!c.pB.cancelContext.cancelAttempted)
+                XCTAssert(!c.pC.cancelContext.cancelAttempted)
+                XCTAssert(!c.pD.cancelContext.cancelAttempted)
+                XCTAssert(!c.pE.cancelContext.cancelAttempted)
             } else {
-                XCTAssert(c.pA.cancelContext?.cancelAttempted ?? false)
-                XCTAssert(ex.a == nil || isFulfilled(c.pB) || c.pB.cancelContext?.cancelAttempted ?? false)
-                XCTAssert(ex.b == nil || isFulfilled(c.pC) || c.pC.cancelContext?.cancelAttempted ?? false)
-                XCTAssert(ex.c == nil || isFulfilled(c.pD) || c.pD.cancelContext?.cancelAttempted ?? false)
-                XCTAssert(ex.d == nil || isFulfilled(c.pE) || c.pE.cancelContext?.cancelAttempted ?? false)
+                XCTAssert(c.pA.cancelContext.cancelAttempted)
+                XCTAssert(ex.a == nil || isFulfilled(c.pB) || c.pB.cancelContext.cancelAttempted)
+                XCTAssert(ex.b == nil || isFulfilled(c.pC) || c.pC.cancelContext.cancelAttempted)
+                XCTAssert(ex.c == nil || isFulfilled(c.pD) || c.pD.cancelContext.cancelAttempted)
+                XCTAssert(ex.d == nil || isFulfilled(c.pE) || c.pE.cancelContext.cancelAttempted)
             }
             
             wait(for: [exCancelCalled], timeout: 1)

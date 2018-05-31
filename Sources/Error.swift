@@ -26,44 +26,6 @@ extension PromiseCancelledError: LocalizedError {
     }
 }
 
-class ErrorConditions {
-    enum Severity {
-        case warning, error
-    }
-
-    static func cancelContextMissingInChain(className: String, functionName: String, severity: Severity = .error, file: StaticString, function: StaticString, line: UInt) {
-        let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-        let message = """
-        \(className).\(functionName): the cancel context is missing from the previous link in the cancel chain at \(fileBasename) \(function):\(line).
-        Be sure to use the 'Cancellable' varient for all PromiseKit functions in the cancel chain.
-        
-        """
-        switch severity {
-        case .warning:
-            print("*** WARNING *** \(message)")
-        case .error:
-            assert(false, message, file: file, line: line)
-            print("*** ERROR *** \(message)")
-        }
-    }
-
-    static func cancelContextMissingFromBody(className: String, functionName: String, severity: Severity = .error, file: StaticString, function: StaticString, line: UInt) {
-        let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
-        let message = """
-        \(className).\(functionName): the cancel context is missing from the promise returned by the closure at \(fileBasename) \(function):\(line).
-        Be sure to use the 'Cancellable' varient for all PromiseKit functions in the cancel chain.
-        
-        """
-        switch severity {
-        case .warning:
-            print("*** WARNING *** \(message)")
-        case .error:
-            assert(false, message, file: file, line: line)
-            print("*** ERROR *** \(message)")
-        }
-    }
-}
-
 func rawPointerDescription(obj: AnyObject) -> String {
     let id = ObjectIdentifier(obj)
     let idDesc = id.debugDescription

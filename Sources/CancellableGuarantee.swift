@@ -20,12 +20,17 @@ public class CancellableGuarantee<T>: CancellableThenable {
     
     public var guarantee: Guarantee<T>
     
+    public var cancelContext: CancelContext
+    
+    public var cancelItems: CancelItemList
+    
     public let cancelValue: T?
     
     init(_ guarantee: Guarantee<T>, cancelValue: T? = nil, context: CancelContext? = nil) {
         self.guarantee = guarantee
         self.cancelValue = cancelValue
         self.cancelContext = context ?? CancelContext()
+        self.cancelItems = CancelItemList()
     }
     
     /// Initialize a new cancellable guarantee that can be resolved with the provided `Resolver`.
@@ -64,14 +69,9 @@ public class CancellableGuarantee<T>: CancellableThenable {
 public extension CancellableGuarantee {
     @discardableResult
     func done(on: DispatchQueue? = conf.Q.return, cancelValue: T? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Void) -> CancellableGuarantee<Void> {
-        if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Guarantee", functionName: #function, file: file, function: function, line: line)
-            self.cancelContext = CancelContext()
-        }
-        
         let cancelBody = { (value: T) -> Void in
-            let value = self.cancelContext?.cancelledError == nil ? value : (self.cancelValue ?? value)
-            self.cancelContext?.removeItems(self.cancelItems, clearList: true)
+            let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
+            self.cancelContext.removeItems(self.cancelItems, clearList: true)
             body(value)
         }
         
@@ -80,14 +80,9 @@ public extension CancellableGuarantee {
     }
 
     func map<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> U) -> CancellableGuarantee<U> {
-        if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Guarantee", functionName: #function, file: file, function: function, line: line)
-            self.cancelContext = CancelContext()
-        }
-        
         let cancelBody = { (value: T) -> U in
-            let value = self.cancelContext?.cancelledError == nil ? value : (self.cancelValue ?? value)
-            self.cancelContext?.removeItems(self.cancelItems, clearList: true)
+            let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
+            self.cancelContext.removeItems(self.cancelItems, clearList: true)
             return body(value)
         }
         
@@ -97,17 +92,9 @@ public extension CancellableGuarantee {
     
     @discardableResult
     func then<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> CancellableGuarantee<U>) -> CancellableGuarantee<U> {
-        if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Guarantee", functionName: #function, file: file, function: function, line: line)
-            self.cancelContext = CancelContext()
-        }
-        
         let cancelBody = { (value: T) -> Guarantee<U> in
-            let value = self.cancelContext?.cancelledError == nil ? value : (self.cancelValue ?? value)
+            let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
             let rv = body(value)
-            if rv.cancelContext == nil {
-                ErrorConditions.cancelContextMissingFromBody(className: "Guarantee", functionName: #function, file: file, function: function, line: line)
-            }
             self.appendCancelContext(from: rv)
             return rv.guarantee
         }
@@ -118,13 +105,8 @@ public extension CancellableGuarantee {
 
     @discardableResult
     func then<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Guarantee<U>) -> CancellableGuarantee<U> {
-        if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Guarantee", functionName: #function, file: file, function: function, line: line)
-            self.cancelContext = CancelContext()
-        }
-        
         let cancelBody = { (value: T) -> Guarantee<U> in
-            let value = self.cancelContext?.cancelledError == nil ? value : (self.cancelValue ?? value)
+            let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
             return body(value)
         }
         

@@ -22,9 +22,14 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
         return promise
     }
     
+    public var cancelContext: CancelContext
+    
+    public var cancelItems: CancelItemList
+    
     init(_ promise: Promise<T>, context: CancelContext? = nil) {
         self.promise = promise
         self.cancelContext = context ?? CancelContext()
+        self.cancelItems = CancelItemList()
     }
     
     /// Initialize a new rejected cancellable promise.

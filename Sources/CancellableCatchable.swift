@@ -17,11 +17,6 @@ public protocol CancellableCatchMixin: CancellableThenable {
 public extension CancellableCatchMixin {
     @discardableResult
     func `catch`(on: DispatchQueue? = conf.Q.return, policy: CatchPolicy = conf.catchPolicy, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) -> Void) -> CPKFinalizer {
-        if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
-            self.cancelContext = CancelContext()
-        }
-        
         return CPKFinalizer(self.catchable.catch(on: on, policy: policy, body), cancel: self.cancelContext)
     }
 }
@@ -61,31 +56,20 @@ public class CPKFinalizer {
 
 public extension CancellableCatchMixin {
     func recover<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.U.T == M.T {
-        if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
-            self.cancelContext = CancelContext()
-        }
-        
         let cancelBody = { (error: Error) throws -> V.U in
-            if let cancelledError = self.cancelContext?.cancelledError {
+            if let cancelledError = self.cancelContext.cancelledError {
                 if policy == .allErrorsExceptCancellation {
                     throw cancelledError
                 } else {
-                    self.cancelContext?.recover()
+                    self.cancelContext.recover()
                 }
             }
             
-            self.cancelContext?.removeItems(self.cancelItems, clearList: true)
+            self.cancelContext.removeItems(self.cancelItems, clearList: true)
             
             let rv = try body(error)
-            if rv.cancelContext == nil {
-                ErrorConditions.cancelContextMissingFromBody(className: "Promise", functionName: #function, file: file, function: function, line: line)
-            }
-            
-            if let context = rv.cancelContext {
-                // TODO: should be using 'promise' created below, not 'self' -- the cancel item is put into the wrong CancelItemList
-                self.cancelContext?.append(context: context, thenable: self)
-            }
+            // TODO: should be using 'promise' created below, not 'self' -- the cancel item is put into the wrong CancelItemList
+            self.cancelContext.append(context: rv.cancelContext, thenable: self)
             return rv.thenable
         }
         
@@ -94,11 +78,6 @@ public extension CancellableCatchMixin {
     }
     
     func ensure(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping () -> Void) -> CancellablePromise<M.T> {
-        if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
-            self.cancelContext = CancelContext()
-        }
-        
         let rp = CancellablePromise<M.T>.pending()
         rp.promise.cancelContext = self.cancelContext
         self.catchable.pipe { result in
@@ -106,7 +85,7 @@ public extension CancellableCatchMixin {
                 body()
                 switch result {
                 case .fulfilled(let value):
-                    if let error = self.cancelContext?.cancelledError {
+                    if let error = self.cancelContext.cancelledError {
                         rp.resolver.reject(error)
                     } else {
                         rp.resolver.fulfill(value)
@@ -120,25 +99,17 @@ public extension CancellableCatchMixin {
     }
     
     func ensureThen(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping () -> CancellablePromise<Void>) -> CancellablePromise<M.T> {
-        if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
-            self.cancelContext = CancelContext()
-        }
-        
         let rp = CancellablePromise<M.T>.pending()
         rp.promise.cancelContext = cancelContext
         self.catchable.pipe { result in
             on.async {
                 let rv = body()
-                if rv.cancelContext == nil {
-                    ErrorConditions.cancelContextMissingFromBody(className: "Promise", functionName: #function, file: file, function: function, line: line)
-                }
                 rp.promise.appendCancelContext(from: rv)
                 
                 rv.done {
                     switch result {
                     case .fulfilled(let value):
-                        if let error = self.cancelContext?.cancelledError {
+                        if let error = self.cancelContext.cancelledError {
                             rp.resolver.reject(error)
                         } else {
                             rp.resolver.fulfill(value)
@@ -155,11 +126,6 @@ public extension CancellableCatchMixin {
     }
     
     func cauterize(file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
-        if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
-            self.cancelContext = CancelContext()
-        }
-        
         self.catch(policy: .allErrors) {
             Swift.print("CancelForPromiseKit:cauterized-error:", $0)
         }
@@ -178,11 +144,6 @@ public extension CancellableCatchMixin where M.T == Void {
      */
     @discardableResult
     func recover(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) -> Void) -> CancellableGuarantee<Void> {
-        if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
-            self.cancelContext = CancelContext()
-        }
-        
         let guarantee: Guarantee<Void> = self.catchable.recover(on: on, body)
         return CancellableGuarantee(guarantee, context: self.cancelContext)
     }
@@ -197,13 +158,8 @@ public extension CancellableCatchMixin where M.T == Void {
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
     func recover(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) throws -> Void) -> CancellablePromise<Void> {
-        if self.cancelContext == nil {
-            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
-            self.cancelContext = CancelContext()
-        }
-        
         let cancelBody = { (error: Error) throws -> Void in
-            if let error = self.cancelContext?.cancelledError, policy == .allErrorsExceptCancellation {
+            if let error = self.cancelContext.cancelledError, policy == .allErrorsExceptCancellation {
                 throw error
             } else {
                 try body(error)
