@@ -55,8 +55,8 @@ class PromiseTests: XCTestCase {
             throw Error.dummy
         }.done { _ in
             XCTFail()
-        }.catch(policy: .allErrors) {
-            $0.isCancelled ? XCTFail() : ex.fulfill()
+        }.catch(policy: .allErrors) { _ in
+            ex.fulfill()
         }.cancel()
 
         waitForExpectations(timeout: 1)

@@ -127,7 +127,6 @@ class ValueTests: XCTestCase {
     }
 
     func testCancelForPromise_ThenDone() {
-        let exThen = expectation(description: "then is not cancelled")
         let exComplete = expectation(description: "done is cancelled")
 
         let promise = CancellablePromise<Void> { seal in
@@ -135,7 +134,7 @@ class ValueTests: XCTestCase {
             seal.fulfill()
         }
         promise.then { _ -> CancellablePromise<String> in
-            exThen.fulfill()
+            XCTFail("then not cancelled")
             return CancellablePromise.value("x")
         }.done { _ in
             XCTFail("done not cancelled")
@@ -143,6 +142,6 @@ class ValueTests: XCTestCase {
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }.cancel()
 
-        wait(for: [exThen, exComplete], timeout: 1)
+        wait(for: [exComplete], timeout: 1)
     }
 }

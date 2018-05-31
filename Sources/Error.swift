@@ -2,7 +2,7 @@
 //  Error.swift
 //  CancelForPromiseKit
 //
-//  Created by Doug on 4/28/18.
+//  Created by Doug Stein on 4/28/18.
 //
 
 import PromiseKit
@@ -35,7 +35,7 @@ class ErrorConditions {
         let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
         let message = """
         \(className).\(functionName): the cancel context is missing from the previous link in the cancel chain at \(fileBasename) \(function):\(line).
-        Be sure to use the 'CC' varient for all PromiseKit functions in the cancel chain, and for custom Promises be sure to specify the 'cancel: CancelContext' initializer parameter.
+        Be sure to use the 'Cancellable' varient for all PromiseKit functions in the cancel chain.
         
         """
         switch severity {
@@ -51,7 +51,7 @@ class ErrorConditions {
         let fileBasename = URL(fileURLWithPath: "\(file)").lastPathComponent
         let message = """
         \(className).\(functionName): the cancel context is missing from the promise returned by the closure at \(fileBasename) \(function):\(line).
-        Be sure to use the 'CC' varient for all PromiseKit functions in the cancel chain, and for custom Promises be sure to specify the 'cancel: CancelContext' initializer parameter.
+        Be sure to use the 'Cancellable' varient for all PromiseKit functions in the cancel chain.
         
         """
         switch severity {

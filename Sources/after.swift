@@ -2,29 +2,21 @@
 //  after.swift
 //  CancelForPromiseKit
 //
-//  Created by Doug on 4/28/18.
+//  Created by Doug Stein on 4/28/18.
 //
 
 import Foundation
 import PromiseKit
 
 public func afterCC(seconds: TimeInterval) -> CancellablePromise<Void> {
-    return CancellablePromise(at(time: DispatchTime.now() + seconds))
+    return at(time: DispatchTime.now() + seconds)
 }
 
 public func afterCC(_ interval: DispatchTimeInterval) -> CancellablePromise<Void> {
-    return CancellablePromise(at(time: DispatchTime.now() + interval))
+    return at(time: DispatchTime.now() + interval)
 }
 
-func afterCC(seconds: TimeInterval, cancel: CancelContext) -> Promise<Void> {
-    return at(time: DispatchTime.now() + seconds, cancel: cancel)
-}
-
-func afterCC(_ interval: DispatchTimeInterval, cancel: CancelContext) -> Promise<Void> {
-    return at(time: DispatchTime.now() + interval, cancel: cancel)
-}
-
-func at(time: DispatchTime, cancel: CancelContext? = nil) -> Promise<Void> {
+func at(time: DispatchTime) -> CancellablePromise<Void> {
 #if swift(>=4.0)
     var fulfill: ((()) -> Void)!
 #else
@@ -32,7 +24,7 @@ func at(time: DispatchTime, cancel: CancelContext? = nil) -> Promise<Void> {
 #endif
     var reject: ((Error) -> Void)!
 
-    let promise = Promise<Void> { seal in
+    let promise = CancellablePromise<Void> { seal in
         fulfill = seal.fulfill
         reject = seal.reject
     }
@@ -46,7 +38,6 @@ func at(time: DispatchTime, cancel: CancelContext? = nil) -> Promise<Void> {
     }
     q.asyncAfter(deadline: time, execute: task)
 
-    promise.cancelContext = cancel ?? CancelContext()
     promise.appendCancellableTask(task: task, reject: reject)
     return promise
 }

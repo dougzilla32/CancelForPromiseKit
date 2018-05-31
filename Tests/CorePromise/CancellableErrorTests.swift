@@ -1,19 +1,19 @@
 import Foundation
 import PromiseKit
-@testable import CancelForPromiseKit
+import CancelForPromiseKit
 import XCTest
 
 class CancellationTests: XCTestCase {
     func testCancellation() {
         let ex1 = expectation(description: "")
 
-        let p = afterCC(seconds: 0, cancel: CancelContext()).doneCC { _ in
+        let p = afterCC(seconds: 0).done { _ in
             XCTFail()
         }
-        p.catchCC { _ in
+        p.catch { _ in
             XCTFail()
         }
-        p.catchCC(policy: .allErrors) {
+        p.catch(policy: .allErrors) {
             XCTAssertTrue($0.isCancelled)
             ex1.fulfill()
         }
@@ -26,9 +26,9 @@ class CancellationTests: XCTestCase {
     func testThrowCancellableErrorThatIsNotCancelled() {
         let expect = expectation(description: "")
 
-        let cc = afterCC(seconds: 0, cancel: CancelContext()).doneCC {
+        let cc = afterCC(seconds: 0).done {
             XCTFail()
-        }.catchCC {
+        }.catch {
             XCTAssertFalse($0.isCancelled)
             expect.fulfill()
         }
@@ -42,19 +42,19 @@ class CancellationTests: XCTestCase {
         let ex1 = expectation(description: "")
         let ex2 = expectation(description: "")
 
-        let p = afterCC(seconds: 0, cancel: CancelContext()).doneCC { _ in
+        let p = afterCC(seconds: 0).done { _ in
             XCTFail()
-        }.recoverCC(policy: .allErrors) { err -> Promise<Void> in
+        }.recover(policy: .allErrors) { err -> CancellablePromise<Void> in
             ex1.fulfill()
             XCTAssertTrue(err.isCancelled)
             throw err
-        }.doneCC { _ in
+        }.done { _ in
             XCTFail()
         }
-        p.catchCC { _ in
+        p.catch { _ in
             XCTFail()
         }
-        p.catchCC(policy: .allErrors) {
+        p.catch(policy: .allErrors) {
             XCTAssertTrue($0.isCancelled)
             ex2.fulfill()
         }
@@ -67,13 +67,13 @@ class CancellationTests: XCTestCase {
     func testFoundationBridging1() {
         let ex = expectation(description: "")
 
-        let p = afterCC(seconds: 0, cancel: CancelContext()).doneCC { _ in
+        let p = afterCC(seconds: 0).done { _ in
             XCTFail()
         }
-        p.catchCC { _ in
+        p.catch { _ in
             XCTFail()
         }
-        p.catchCC(policy: .allErrors) {
+        p.catch(policy: .allErrors) {
             XCTAssertTrue($0.isCancelled)
             ex.fulfill()
         }
@@ -86,13 +86,13 @@ class CancellationTests: XCTestCase {
     func testFoundationBridging2() {
         let ex = expectation(description: "")
 
-        let p = Promise.pendingCC().promise.doneCC {
+        let p = CancellablePromise.pending().promise.done {
             XCTFail()
         }
-        p.catchCC { _ in
+        p.catch { _ in
             XCTFail()
         }
-        p.catchCC(policy: .allErrors) {
+        p.catch(policy: .allErrors) {
             XCTAssertTrue($0.isCancelled)
             ex.fulfill()
         }

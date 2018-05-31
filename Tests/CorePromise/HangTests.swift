@@ -1,17 +1,17 @@
 import PromiseKit
-@testable import CancelForPromiseKit
+import CancelForPromiseKit
 import XCTest
 
 class HangTests: XCTestCase {
     func test() {
         let ex = expectation(description: "block executed")
         do {
-            let p = afterCC(seconds: 0.02, cancel: CancelContext()).thenCC { _ -> Promise<Int> in
+            let p = afterCC(seconds: 0.02).then { _ -> CancellablePromise<Int> in
                 XCTFail()
                 return .value(1)
             }
             p.cancel()
-            let value = try hangCC(p)
+            let value = try hang(p)
             XCTFail()
             XCTAssertEqual(value, 1)
         } catch {
@@ -27,13 +27,13 @@ class HangTests: XCTestCase {
     func testError() {
         var value = 0
         do {
-            let p = afterCC(seconds: 0.02, cancel: CancelContext()).doneCC {
+            let p = afterCC(seconds: 0.02).done {
                 XCTFail()
                 value = 1
                 throw Error.test
             }
             p.cancel()
-            _ = try hangCC(p)
+            _ = try hang(p)
             XCTFail()
             XCTAssertEqual(value, 1)
         } catch Error.test {

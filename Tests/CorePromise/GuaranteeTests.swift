@@ -1,16 +1,16 @@
 import PromiseKit
-@testable import CancelForPromiseKit
+import CancelForPromiseKit
 import XCTest
 
 class GuaranteeTests: XCTestCase {
     func testInit() {
         let ex = expectation(description: "")
-        Guarantee(cancel: CancelContext()) { seal in
+        CancellableGuarantee { seal in
             seal(1)
-        }.doneCC {
+        }.done {
             XCTFail()
             XCTAssertEqual(1, $0)
-        }.catchCC(policy: .allErrors) {
+        }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
         wait(for: [ex], timeout: 1)
@@ -19,7 +19,7 @@ class GuaranteeTests: XCTestCase {
     func testWait() {
         let ex = expectation(description: "")
         do {
-            let p = afterCC(.milliseconds(100), cancel: CancelContext()).mapCC(on: nil){ 1 }
+            let p = afterCC(.milliseconds(100)).map(on: nil) { 1 }
             p.cancel()
             let value = try p.wait()
             XCTAssertEqual(value, 1)

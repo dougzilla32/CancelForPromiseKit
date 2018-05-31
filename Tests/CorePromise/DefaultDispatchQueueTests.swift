@@ -1,14 +1,6 @@
-//
-//  PMKDefaultDispatchQueue.test.swift
-//  PromiseKit
-//
-//  Created by David Rodriguez on 4/14/16.
-//  Copyright © 2016 Max Howell. All rights reserved.
-//
-
 import class Foundation.Thread
 import PromiseKit
-@testable import CancelForPromiseKit
+import CancelForPromiseKit
 import Dispatch
 import XCTest
 
@@ -31,16 +23,13 @@ class CPKDefaultDispatchQueueTest: XCTestCase {
     func testOverrodeDefaultThenQueue() {
         let ex = expectation(description: "resolving")
 
-        let p = Promise.valueCC(1)
-        print("p.cancel()")
+        let p = CancellablePromise.value(1)
         p.cancel()
-        p.thenCC { _ -> Promise<Void> in
-            print("thenCC")
+        p.then { _ -> CancellablePromise<Void> in
             XCTFail()
             XCTAssertFalse(Thread.isMainThread)
-            return Promise()
-        }.catchCC(policy: .allErrors) {
-            print("catchCC")
+            return CancellablePromise()
+        }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
             XCTAssertFalse(Thread.isMainThread)
         }
@@ -53,9 +42,9 @@ class CPKDefaultDispatchQueueTest: XCTestCase {
     func testOverrodeDefaultCatchQueue() {
         let ex = expectation(description: "resolving")
 
-        let p = Promise<Int>(cancel: CancelContext(), error: Error.dummy)
+        let p = CancellablePromise<Int>(error: Error.dummy)
         p.cancel()
-        p.catchCC { _ in
+        p.catch { _ in
             ex.fulfill()
             XCTAssertFalse(Thread.isMainThread)
         }
@@ -69,12 +58,12 @@ class CPKDefaultDispatchQueueTest: XCTestCase {
         let ex = expectation(description: "resolving")
         let ex2 = expectation(description: "catching")
 
-        let p = Promise.valueCC(1)
+        let p = CancellablePromise.value(1)
         p.cancel()
-        p.ensureCC {
+        p.ensure {
             ex.fulfill()
             XCTAssertFalse(Thread.isMainThread)
-        }.catchCC(policy: .allErrors) {
+        }.catch(policy: .allErrors) {
             $0.isCancelled ? ex2.fulfill() : XCTFail()
             XCTAssertFalse(Thread.isMainThread)
         }

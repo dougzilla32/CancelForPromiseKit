@@ -1,5 +1,5 @@
 import PromiseKit
-@testable import CancelForPromiseKit
+import CancelForPromiseKit
 import XCTest
 
 class RegressionTests: XCTestCase {
@@ -9,18 +9,18 @@ class RegressionTests: XCTestCase {
         // in our A+ tests implementation for spec: 2.3.1
 
         do {
-            let promise1 = Promise(cancel: CancelContext())
-            let promise2 = promise1.thenCC(on: nil) { promise1 }
-            promise2.catchCC(on: nil) { _ in XCTFail() }
+            let promise1 = CancellablePromise()
+            let promise2 = promise1.then(on: nil) { promise1 }
+            promise2.catch(on: nil) { _ in XCTFail() }
             promise1.cancel()
         }
         
         do {
             let ex = expectation(description: "")
-            let promise1 = Promise(cancel: CancelContext())
+            let promise1 = CancellablePromise()
             promise1.cancel()
-            let promise2 = promise1.thenCC(on: nil) { () -> Promise<Void> in  XCTFail(); return promise1 }
-            promise2.catchCC(on: nil) {
+            let promise2 = promise1.then(on: nil) { () -> CancellablePromise<Void> in  XCTFail(); return promise1 }
+            promise2.catch(on: nil) {
                 ex.fulfill()
                 print("HI \($0)")
                 if !$0.isCancelled {
@@ -33,9 +33,9 @@ class RegressionTests: XCTestCase {
         do {
             enum Error: Swift.Error { case dummy }
 
-            let promise1 = Promise<Void>(cancel: CancelContext(), error: Error.dummy)
-            let promise2 = promise1.recoverCC(on: nil) { _ in promise1 }
-            promise2.catchCC(on: nil) { err in
+            let promise1 = CancellablePromise<Void>(error: Error.dummy)
+            let promise2 = promise1.recover(on: nil) { _ in promise1 }
+            promise2.catch(on: nil) { err in
                 if case PMKError.returnedSelf = err {
                     XCTFail()
                 }

@@ -2,7 +2,7 @@
 //  CustomStringConvertible.swift
 //  CancelForPromiseKit
 //
-//  Created by Doug on 5/18/18.
+//  Created by Doug Stein on 5/18/18.
 //
 
 import PromiseKit

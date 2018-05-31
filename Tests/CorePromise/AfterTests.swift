@@ -7,7 +7,7 @@
 
 import XCTest
 import PromiseKit
-@testable import CancelForPromiseKit
+import CancelForPromiseKit
 
 extension XCTestExpectation {
     open func fulfill(error: Error) {
@@ -20,12 +20,12 @@ class AfterTests: XCTestCase {
     
     func testZero() {
         let ex2 = expectation(description: "")
-        let cc2 = afterCC(seconds: 0, cancel: CancelContext()).doneCC(fail).catchCC(policy: .allErrors, ex2.fulfill)
+        let cc2 = afterCC(seconds: 0).done(fail).catch(policy: .allErrors, ex2.fulfill)
         cc2.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
         let ex3 = expectation(description: "")
-        let cc3 = afterCC(.seconds(0), cancel: CancelContext()).doneCC(fail).catchCC(policy: .allErrors, ex3.fulfill)
+        let cc3 = afterCC(.seconds(0)).done(fail).catch(policy: .allErrors, ex3.fulfill)
         cc3.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
@@ -38,12 +38,12 @@ class AfterTests: XCTestCase {
     
     func testNegative() {
         let ex2 = expectation(description: "")
-        let cc2 = afterCC(seconds: -1, cancel: CancelContext()).doneCC(fail).catchCC(policy: .allErrors, ex2.fulfill)
+        let cc2 = afterCC(seconds: -1).done(fail).catch(policy: .allErrors, ex2.fulfill)
         cc2.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
         let ex3 = expectation(description: "")
-        let cc3 = afterCC(.seconds(-1), cancel: CancelContext()).doneCC(fail).catchCC(policy: .allErrors, ex3.fulfill)
+        let cc3 = afterCC(.seconds(-1)).done(fail).catch(policy: .allErrors, ex3.fulfill)
         cc3.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
@@ -56,12 +56,12 @@ class AfterTests: XCTestCase {
     
     func testPositive() {
         let ex2 = expectation(description: "")
-        let cc2 = afterCC(seconds: 1, cancel: CancelContext()).doneCC(fail).catchCC(policy: .allErrors, ex2.fulfill)
+        let cc2 = afterCC(seconds: 1).done(fail).catch(policy: .allErrors, ex2.fulfill)
         cc2.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
         let ex3 = expectation(description: "")
-        let cc3 = afterCC(.seconds(1), cancel: CancelContext()).doneCC(fail).catchCC(policy: .allErrors, ex3.fulfill)
+        let cc3 = afterCC(.seconds(1)).done(fail).catch(policy: .allErrors, ex3.fulfill)
         cc3.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
@@ -85,54 +85,49 @@ class AfterTests: XCTestCase {
             XCTFail("afterPromise failed with error: \(error)")
         }
         
-        let contextIgnore = CancelContext()
         let exCancelComplete = expectation(description: "after completes")
         
         // Test 'afterCC' to ensure it is fulfilled if not cancelled
-        let cancelIgnoreAfterPromise = afterCC(seconds: 0, cancel: contextIgnore)
-        cancelIgnoreAfterPromise.doneCC {
+        let cancelIgnoreAfterPromise = afterCC(seconds: 0)
+        cancelIgnoreAfterPromise.done {
             exCancelComplete.fulfill()
-        }.catchCC(policy: .allErrors) { error in
+        }.catch(policy: .allErrors) { error in
             XCTFail("cancellableAfterPromise failed with error: \(error)")
         }
-        
-        let context = CancelContext()
         
         // Test 'afterCC' to ensure it is cancelled
-        let cancellableAfterPromise = afterCC(seconds: 0, cancel: context)
-        cancellableAfterPromise.doneCC {
+        let cancellableAfterPromise = afterCC(seconds: 0)
+        cancellableAfterPromise.done {
             XCTFail("cancellableAfter not cancelled")
-        }.catchCC(policy: .allErrorsExceptCancellation) { error in
+        }.catch(policy: .allErrorsExceptCancellation) { error in
             XCTFail("cancellableAfterPromise failed with error: \(error)")
-        }
+        }.cancel()
         
         // Test 'afterCC' to ensure it is cancelled and throws a 'CancellableError'
         let exCancel = expectation(description: "after cancels")
-        let cancellableAfterPromiseWithError = afterCC(seconds: 0, cancel: context)
-        cancellableAfterPromiseWithError.doneCC {
+        let cancellableAfterPromiseWithError = afterCC(seconds: 0)
+        cancellableAfterPromiseWithError.done {
             XCTFail("cancellableAfterWithError not cancelled")
-        }.catchCC(policy: .allErrors) { error in
+        }.catch(policy: .allErrors) { error in
             error.isCancelled ? exCancel.fulfill() : XCTFail("unexpected error \(error)")
-        }
+        }.cancel()
         
-        context.cancel()
         wait(for: [exComplete, exCancelComplete, exCancel], timeout: 1)
     }
     
     func testCancelForPromise_Done() {
         let exComplete = expectation(description: "done is cancelled")
-        let context = CancelContext()
         
-        let promise = Promise<Void>(cancel: context) { seal in
+        let promise = CancellablePromise<Void> { seal in
             seal.fulfill()
         }
-        promise.doneCC { _ in
+        promise.done { _ in
             XCTFail("done not cancelled")
-        }.catchCC(policy: .allErrors) { error in
+        }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }
         
-        context.cancel()
+        promise.cancel()
         
         wait(for: [exComplete], timeout: 1)
     }
@@ -140,9 +135,9 @@ class AfterTests: XCTestCase {
     func testCancelForGuarantee_Done() {
         let exComplete = expectation(description: "done is cancelled")
         
-        afterCC(seconds: 0, cancel: CancelContext()).doneCC { _ in
+        afterCC(seconds: 0).done { _ in
             XCTFail("done not cancelled")
-        }.catchCC(policy: .allErrors) { error in
+        }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }.cancel()
         

@@ -2,7 +2,7 @@
 //  CancellableThenable.swift
 //  CancelForPromiseKit
 //
-//  Created by Doug on 5/22/18.
+//  Created by Doug Stein on 5/11/18.
 //
 
 import PromiseKit
@@ -13,57 +13,182 @@ public protocol CancellableThenable: class {
     var thenable: U { get }
 }
 
+struct CancelContextKey {
+    public static var cancelContext: UInt8 = 0
+    public static var cancelItems: UInt8 = 0
+}
+
 public extension CancellableThenable {
-    var cancelContext: CancelContext! {
-        return thenable.cancelContext
+    internal(set) var cancelContext: CancelContext! {
+        get {
+            return objc_getAssociatedObject(self, &CancelContextKey.cancelContext) as? CancelContext
+        }
+        set(newValue) {
+            objc_setAssociatedObject(self, &CancelContextKey.cancelContext, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    internal var cancelItems: CancelItemList {
+        get {
+            var list: CancelItemList! = objc_getAssociatedObject(self, &CancelContextKey.cancelItems) as? CancelItemList
+            if list == nil {
+                list = CancelItemList()
+                self.cancelItems = list
+            }
+            return list
+        }
+        set(newValue) {
+            objc_setAssociatedObject(self, &CancelContextKey.cancelItems, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
     }
     
     func appendCancellableTask(task: CancellableTask?, reject: ((Error) -> Void)?) {
-        thenable.cancelContext?.append(task: task, reject: reject, thenable: thenable)
+        self.cancelContext?.append(task: task, reject: reject, thenable: self)
+    }
+    
+    func appendCancelContext<Z: CancellableThenable>(from: Z) {
+        if let context = from.cancelContext {
+            self.cancelContext?.append(context: context, thenable: self)
+        }
     }
     
     func cancel(error: Error? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
-        cancelContext?.cancel(error: error, file: file, function: function, line: line)
+        self.cancelContext?.cancel(error: error, file: file, function: function, line: line)
     }
     
     var isCancelled: Bool {
-        return cancelContext?.isCancelled ?? false
+        return self.cancelContext?.isCancelled ?? false
     }
     
     var cancelAttempted: Bool {
-        return cancelContext?.cancelAttempted ?? false
+        return self.cancelContext?.cancelAttempted ?? false
     }
     
     var cancelledError: Error? {
-        return cancelContext?.cancelledError
+        return self.cancelContext?.cancelledError
     }
     
     func then<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.U.T> {
-        return CancellablePromise(thenable.thenCC(on: on, file: file, function: function, line: line) { (value: U.T) throws -> Promise<V.U.T> in
-            return try body(value).thenable as! Promise<V.U.T>
-        })
+        if self.cancelContext == nil {
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
+        }
+        
+        let cancelBody = { (value: U.T) throws -> V.U in
+            if let error = self.cancelContext?.cancelledError {
+                throw error
+            } else {
+                self.cancelContext?.removeItems(self.cancelItems, clearList: true)
+                
+                let rv = try body(value)
+                if rv.cancelContext == nil {
+                    ErrorConditions.cancelContextMissingFromBody(className: "Promise", functionName: #function, file: file, function: function, line: line)
+                }
+                
+                if let context = rv.cancelContext {
+                    // TODO: should be using 'promise' created below, not 'self' -- the cancel item is put into the wrong CancelItemList
+                   self.cancelContext?.append(context: context, thenable: self)
+                }
+                return rv.thenable
+            }
+        }
+        
+        let promise = self.thenable.then(on: on, file: file, line: line, cancelBody)
+        return CancellablePromise(promise, context: self.cancelContext)
     }
     
     func then<V: Thenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
-        return CancellablePromise(thenable.thenCC(on: on, file: file, function: function, line: line) { (value: U.T) throws -> Promise<V.T> in
-            return try body(value) as! Promise<V.T>
-        })
+        if self.cancelContext == nil {
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
+        }
+        
+        let cancelBody = { (value: U.T) throws -> V in
+            if let error = self.cancelContext?.cancelledError {
+                throw error
+            } else {
+                self.cancelContext?.removeItems(self.cancelItems, clearList: true)
+                
+                return try body(value)
+            }
+        }
+        
+        let promise = self.thenable.then(on: on, file: file, line: line, cancelBody)
+        return CancellablePromise(promise, context: self.cancelContext)
     }
     
     func map<V>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping (U.T) throws -> V) -> CancellablePromise<V> {
-        return CancellablePromise(thenable.mapCC(on: on, file: file, function: function, line: line, transform))
+        if self.cancelContext == nil {
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
+        }
+        
+        let cancelTransform = { (value: U.T) throws -> V in
+            if let error = self.cancelContext?.cancelledError {
+                throw error
+            } else {
+                self.cancelContext?.removeItems(self.cancelItems, clearList: true)
+                return try transform(value)
+            }
+        }
+        
+        let promise = self.thenable.map(on: on, cancelTransform)
+        return CancellablePromise(promise, context: self.cancelContext)
     }
     
     func compactMap<V>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping (U.T) throws -> V?) -> CancellablePromise<V> {
-        return CancellablePromise(thenable.compactMapCC(on: on, file: file, function: function, line: line, transform))
+        if self.cancelContext == nil {
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
+        }
+        
+        let cancelTransform = { (value: U.T) throws -> V? in
+            if let error = self.cancelContext?.cancelledError {
+                throw error
+            } else {
+                self.cancelContext?.removeItems(self.cancelItems, clearList: true)
+                return try transform(value)
+            }
+        }
+        
+        let promise = self.thenable.compactMap(on: on, cancelTransform)
+        return CancellablePromise(promise, context: self.cancelContext)
     }
     
     func done(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (U.T) throws -> Void) -> CancellablePromise<Void> {
-        return CancellablePromise(thenable.doneCC(on: on, file: file, function: function, line: line, body))
+        if self.cancelContext == nil {
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
+        }
+        
+        let cancelBody = { (value: U.T) throws -> Void in
+            if let error = self.cancelContext?.cancelledError {
+                throw error
+            } else {
+                self.cancelContext?.removeItems(self.cancelItems, clearList: true)
+                try body(value)
+            }
+        }
+        
+        let promise = self.thenable.done(on: on, cancelBody)
+        return CancellablePromise(promise, context: self.cancelContext)
     }
     
     func get(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (U.T) throws -> Void) -> CancellablePromise<U.T> {
-        return CancellablePromise(thenable.getCC(on: on, file: file, function: function, line: line, body))
+        if self.cancelContext == nil {
+            ErrorConditions.cancelContextMissingInChain(className: "Promise", functionName: #function, file: file, function: function, line: line)
+            self.cancelContext = CancelContext()
+        }
+        
+        return map(on: on) {
+            try body($0)
+            return $0
+        }
+    }
+
+    /// - Returns: a new promise chained off this promise but with its value discarded.
+    func asVoid() -> CancellablePromise<Void> {
+        return map(on: nil) { _ in }
     }
 }
 
@@ -262,5 +387,16 @@ public extension CancellableThenable where U.T: Sequence, U.T.Iterator.Element: 
     /// - Returns: a promise fulfilled with the sorted values of this `Sequence`.
     func sortedValues(on: DispatchQueue? = conf.Q.map) -> CancellablePromise<[U.T.Iterator.Element]> {
         return map(on: on) { $0.sorted() }
+    }
+}
+
+extension Optional where Wrapped: DispatchQueue {
+    func async(_ body: @escaping() -> Void) {
+        switch self {
+        case .none:
+            body()
+        case .some(let q):
+            q.async(execute: body)
+        }
     }
 }

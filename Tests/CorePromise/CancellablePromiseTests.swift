@@ -2,7 +2,7 @@
 //  CancellablePromiseTests.swift
 //  CPKCoreTests
 //
-//  Created by Doug on 5/21/18.
+//  Created by Doug Stein on 5/21/18.
 //
 
 import PromiseKit

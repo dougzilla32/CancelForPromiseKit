@@ -2,7 +2,7 @@
 //  CancelContext.swift
 //  CancelForPromiseKit
 //
-//  Created by Doug on 5/3/18.
+//  Created by Doug Stein on 5/3/18.
 //
 
 import PromiseKit
@@ -67,8 +67,11 @@ public class CancelContext: Hashable, CustomStringConvertible {
         return true
     }
     
-    func append<Z: Thenable>(task: CancellableTask?, reject: ((Error) -> Void)?, thenable: Z) {
-        let item = CancelItem(task: task, reject: reject, thenable: thenable)
+    func append<Z: CancellableThenable>(task: CancellableTask?, reject: ((Error) -> Void)?, thenable: Z) {
+        if task == nil && reject == nil {
+            return
+        }
+        let item = CancelItem(task: task, reject: reject, thenable: thenable.thenable)
         if let error = cancelledError {
             item.cancel(error: error)
         }
@@ -77,11 +80,7 @@ public class CancelContext: Hashable, CustomStringConvertible {
         thenable.cancelItems.append(item)
     }
     
-    func append<Z: CancellableThenable>(task: CancellableTask?, reject: ((Error) -> Void)?, thenable: Z) {
-        append(task: task, reject: reject, thenable: thenable.thenable)
-    }
-    
-    func append<Z: Thenable>(context childContext: CancelContext, thenable: Z) {
+    func append<Z: CancellableThenable>(context childContext: CancelContext, thenable: Z) {
         guard childContext !== self else {
             return
         }
@@ -96,15 +95,11 @@ public class CancelContext: Hashable, CustomStringConvertible {
             }
         }
         
-        let item = CancelItem(context: childContext, thenable: thenable)
+        let item = CancelItem(context: childContext, thenable: thenable.thenable)
         cancelItemList.append(item)
         cancelItemSet.insert(item)
 
         thenable.cancelItems.append(item)
-    }
-    
-    func append<Z: CancellableThenable>(context childContext: CancelContext, thenable: Z) {
-        append(context: childContext, thenable: thenable.thenable)
     }
     
     func recover(file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
@@ -160,10 +155,11 @@ class CancelItem: Hashable, CustomStringConvertible {
     
     let task: CancellableTask?
     var reject: ((Error) -> Void)?
-    var context: CancelContext?
+    weak var context: CancelContext?
     var cancelAttempted = false
     
     init<Z: Thenable>(task: CancellableTask?, reject: ((Error) -> Void)?, thenable: Z) {
+        assert(task != nil || reject != nil)
         self.task = task
         self.reject = reject
         self.descriptionCSC = CancelItem.createDescription(thenable)

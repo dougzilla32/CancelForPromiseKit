@@ -2,12 +2,12 @@
 //  ListOfItemsTest.swift
 //  CPKCoreTests
 //
-//  Created by Doug on 5/26/18.
+//  Created by Doug Stein on 5/26/18.
 //
 
 import XCTest
 import PromiseKit
-@testable import CancelForPromiseKit
+import CancelForPromiseKit
 
 var cancelItemSet = Set<Int>()
 var cancelItemList = [Int]()

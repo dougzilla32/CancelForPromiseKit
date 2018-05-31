@@ -1,5 +1,5 @@
 import PromiseKit
-@testable import CancelForPromiseKit
+import CancelForPromiseKit
 import XCTest
 
 class CPKErrorTests: XCTestCase {
