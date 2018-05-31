@@ -22,6 +22,8 @@ public class PromiseDescription<T>: ThenableDescription {
     
     weak var promise: Promise<T>?
     
+    public init() { }
+    
     public init(_ promise: Promise<T>) {
         self.promise = promise
     }

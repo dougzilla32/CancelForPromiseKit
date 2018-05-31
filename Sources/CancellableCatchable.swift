@@ -56,6 +56,10 @@ public class CPKFinalizer {
 
 public extension CancellableCatchMixin {
     func recover<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.U.T == M.T {
+        
+        let description = PromiseDescription<V.U.T>()
+        let cancelItems = CancelItemList()
+        
         let cancelBody = { (error: Error) throws -> V.U in
             if let cancelledError = self.cancelContext.cancelledError {
                 if policy == .allErrorsExceptCancellation {
@@ -68,13 +72,13 @@ public extension CancellableCatchMixin {
             self.cancelContext.removeItems(self.cancelItems, clearList: true)
             
             let rv = try body(error)
-            // TODO: should be using 'promise' created below, not 'self' -- the cancel item is put into the wrong CancelItemList
-            self.cancelContext.append(context: rv.cancelContext, thenable: self)
+            self.cancelContext.append(context: rv.cancelContext, description: description, cancelItems: cancelItems)
             return rv.thenable
         }
         
         let promise = self.catchable.recover(on: on, policy: policy, cancelBody)
-        return CancellablePromise(promise, context: self.cancelContext)
+        description.promise = promise
+        return CancellablePromise(promise, context: self.cancelContext, cancelItems: cancelItems)
     }
     
     func ensure(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping () -> Void) -> CancellablePromise<M.T> {

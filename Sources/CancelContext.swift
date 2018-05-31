@@ -81,8 +81,26 @@ public class CancelContext: Hashable, CustomStringConvertible {
     }
     
     func append<Z: CancellableThenable>(context childContext: CancelContext, thenable: Z) {
+        if validateContext(context: childContext) {
+            let item = CancelItem(context: childContext, thenable: thenable.thenable)
+            cancelItemList.append(item)
+            cancelItemSet.insert(item)
+            thenable.cancelItems.append(item)
+        }
+    }
+    
+    func append<Z: ThenableDescription>(context childContext: CancelContext, description: Z, cancelItems: CancelItemList) {
+        if validateContext(context: childContext) {
+            let item = CancelItem(context: childContext, description: description)
+            cancelItemList.append(item)
+            cancelItemSet.insert(item)
+            cancelItems.append(item)
+        }
+    }
+    
+    private func validateContext(context childContext: CancelContext) -> Bool {
         guard childContext !== self else {
-            return
+            return false
         }
         
         if let parentError = cancelledError {
@@ -95,11 +113,7 @@ public class CancelContext: Hashable, CustomStringConvertible {
             }
         }
         
-        let item = CancelItem(context: childContext, thenable: thenable.thenable)
-        cancelItemList.append(item)
-        cancelItemSet.insert(item)
-
-        thenable.cancelItems.append(item)
+        return true
     }
     
     func recover(file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
@@ -190,6 +204,12 @@ class CancelItem: Hashable, CustomStringConvertible {
         self.task = nil
         self.context = context
         self.descriptionCSC = CancelItem.createDescription(thenable)
+    }
+    
+    init<Z: ThenableDescription>(context: CancelContext, description: Z) {
+        self.task = nil
+        self.context = context
+        self.descriptionCSC = description
     }
     
     static func createDescription<Z: Thenable>(_ thenable: Z) -> CustomStringConvertible {

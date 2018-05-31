@@ -48,6 +48,10 @@ public extension CancellableThenable {
     }
     
     func then<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.U.T> {
+
+        let description = PromiseDescription<V.U.T>()
+        let cancelItems = CancelItemList()
+        
         let cancelBody = { (value: U.T) throws -> V.U in
             if let error = self.cancelContext.cancelledError {
                 throw error
@@ -55,15 +59,14 @@ public extension CancellableThenable {
                 self.cancelContext.removeItems(self.cancelItems, clearList: true)
                 
                 let rv = try body(value)
-                // TODO: should be using 'promise' created below, not 'self' -- the cancel item is put into the wrong CancelItemList
-                self.cancelContext.append(context: rv.cancelContext, thenable: self)
-
+                self.cancelContext.append(context: rv.cancelContext, description: description, cancelItems: cancelItems)
                 return rv.thenable
             }
         }
         
         let promise = self.thenable.then(on: on, file: file, line: line, cancelBody)
-        return CancellablePromise(promise, context: self.cancelContext)
+        description.promise = promise
+        return CancellablePromise(promise, context: self.cancelContext, cancelItems: cancelItems)
     }
     
     func then<V: Thenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
