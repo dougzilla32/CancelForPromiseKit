@@ -71,7 +71,7 @@ public func race<V: CancellableThenable>(_ thenables: [V]) -> CancellablePromise
  - Warning: If any of the provided promises reject, the returned promise is rejected.
  - Remark: Returns promise rejected with PMKError.badInput if empty array provided
 */
-public func race<T>(_ guarantees: CancellableGuarantee<T>..., cancelValue: T) -> CancellableGuarantee<T> {
+public func race<T>(_ guarantees: CancellableGuarantee<T>..., cancelValue: T? = nil) -> CancellableGuarantee<T> {
     let guarantee = CancellableGuarantee(race(asGuarantees(guarantees)), cancelValue: cancelValue)
     for g in guarantees {
         guarantee.appendCancelContext(from: g)
@@ -109,4 +109,18 @@ private func race<T>(_ gs: [Guarantee<T>]) -> Guarantee<T> {
         guarantee = Guarantee.pending().guarantee  // to make the compiler happy
     }
     return guarantee
+}
+
+// MARK: CC wrapper functions
+
+public func raceCC<U: Thenable>(_ thenables: U...) -> CancellablePromise<U.T> {
+    return CancellablePromise(race(thenables))
+}
+
+public func raceCC<U: Thenable>(_ thenables: [U]) -> CancellablePromise<U.T> {
+    return CancellablePromise(race(thenables))
+}
+
+public func raceCC<T>(_ guarantees: Guarantee<T>..., cancelValue: T? = nil) -> CancellableGuarantee<T> {
+    return CancellableGuarantee(race(guarantees), cancelValue: cancelValue)
 }
