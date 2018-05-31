@@ -9,20 +9,12 @@ class RegressionTests: XCTestCase {
         // in our A+ tests implementation for spec: 2.3.1
 
         do {
-            let promise1 = CancellablePromise()
-            let promise2 = promise1.then(on: nil) { promise1 }
-            promise2.catch(on: nil) { _ in XCTFail() }
-            promise1.cancel()
-        }
-        
-        do {
             let ex = expectation(description: "")
             let promise1 = CancellablePromise()
             promise1.cancel()
-            let promise2 = promise1.then(on: nil) { () -> CancellablePromise<Void> in  XCTFail(); return promise1 }
-            promise2.catch(on: nil) {
+            let promise2 = promise1.then(on: nil) { promise1 }
+            promise2.catch(on: nil, policy: .allErrors) {
                 ex.fulfill()
-                print("HI \($0)")
                 if !$0.isCancelled {
                     XCTFail()
                 }
@@ -31,16 +23,39 @@ class RegressionTests: XCTestCase {
         }
         
         do {
-            enum Error: Swift.Error { case dummy }
-
-            let promise1 = CancellablePromise<Void>(error: Error.dummy)
-            let promise2 = promise1.recover(on: nil) { _ in promise1 }
-            promise2.catch(on: nil) { err in
-                if case PMKError.returnedSelf = err {
+            let ex = expectation(description: "")
+            let promise1 = CancellablePromise()
+            promise1.cancel()
+            let promise2 = promise1.then(on: nil) { () -> CancellablePromise<Void> in
+                XCTFail()
+                return promise1
+            }
+            promise2.catch(on: nil, policy: .allErrors) {
+                ex.fulfill()
+                if !$0.isCancelled {
                     XCTFail()
                 }
             }
+            wait(for: [ex], timeout: 1)
+        }
+        
+        do {
+            let ex = expectation(description: "")
+            enum Error: Swift.Error { case dummy }
+
+            let promise1 = CancellablePromise<Void>(error: Error.dummy)
             promise1.cancel()
+            let promise2 = promise1.recover(on: nil) { _ in promise1 }
+            promise2.catch(on: nil, policy: .allErrors) { err in
+                if case PMKError.returnedSelf = err {
+                    XCTFail()
+                }
+                ex.fulfill()
+                if !err.isCancelled {
+                    XCTFail()
+                }
+            }
+            wait(for: [ex], timeout: 1)
         }
     }
 }
