@@ -166,7 +166,7 @@ public extension CancellableCatchMixin {
     }
 }
 
-extension CancellableCatchMixin where M.T == Void {
+public extension CancellableCatchMixin where M.T == Void {
     /**
      The provided closure executes when this promise rejects.
      

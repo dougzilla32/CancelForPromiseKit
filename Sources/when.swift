@@ -44,10 +44,6 @@ public func when<V: CancellableThenable>(fulfilled thenables: [V]) -> Cancellabl
     return rp
 }
 
-public func whenCC<U: Thenable>(fulfilled thenables: [U]) -> CancellablePromise<[U.T]> {
-    return CancellablePromise(when(fulfilled: thenables))
-}
-
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
 public func when<V: CancellableThenable>(fulfilled promises: V...) -> CancellablePromise<Void> where V.U.T == Void {
     let rp = CancellablePromise(when(fulfilled: asThenables(promises)))
@@ -55,11 +51,6 @@ public func when<V: CancellableThenable>(fulfilled promises: V...) -> Cancellabl
         rp.appendCancelContext(from: p)
     }
     return rp
-}
-
-/// Wait for all promises in a set to fulfill, unless cancelled before completion.
-public func whenCC<U: Thenable>(fulfilled promises: U...) -> CancellablePromise<Void> where U.T == Void {
-    return CancellablePromise(when(fulfilled: promises))
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
@@ -72,19 +63,9 @@ public func when<V: CancellableThenable>(fulfilled promises: [V]) -> Cancellable
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
-public func whenCC<U: Thenable>(fulfilled promises: [U]) -> CancellablePromise<Void> where U.T == Void {
-    return CancellablePromise(when(fulfilled: promises))
-}
-
-/// Wait for all promises in a set to fulfill, unless cancelled before completion.
 public func when<U: CancellableThenable, V: CancellableThenable>(fulfilled pu: U, _ pv: V) -> CancellablePromise<(U.U.T, V.U.T)> {
     let t = [pu.asVoid(), pv.asVoid()]
     return when(fulfilled: t).map(on: nil) { (pu.value!, pv.value!) }
-}
-
-/// Wait for all promises in a set to fulfill, unless cancelled before completion.
-public func whenCC<U: Thenable, V: Thenable>(fulfilled pu: U, _ pv: V) -> CancellablePromise<(U.T, V.T)> {
-    return CancellablePromise(when(fulfilled: pu, pv))
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
@@ -94,30 +75,15 @@ public func when<U: CancellableThenable, V: CancellableThenable, W: CancellableT
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
-public func whenCC<U: Thenable, V: Thenable, W: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W) -> CancellablePromise<(U.T, V.T, W.T)> {
-    return CancellablePromise(when(fulfilled: pu, pv, pw))
-}
-
-/// Wait for all promises in a set to fulfill, unless cancelled before completion.
 public func when<U: CancellableThenable, V: CancellableThenable, W: CancellableThenable, X: CancellableThenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X) -> CancellablePromise<(U.U.T, V.U.T, W.U.T, X.U.T)> {
     let t = [pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid()]
     return when(fulfilled: t).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!) }
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
-public func whenCC<U: Thenable, V: Thenable, W: Thenable, X: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X) -> CancellablePromise<(U.T, V.T, W.T, X.T)> {
-    return CancellablePromise(when(fulfilled: pu, pv, pw, px))
-}
-
-/// Wait for all promises in a set to fulfill, unless cancelled before completion.
 public func when<U: CancellableThenable, V: CancellableThenable, W: CancellableThenable, X: CancellableThenable, Y: CancellableThenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X, _ py: Y) -> CancellablePromise<(U.U.T, V.U.T, W.U.T, X.U.T, Y.U.T)> {
     let t = [pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid(), py.asVoid()]
     return when(fulfilled: t).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!, py.value!) }
-}
-
-/// Wait for all promises in a set to fulfill, unless cancelled before completion.
-public func whenCC<U: Thenable, V: Thenable, W: Thenable, X: Thenable, Y: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X, _ py: Y) -> CancellablePromise<(U.T, V.T, W.T, X.T, Y.T)> {
-    return CancellablePromise(when(fulfilled: pu, pv, pw, px, py))
 }
 
 /**
@@ -186,13 +152,6 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
     return rootPromise
 }
 
-public func whenCC<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrently: Int) -> CancellablePromise<[It.Element.T]> where It.Element: Thenable {
-    guard concurrently > 0 else {
-        return CancellablePromise(error: PMKError.badInput)
-    }
-    return CancellablePromise(when(fulfilled: promiseIterator, concurrently: concurrently))
-}
-
 /**
  Waits on all provided promises.
 
@@ -221,10 +180,6 @@ public func when<T>(resolved promises: CancellablePromise<T>...) -> CancellableG
     return CancellableGuarantee(when(resolved: asPromises(promises)))
 }
 
-public func whenCC<T>(resolved promises: Promise<T>...) -> CancellableGuarantee<[Result<T>]> {
-    return CancellableGuarantee(when(resolved: promises))
-}
-
 /// Waits on all provided promises.
 public func when<T>(resolved promises: [CancellablePromise<T>]) -> CancellableGuarantee<[Result<T>]> {
     guard !promises.isEmpty else {
@@ -238,17 +193,9 @@ public func when<T>(resolved promises: [CancellablePromise<T>]) -> CancellableGu
     return rg
 }
 
-public func whenCC<T>(resolved promises: [Promise<T>]) -> CancellableGuarantee<[Result<T>]> {
-    return CancellableGuarantee(when(resolved: promises))
-}
-
 /// Waits on all provided Guarantees.
 public func when(_ guarantees: CancellableGuarantee<Void>...) -> CancellableGuarantee<Void> {
     return when(guarantees: guarantees)
-}
-
-public func whenCC(_ guarantees: Guarantee<Void>...) -> CancellableGuarantee<Void> {
-    return CancellableGuarantee(when(guarantees: guarantees))
 }
 
 /// Waits on all provided Guarantees.
@@ -257,11 +204,7 @@ public func when(guarantees: [CancellableGuarantee<Void>]) -> CancellableGuarant
     for g in guarantees {
         rg.appendCancelContext(from: g)
     }
-    return rg.recover { _ in }
-}
-
-public func whenCC(_ guarantees: [Guarantee<Void>]) -> CancellableGuarantee<Void> {
-    return CancellableGuarantee(when(guarantees: guarantees))
+    return rg.recover { _ in }.asVoid()
 }
 
 func asThenables<V: CancellableThenable>(_ cancellableThenables: [V]) -> [V.U] {
@@ -286,4 +229,63 @@ func asGuarantees<T>(_ cancellableGuarantees: [CancellableGuarantee<T>]) -> [Gua
         guarantees.append(cg.guarantee)
     }
     return guarantees
+}
+
+// MARK: CC wrapper functions
+
+/// Wait for all promises in a set to fulfill, unless cancelled before completion.
+public func whenCC<U: Thenable>(fulfilled promises: U...) -> CancellablePromise<Void> where U.T == Void {
+    return CancellablePromise(when(fulfilled: promises))
+}
+
+/// Wait for all promises in a set to fulfill, unless cancelled before completion.
+public func whenCC<U: Thenable>(fulfilled promises: [U]) -> CancellablePromise<Void> where U.T == Void {
+    return CancellablePromise(when(fulfilled: promises))
+}
+
+public func whenCC<U: Thenable>(fulfilled thenables: [U]) -> CancellablePromise<[U.T]> {
+    return CancellablePromise(when(fulfilled: thenables))
+}
+
+/// Wait for all promises in a set to fulfill, unless cancelled before completion.
+public func whenCC<U: Thenable, V: Thenable>(fulfilled pu: U, _ pv: V) -> CancellablePromise<(U.T, V.T)> {
+    return CancellablePromise(when(fulfilled: pu, pv))
+}
+
+/// Wait for all promises in a set to fulfill, unless cancelled before completion.
+public func whenCC<U: Thenable, V: Thenable, W: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W) -> CancellablePromise<(U.T, V.T, W.T)> {
+    return CancellablePromise(when(fulfilled: pu, pv, pw))
+}
+
+/// Wait for all promises in a set to fulfill, unless cancelled before completion.
+public func whenCC<U: Thenable, V: Thenable, W: Thenable, X: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X) -> CancellablePromise<(U.T, V.T, W.T, X.T)> {
+    return CancellablePromise(when(fulfilled: pu, pv, pw, px))
+}
+
+/// Wait for all promises in a set to fulfill, unless cancelled before completion.
+public func whenCC<U: Thenable, V: Thenable, W: Thenable, X: Thenable, Y: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X, _ py: Y) -> CancellablePromise<(U.T, V.T, W.T, X.T, Y.T)> {
+    return CancellablePromise(when(fulfilled: pu, pv, pw, px, py))
+}
+
+public func whenCC<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrently: Int) -> CancellablePromise<[It.Element.T]> where It.Element: Thenable {
+    guard concurrently > 0 else {
+        return CancellablePromise(error: PMKError.badInput)
+    }
+    return CancellablePromise(when(fulfilled: promiseIterator, concurrently: concurrently))
+}
+
+public func whenCC<T>(resolved promises: Promise<T>...) -> CancellableGuarantee<[Result<T>]> {
+    return CancellableGuarantee(when(resolved: promises))
+}
+
+public func whenCC<T>(resolved promises: [Promise<T>]) -> CancellableGuarantee<[Result<T>]> {
+    return CancellableGuarantee(when(resolved: promises))
+}
+
+public func whenCC(_ guarantees: Guarantee<Void>...) -> CancellableGuarantee<Void> {
+    return CancellableGuarantee(when(guarantees: guarantees))
+}
+
+public func whenCC(_ guarantees: [Guarantee<Void>]) -> CancellableGuarantee<Void> {
+    return CancellableGuarantee(when(guarantees: guarantees))
 }
