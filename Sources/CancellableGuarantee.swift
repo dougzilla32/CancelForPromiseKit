@@ -117,7 +117,7 @@ public extension CancellableGuarantee {
     }
 
     @discardableResult
-    func thenCC<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Guarantee<U>) -> CancellableGuarantee<U> {
+    func then<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Guarantee<U>) -> CancellableGuarantee<U> {
         if self.cancelContext == nil {
             ErrorConditions.cancelContextMissingInChain(className: "Guarantee", functionName: #function, file: file, function: function, line: line)
             self.cancelContext = CancelContext()

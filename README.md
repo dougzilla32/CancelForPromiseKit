@@ -29,14 +29,14 @@ UIApplication.shared.isNetworkActivityIndicatorVisible = true
 let fetchImage = URLSession.shared.dataTaskCC(.promise, with: url).compactMap{ UIImage(data: $0.data) }
 let fetchLocation = CLLocationManager.requestLocationCC().lastValue
 
-let chain = firstlyCC {
-    whenCC(fulfilled: fetchImage, fetchLocation)
-}.doneCC { image, location in
+let promise = firstly {
+    when(fulfilled: fetchImage, fetchLocation)
+}.done { image, location in
     self.imageView.image = image
     self.label.text = "\(location)"
-}.ensureCC {
+}.ensure {
     UIApplication.shared.isNetworkActivityIndicatorVisible = false
-}.catchCC(policy: .allErrors) { error in
+}.catch(policy: .allErrors) { error in
     // Will be invoked with a PromiseCancelledError when cancel is called on the context.
     // Use the default policy of .allErrorsExceptCancellation to ignore cancellation errors.
     self.show(UIAlertController(for: error), sender: self)
@@ -45,7 +45,7 @@ let chain = firstlyCC {
 //…
 
 // Cancel currently active tasks and reject all promises with PromiseCancelledError
-chain.cancel()
+promise.cancel()
 ```
 
 # Quick Start
@@ -97,10 +97,10 @@ eg:
 
 ```ruby
 pod "CancelForPromiseKit/MapKit"
-# MKDirections().calculate(cancel: context).then { /*…*/ }
+# MKDirections().calculateCC().then { /*…*/ }
 
 pod "CancelForPromiseKit/CoreLocation"
-# CLLocationManager.requestLocation(cancel: context).then { /*…*/ }
+# CLLocationManager.requestLocationCC().then { /*…*/ }
 ```
 
 As with PromiseKit, all extensions are separate repositories.  Here is a complete list of CancelForPromiseKit extensions listing the specific functions that support cancellation (PromiseKit extensions without any functions supporting cancellation are omitted):
@@ -108,17 +108,17 @@ As with PromiseKit, all extensions are separate repositories.  Here is a complet
 [Alamofire][Alamofire]  
 
 	Alamofire.DataRequest
-		response(_:queue:cancel:)
-		responseData(queue:cancel:)
-		responseString(queue:cancel:)
-		responseJSON(queue:options:cancel:)
-		responsePropertyList(queue:options:cancel:)
-		responseDecodable<T>(queue::decoder:cancel:)
-		responseDecodable<T>(_ type:queue:decoder:cancel:)
+		responseCC(_:queue:)
+		responseDataCC(queue:)
+		responseStringCC(queue:)
+		responseJSONCC(queue:options:)
+		responsePropertyListCC(queue:options:)
+		responseDecodableCC<T>(queue::decoder:)
+		responseDecodableCC<T>(_ type:queue:decoder:)
 
 	Alamofire.DownloadRequest
-		response(_:queue:cancel:)
-		responseData(queue:cancel:)
+		responseCC(_:queue:)
+		responseDataCC(queue:)
 
 [Bolts](http://github.com/dougzilla32/CancelForPromiseKit-Bolts)  
 [Cloudkit](http://github.com/dougzilla32/CancelForPromiseKit-CloudKit)  
@@ -126,13 +126,13 @@ As with PromiseKit, all extensions are separate repositories.  Here is a complet
 [Foundation][Foundation]  
 
 	Process
-		launch(_:cancel)
+		launchCC(_:)
 		
 	URLSession
-		dataTask(_:with:cancel:)
-		uploadTask(_:with:from:cancel:)
-		uploadTask(_:with:fromFile:cancel:)
-		downloadTask(_:with:to:cancel:)
+		dataTaskCC(_:with:)
+		uploadTaskCC(_:with:from:)
+		uploadTaskCC(_:with:fromFile:)
+		downloadTaskCC(_:with:to:)
 
 [MapKit](http://github.com/dougzilla32/CancelForPromiseKit-MapKit)  
 [OMGHTTPURLRQ][OMGHTTPURLRQ]  
@@ -159,16 +159,15 @@ All the networking library extensions supported by PromiseKit are now simple to 
 // pod 'CancelForPromiseKit/Alamofire'
 // # https://github.com/dougzilla32/CancelForPromiseKit-Alamofire
 
-let context = CancelContext()
-firstly {
+let context = firstly {
     Alamofire
         .request("http://example.com", method: .post, parameters: params)
-        .responseDecodable(Foo.self, cancel: context)
+        .responseDecodableCC(Foo.self, cancel: context)
 }.done { foo in
     //…
 }.catch { error in
     //…
-}
+}.cancelContext
 
 //…
 
@@ -182,15 +181,15 @@ context.cancel()
 // # https://github.com/dougzilla32/CancelForPromiseKit-OMGHTTPURLRQ
 
 let context = CancelContext()
-firstly {
-    URLSession.shared.POST("http://example.com", JSON: params, cancel: context)
+let context = firstly {
+    URLSession.shared.POSTCC("http://example.com", JSON: params)
 }.map {
     try JSONDecoder().decoder(Foo.self, with: $0.data)
 }.done { foo in
     //…
 }.catch { error in
     //…
-}
+}.cancelContext
 
 //…
 
@@ -203,16 +202,15 @@ And (of course) plain `URLSession` from [Foundation]:
 // pod 'CancelForPromiseKit/Foundation'
 // # https://github.com/dougzilla32/CancelForPromiseKit-Foundation
 
-let context = CancelContext()
-firstly {
-    URLSession.shared.dataTask(.promise, with: try makeUrlRequest(), cancel: context)
+let context = firstly {
+    URLSession.shared.dataTaskCC(.promise, with: try makeUrlRequest())
 }.map {
     try JSONDecoder().decode(Foo.self, with: $0.data)
 }.done { foo in
     //…
 }.catch { error in
     //…
-}
+}.cancelContext
 
 //…
 

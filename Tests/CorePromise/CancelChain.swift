@@ -110,15 +110,15 @@ class CancelChain: XCTestCase {
                     self.trace("pB.then")
                     return firstly { () -> CancellablePromise<C> in
                         self.trace("pC.firstly")
-                        ex.b?.fulfill() ?? XCTFail("pB.thenCC")
+                        ex.b?.fulfill() ?? XCTFail("pB.then")
                         return c.pC
                     }.then { (_: C) -> CancellablePromise<D> in
-                        ex.c?.fulfill() ?? XCTFail("pC.thenCC")
+                        ex.c?.fulfill() ?? XCTFail("pC.then")
                         self.trace("pC.then")
                         return c.pD
                     }
                 }.then { (_: D) -> CancellablePromise<A> in
-                    ex.d?.fulfill() ?? XCTFail("pD.doneCC")
+                    ex.d?.fulfill() ?? XCTFail("pD.done")
                     return c.pA  // Intentional reuse of pA -- causes a loop that CancelContext must detect
                 }
             }.then { (_: A) -> CancellablePromise<E> in

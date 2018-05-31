@@ -31,7 +31,7 @@ public func race<V: CancellableThenable>(_ thenables: V...) -> CancellablePromis
  Resolves with the first resolving promise from a set of promises. Calling 'cancel' on the
  race promise cancels all pending promises.
 
-     let racePromise = raceCC(promise1, promise2, promise3).thenCC { winner in
+     let racePromise = race(promise1, promise2, promise3).then { winner in
          //…
      }
  
