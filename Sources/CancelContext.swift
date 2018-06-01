@@ -116,11 +116,11 @@ public class CancelContext: Hashable, CustomStringConvertible {
         return true
     }
     
-    func recover(file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+    func recover() {
         cancelledError = nil
     }
     
-    func removeItems(_ list: CancelItemList, clearList: Bool, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+    func removeItems(_ list: CancelItemList, clearList: Bool) {
         guard list.items.count != 0 else {
             return
         }

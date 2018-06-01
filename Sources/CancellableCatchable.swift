@@ -16,7 +16,7 @@ public protocol CancellableCatchMixin: CancellableThenable {
 
 public extension CancellableCatchMixin {
     @discardableResult
-    func `catch`(on: DispatchQueue? = conf.Q.return, policy: CatchPolicy = conf.catchPolicy, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) -> Void) -> CPKFinalizer {
+    func `catch`(on: DispatchQueue? = conf.Q.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> CPKFinalizer {
         return CPKFinalizer(self.catchable.catch(on: on, policy: policy, body), cancel: self.cancelContext)
     }
 }
@@ -55,7 +55,7 @@ public class CPKFinalizer {
 }
 
 public extension CancellableCatchMixin {
-    func recover<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.U.T == M.T {
+    func recover<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.U.T == M.T {
         
         let description = PromiseDescription<V.U.T>()
         let cancelItems = CancelItemList()
@@ -81,7 +81,7 @@ public extension CancellableCatchMixin {
         return CancellablePromise(promise, context: self.cancelContext, cancelItems: cancelItems)
     }
     
-    func ensure(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping () -> Void) -> CancellablePromise<M.T> {
+    func ensure(on: DispatchQueue? = conf.Q.return, _ body: @escaping () -> Void) -> CancellablePromise<M.T> {
         let rp = CancellablePromise<M.T>.pending()
         rp.promise.cancelContext = self.cancelContext
         self.catchable.pipe { result in
@@ -102,7 +102,7 @@ public extension CancellableCatchMixin {
         return rp.promise
     }
     
-    func ensureThen(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping () -> CancellablePromise<Void>) -> CancellablePromise<M.T> {
+    func ensureThen(on: DispatchQueue? = conf.Q.return, _ body: @escaping () -> CancellablePromise<Void>) -> CancellablePromise<M.T> {
         let rp = CancellablePromise<M.T>.pending()
         rp.promise.cancelContext = cancelContext
         self.catchable.pipe { result in
@@ -129,7 +129,7 @@ public extension CancellableCatchMixin {
         return rp.promise
     }
     
-    func cauterize(file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+    func cauterize() {
         self.catch(policy: .allErrors) {
             Swift.print("CancelForPromiseKit:cauterized-error:", $0)
         }
@@ -147,7 +147,7 @@ public extension CancellableCatchMixin where M.T == Void {
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
     @discardableResult
-    func recover(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) -> Void) -> CancellableGuarantee<Void> {
+    func recover(on: DispatchQueue? = conf.Q.map, _ body: @escaping(Error) -> Void) -> CancellableGuarantee<Void> {
         let guarantee: Guarantee<Void> = self.catchable.recover(on: on, body)
         return CancellableGuarantee(guarantee, context: self.cancelContext)
     }
@@ -161,7 +161,7 @@ public extension CancellableCatchMixin where M.T == Void {
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recover(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(Error) throws -> Void) -> CancellablePromise<Void> {
+    func recover(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> CancellablePromise<Void> {
         let cancelBody = { (error: Error) throws -> Void in
             if let error = self.cancelContext.cancelledError, policy == .allErrorsExceptCancellation {
                 throw error

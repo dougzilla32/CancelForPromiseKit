@@ -68,7 +68,7 @@ public class CancellableGuarantee<T>: CancellableThenable {
 
 public extension CancellableGuarantee {
     @discardableResult
-    func done(on: DispatchQueue? = conf.Q.return, cancelValue: T? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Void) -> CancellableGuarantee<Void> {
+    func done(on: DispatchQueue? = conf.Q.return, cancelValue: T? = nil, _ body: @escaping(T) -> Void) -> CancellableGuarantee<Void> {
         let cancelBody = { (value: T) -> Void in
             let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
             self.cancelContext.removeItems(self.cancelItems, clearList: true)
@@ -79,7 +79,7 @@ public extension CancellableGuarantee {
         return CancellableGuarantee<Void>(guarantee, context: self.cancelContext)
     }
 
-    func map<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> U) -> CancellableGuarantee<U> {
+    func map<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, _ body: @escaping(T) -> U) -> CancellableGuarantee<U> {
         let cancelBody = { (value: T) -> U in
             let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
             self.cancelContext.removeItems(self.cancelItems, clearList: true)
@@ -91,7 +91,7 @@ public extension CancellableGuarantee {
     }
     
     @discardableResult
-    func then<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> CancellableGuarantee<U>) -> CancellableGuarantee<U> {
+    func then<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, _ body: @escaping(T) -> CancellableGuarantee<U>) -> CancellableGuarantee<U> {
         let cancelBody = { (value: T) -> Guarantee<U> in
             let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
             let rv = body(value)
@@ -104,7 +104,7 @@ public extension CancellableGuarantee {
     }
 
     @discardableResult
-    func then<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping(T) -> Guarantee<U>) -> CancellableGuarantee<U> {
+    func then<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, _ body: @escaping(T) -> Guarantee<U>) -> CancellableGuarantee<U> {
         let cancelBody = { (value: T) -> Guarantee<U> in
             let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
             return body(value)

@@ -7,7 +7,7 @@
 
 import PromiseKit
 
-public func firstly<V: CancellableThenable>(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, execute body: () throws -> V) -> CancellablePromise<V.U.T> {
+public func firstly<V: CancellableThenable>(execute body: () throws -> V) -> CancellablePromise<V.U.T> {
     do {
         let rv = try body()
         let rp = CancellablePromise<V.U.T>(rv.thenable)
@@ -18,7 +18,7 @@ public func firstly<V: CancellableThenable>(file: StaticString = #file, function
     }
 }
 
-public func firstlyCC<U: Thenable>(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, execute body: () throws -> U) -> CancellablePromise<U.T> {
+public func firstlyCC<U: Thenable>(execute body: () throws -> U) -> CancellablePromise<U.T> {
     do {
         return CancellablePromise(try body())
     } catch {

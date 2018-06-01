@@ -47,7 +47,7 @@ public extension CancellableThenable {
         return self.cancelContext.cancelledError
     }
     
-    func then<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.U.T> {
+    func then<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, line: UInt = #line, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.U.T> {
 
         let description = PromiseDescription<V.U.T>()
         let cancelItems = CancelItemList()
@@ -69,7 +69,7 @@ public extension CancellableThenable {
         return CancellablePromise(promise, context: self.cancelContext, cancelItems: cancelItems)
     }
     
-    func then<V: Thenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
+    func then<V: Thenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, line: UInt = #line, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
         let cancelBody = { (value: U.T) throws -> V in
             if let error = self.cancelContext.cancelledError {
                 throw error
@@ -83,7 +83,7 @@ public extension CancellableThenable {
         return CancellablePromise(promise, context: self.cancelContext)
     }
     
-    func map<V>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping (U.T) throws -> V) -> CancellablePromise<V> {
+    func map<V>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping (U.T) throws -> V) -> CancellablePromise<V> {
         let cancelTransform = { (value: U.T) throws -> V in
             if let error = self.cancelContext.cancelledError {
                 throw error
@@ -97,7 +97,7 @@ public extension CancellableThenable {
         return CancellablePromise(promise, context: self.cancelContext)
     }
     
-    func compactMap<V>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ transform: @escaping (U.T) throws -> V?) -> CancellablePromise<V> {
+    func compactMap<V>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping (U.T) throws -> V?) -> CancellablePromise<V> {
         let cancelTransform = { (value: U.T) throws -> V? in
             if let error = self.cancelContext.cancelledError {
                 throw error
@@ -111,7 +111,7 @@ public extension CancellableThenable {
         return CancellablePromise(promise, context: self.cancelContext)
     }
     
-    func done(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (U.T) throws -> Void) -> CancellablePromise<Void> {
+    func done(on: DispatchQueue? = conf.Q.return, _ body: @escaping (U.T) throws -> Void) -> CancellablePromise<Void> {
         let cancelBody = { (value: U.T) throws -> Void in
             if let error = self.cancelContext.cancelledError {
                 throw error
@@ -125,7 +125,7 @@ public extension CancellableThenable {
         return CancellablePromise(promise, context: self.cancelContext)
     }
     
-    func get(on: DispatchQueue? = conf.Q.return, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, _ body: @escaping (U.T) throws -> Void) -> CancellablePromise<U.T> {
+    func get(on: DispatchQueue? = conf.Q.return, _ body: @escaping (U.T) throws -> Void) -> CancellablePromise<U.T> {
         return map(on: on) {
             try body($0)
             return $0
