@@ -134,17 +134,22 @@ public extension DispatchQueue {
     /**
      Asynchronously executes the provided closure on a dispatch queue.
 
-         DispatchQueue.global().async(.promise) {
+         let context = DispatchQueue.global().asyncCC(.promise) {
              try md5(input)
          }.done { md5 in
              //…
-         }
-
+         }.cancelContext
+     
+         //…
+     
+         context.cancel()
+     
+     - Parameter cancelValue: No-op -- workaround for compiler problem, can get 'ambiguous use of asynCC' error otherwise
      - Parameter body: The closure that resolves this promise.
      - Returns: A new `Promise` resolved by the result of the provided closure.
      */
     @available(macOS 10.10, iOS 8.0, tvOS 9.0, watchOS 2.0, *)
-    final func asyncCC<T>(_: PMKNamespacer, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: @escaping () throws -> T) -> CancellablePromise<T> {
+    final func asyncCC<T>(_: PMKNamespacer, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], cancelValue: T? = nil, execute body: @escaping () throws -> T) -> CancellablePromise<T> {
         let rp = CancellablePromise<T>.pending()
         async(group: group, qos: qos, flags: flags) {
             if let error = rp.promise.cancelContext.cancelledError {

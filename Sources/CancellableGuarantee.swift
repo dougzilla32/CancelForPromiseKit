@@ -148,22 +148,26 @@ extension CancellableGuarantee where T == Void {
 }
 #endif
 
-extension DispatchQueue {
+public extension DispatchQueue {
     /**
      Asynchronously executes the provided closure on a dispatch queue.
 
-         DispatchQueue.global().asyncCC(.promise) {
-             md5(input)
+         let context = DispatchQueue.global().asyncCC(.promise) {
+             try md5(input)
          }.done { md5 in
              //…
-         }
+         }.cancelContext
+     
+         //…
+     
+         context.cancel()
 
-     - Parameter cancel: The cancel context to use for this promise.
+     - Parameter cancelValue: The value to use if the CancellableGuarantee is cancelled.
      - Parameter body: The closure that resolves this promise.
      - Returns: A new `Guarantee` resolved by the result of the provided closure.
      */
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
-    final func asyncCC<T>(_: PMKNamespacer, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], cancelValue: T, execute body: @escaping () -> T) -> CancellableGuarantee<T> {
+    final func asyncCC<T>(_: PMKNamespacer, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], cancelValue: T? = nil, execute body: @escaping () -> T) -> CancellableGuarantee<T> {
         let rg = CancellableGuarantee<T>.pending(cancelValue: cancelValue)
         async(group: group, qos: qos, flags: flags) {
             rg.resolve(body())
