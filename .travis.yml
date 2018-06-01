@@ -44,14 +44,14 @@ before_install:
 install:
   case $PLAT in
   iOS|tvOS|macOS|watchOS)
-    xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;;
+    xcodebuild -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;;
   *)
     swift build;;
   esac
 script:
   case $PLAT in
   iOS|tvOS|macOS)
-    xcodebuild -scheme PromiseKit -destination "$DST" -quiet test -enableCodeCoverage YES;;
+    xcodebuild -scheme CancelForPromiseKit -destination "$DST" -quiet test -enableCodeCoverage YES;;
   watchOS)
     ;;
   *)
