@@ -3,7 +3,7 @@
 
 ---
 
-CancelForPromiseKit provides clear and concise cancellation extensions for [PromiseKit].  While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
+CancelForPromiseKit provides clear and concise cancellation abilities for [PromiseKit] and for the [PromiseKit Extensions].  While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
 
 The goals of this project are as follows:
 
@@ -233,6 +233,7 @@ func makeUrlRequest() throws -> URLRequest {
 [badge-platforms]: https://img.shields.io/cocoapods/p/CancelForPromiseKit.svg
 [badge-mit]: https://img.shields.io/badge/license-MIT-blue.svg
 [PromiseKit]: https://github.com/mxcl/PromiseKit
+[PromiseKit Extensions]: https://github.com/PromiseKit
 [CancelForPromiseKit]: https://github.com/dougzilla32/CancelForPromiseKit
 [OMGHTTPURLRQ]: http://github.com/dougzilla32/CancelForPromiseKit-OMGHTTPURLRQ
 [Alamofire]: http://github.com/dougzilla32/CancelForPromiseKit-Alamofire
