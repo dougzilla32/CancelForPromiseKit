@@ -194,7 +194,6 @@ class CancelItem: Hashable, CustomStringConvertible {
     var cancelAttempted = false
     
     init<Z: Thenable>(task: CancellableTask?, reject: ((Error) -> Void)?, thenable: Z) {
-        assert(task != nil || reject != nil)
         self.task = task
         self.reject = reject
         self.descriptionCSC = CancelItem.createDescription(thenable)
