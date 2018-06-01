@@ -1,5 +1,5 @@
 # CancelForPromiseKit
-![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit]
+![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit] [![Build Status](https://travis-ci.org/dougzilla32/CancelForPromiseKit.svg?branch=master)](https://travis-ci.org/dougzilla32/CancelForPromiseKit)
 
 ---
 
