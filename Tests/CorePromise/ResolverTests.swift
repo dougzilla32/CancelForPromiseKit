@@ -56,7 +56,7 @@ class WrapTests: XCTestCase {
         }
         
         func fetchWithCompletionBlock(block: @escaping(Int?, Swift.Error?) -> Void) {
-            finalizer = afterCC(.milliseconds(2000)).done {_ in
+            finalizer = afterCC(.milliseconds(20)).done {_ in
                 block(self.value, self.error)
             }.catch(policy: .allErrors) {
                 block(nil, $0)
@@ -151,9 +151,9 @@ class WrapTests: XCTestCase {
         let ex = expectation(description: "")
 
         let kittenFetcher = CancellableKittenFetcher(value: nil, error: nil)
-        CancellablePromise(task: kittenFetcher) { seal in
+        CancellablePromise<Any>(task: kittenFetcher) { seal in
             kittenFetcher.fetchWithCompletionBlock(block: seal.resolve)
-        }.catch { error in
+        }.catch(policy: .allErrors) { (error: Swift.Error) -> Void in
             error.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
 
