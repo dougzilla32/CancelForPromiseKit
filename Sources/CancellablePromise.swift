@@ -33,40 +33,39 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
     }
     
     /// Initialize a new rejected cancellable promise.
-    public convenience init(error: Error) {
-        self.init(Promise(error: error))
+    public convenience init(task: CancellableTask? = nil, error: Error) {
+        var reject: ((Error) -> Void)!
+        self.init(Promise { seal in
+            reject = seal.reject
+            seal.reject(error)
+        })
+        self.appendCancellableTask(task: task, reject: reject)
     }
     
     /// Initialize a new cancellable promise bound to the provided `Thenable`.
-    public convenience init<U: Thenable>(_ bridge: U) where U.T == T {
-        self.init(Promise(bridge))
+    public convenience init<U: Thenable>(task: CancellableTask? = nil, _ bridge: U) where U.T == T {
+        var reject: ((Error) -> Void)!
+        self.init(Promise { seal in
+            reject = seal.reject
+            bridge.done(on: nil) {
+                seal.fulfill($0)
+            }.catch {
+                seal.reject($0)
+            }
+        })
+        self.appendCancellableTask(task: task, reject: reject)
     }
     
     /// Initialize a new cancellable promise that can be resolved with the provided `Resolver`.
-    public convenience init(resolver body: (Resolver<T>) throws -> Void) {
-        self.init(Promise(resolver: body))
-    }
-    
-    /// Initialize a new cancellable promise with a cancellable task that can be resolved with the provided `Resolver`.
-    public convenience init(task: CancellableTask, resolver body: @escaping (Resolver<T>) throws -> Void) {
+    public convenience init(task: CancellableTask? = nil, resolver body: (Resolver<T>) throws -> Void) {
         var reject: ((Error) -> Void)!
-        self.init { seal in
+        self.init(Promise { seal in
             reject = seal.reject
             try body(seal)
-        }
+        })
         self.appendCancellableTask(task: task, reject: reject)
     }
     
-    /// Initialize a new cancellable promise with a cancellable task and rejected with the provided error.
-    public convenience init(task: CancellableTask, error: Error) {
-        var reject: ((Error) -> Void)!
-        self.init { seal in
-            reject = seal.reject
-            seal.reject(error)
-        }
-        self.appendCancellableTask(task: task, reject: reject)
-    }
-
     /// - Returns: a tuple of a new cancellable pending promise and its `Resolver`.
     public class func pending() -> (promise: CancellablePromise<T>, resolver: Resolver<T>) {
         let rp = Promise<T>.pending()

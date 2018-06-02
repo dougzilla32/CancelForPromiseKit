@@ -108,6 +108,18 @@ class WrapTests: XCTestCase {
         let kittenFetcher = KittenFetcher(value: nil, error: Error.test)
         CancellablePromise { seal in
             kittenFetcher.fetchWithCompletionBlock(block: seal.resolve)
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+        
+        waitForExpectations(timeout: 1)
+    }
+    
+    func testErrorNoDelay() {
+        let ex = expectation(description: "")
+        
+        CancellablePromise<Int> { seal in
+            seal.resolve(nil, Error.test)
         }.catch(policy: .allErrors) { error in
             defer { ex.fulfill() }
             guard case Error.test = error else {
@@ -137,11 +149,8 @@ class WrapTests: XCTestCase {
         let kittenFetcher = KittenFetcher(value: nil, error: nil)
         CancellablePromise { seal in
             kittenFetcher.fetchWithCompletionBlock(block: seal.resolve)
-        }.catch { error in
-            defer { ex.fulfill() }
-            guard case PMKError.invalidCallingConvention = error else {
-                return XCTFail()
-            }
+        }.catch(policy: .allErrors) { error in
+            error.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
 
         waitForExpectations(timeout: 1)
@@ -207,7 +216,7 @@ class WrapTests: XCTestCase {
         CancellablePromise { seal in
             kf2.fetchWithCompletionBlock3(block: seal.resolve)
         }.catch(policy: .allErrors) { error in
-            error.isCancelled ? XCTFail() : ex2.fulfill()
+            error.isCancelled ? ex2.fulfill() : XCTFail()
         }.cancel()
 
         wait(for: [ex1, ex2] ,timeout: 1)
@@ -251,7 +260,7 @@ class WrapTests: XCTestCase {
         CancellablePromise { seal in
             kf2.fetchWithCompletionBlock4(block: seal.resolve)
         }.catch(policy: .allErrors) { error in
-            error.isCancelled ? XCTFail() : ex2.fulfill()
+            error.isCancelled ? ex2.fulfill() : XCTFail()
         }.cancel()
 
         wait(for: [ex1, ex2], timeout: 1)

@@ -34,12 +34,7 @@ public class CancellableGuarantee<T>: CancellableThenable {
     }
     
     /// Initialize a new cancellable guarantee that can be resolved with the provided `Resolver`.
-    public convenience init(cancelValue: T? = nil, resolver body: ((T) -> Void) -> Void) {
-        self.init(Guarantee(resolver: body), cancelValue: cancelValue)
-    }
-    
-    /// Initialize a new cancellable guarantee with a cancellable task that can be resolved with the provided `Resolver`.
-    public convenience init(task: CancellableTask, cancelValue: T? = nil, resolver body: ((T) -> Void) -> Void) {
+    public convenience init(task: CancellableTask? = nil, cancelValue: T? = nil, resolver body: ((T) -> Void) -> Void) {
         self.init(Guarantee(resolver: body), cancelValue: cancelValue)
         self.appendCancellableTask(task: task, reject: nil)
     }

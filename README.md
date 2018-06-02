@@ -3,7 +3,7 @@
 
 ---
 
-CancelForPromiseKit provides clear and concise cancellation abilities for [PromiseKit] and for the [PromiseKit Extensions].  While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
+CancelForPromiseKit provides clear and concise cancellation abilities for [PromiseKit] and the [PromiseKit Extensions].  While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
 
 The goals of this project are as follows:
 

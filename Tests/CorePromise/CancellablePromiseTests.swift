@@ -105,4 +105,26 @@ class CancellablePromiseTests: XCTestCase {
         }.cancel()
         waitForExpectations(timeout: 1)
     }
+    
+    func testBridge() {
+        let ex1 = expectation(description: "")
+        let ex2 = expectation(description: "")
+        
+        let (promise, seal) = Promise<Void>.pending()
+        DispatchQueue.global(qos: .default).asyncAfter(deadline: DispatchTime.now() + 0.2) { seal.fulfill() }
+
+        CancellablePromise(promise).done { _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex2.fulfill() : XCTFail()
+        }.cancel()
+        
+        promise.done { _ in
+            ex1.fulfill()
+        }.catch(policy: .allErrors) { _ in
+            XCTFail()
+        }
+        
+        waitForExpectations(timeout: 1)
+    }
 }
