@@ -7,21 +7,34 @@ CancelForPromiseKit provides clear and concise cancellation abilities for [Promi
 
 The goals of this project are as follows:
 
-* **A streamlined way to cancel a promise, which rejects the promise and cancels it's associated task(s)**
+* **A streamlined way to cancel a promise chain, which rejects all associated promises and cancels all associated tasks. For example:**
 
-* **A streamlined way to cancel a promise chain and all it's currently running tasks, and also cancel any nested promise chains**
+```swift
+let promise = firstly {
+    loginCC() // 'CC' (aka cancel chain) methods return a CancellablePromise
+}.then { creds in
+    fetch(avatar: creds.user)
+}.done { image in
+    self.imageView = image
+}.catch(policy: .allErrors) { error in
+	if error.isCancelled {
+		// the chain has been cancelled!
+	}
+}
+//…
+promise.cancel()
+```
+* **Ensure that subsequent code blocks in a promise chain are _NEVER_ called after the chain has been cancelled**
 
-* **A simple way to define new varieties of cancellable promises**
-
-* **Provide cancellable varients for all the PromiseKit extensions (e.g. Foundation, CoreLocation, Alamofire)**
-
-* **Ensure that subsequent code blocks in a promise chain are _NEVER_ called after the chain has been cancelled -- handy for UIs where outdated tasks need to be cancelled (e.g. user is typing in an auto-completion search field)**
+* **Provide cancellable varients for all appropriate PromiseKit extensions (e.g. Foundation, CoreLocation, Alamofire)**
 
 * **Support cancellation for all PromiseKit primitives such as 'after', 'firstly', 'when', 'race'**
 
-CancelForPromiseKit defines it's extensions as methods and functions with the 'CC' (cancel chain) suffix.  By using theses 'CC' methods and functions, all of the above stated goals are met. 
+* **A simple way to make new types of cancellable promises**
 
-This README has the same structure as the PromiseKit README, with cancellation added to the sample code blocks:
+CancelForPromiseKit defines it's extensions as methods and functions with the 'CC' (cancel chain) suffix.
+
+This README has the same structure as the [PromiseKit README], with cancellation added to the sample code blocks:
 
 ```swift
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -29,7 +42,9 @@ UIApplication.shared.isNetworkActivityIndicatorVisible = true
 let fetchImage = URLSession.shared.dataTaskCC(.promise, with: url).compactMap{ UIImage(data: $0.data) }
 let fetchLocation = CLLocationManager.requestLocationCC().lastValue
 
-let promise = firstly {
+// Hold on to the 'CancelContext' rather than the promise chain so the
+// promises can be freed up.
+let context = firstly {
     when(fulfilled: fetchImage, fetchLocation)
 }.done { image, location in
     self.imageView.image = image
@@ -40,12 +55,12 @@ let promise = firstly {
     // Will be invoked with a PromiseCancelledError when cancel is called on the context.
     // Use the default policy of .allErrorsExceptCancellation to ignore cancellation errors.
     self.show(UIAlertController(for: error), sender: self)
-}
+}.cancelContext
 
 //…
 
 // Cancel currently active tasks and reject all promises with PromiseCancelledError
-promise.cancel()
+context.cancel()
 ```
 
 # Quick Start
@@ -180,7 +195,6 @@ context.cancel()
 // pod 'CancelForPromiseKit/OMGHTTPURLRQ'
 // # https://github.com/dougzilla32/CancelForPromiseKit-OMGHTTPURLRQ
 
-let context = CancelContext()
 let context = firstly {
     URLSession.shared.POSTCC("http://example.com", JSON: params)
 }.map {
@@ -234,6 +248,7 @@ func makeUrlRequest() throws -> URLRequest {
 [badge-mit]: https://img.shields.io/badge/license-MIT-blue.svg
 [PromiseKit]: https://github.com/mxcl/PromiseKit
 [PromiseKit Extensions]: https://github.com/PromiseKit
+[PromiseKit README]: https://github.com/mxcl/PromiseKit/blob/master/README.md
 [CancelForPromiseKit]: https://github.com/dougzilla32/CancelForPromiseKit
 [OMGHTTPURLRQ]: http://github.com/dougzilla32/CancelForPromiseKit-OMGHTTPURLRQ
 [Alamofire]: http://github.com/dougzilla32/CancelForPromiseKit-Alamofire
