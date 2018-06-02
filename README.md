@@ -11,7 +11,8 @@ The goals of this project are as follows:
 
 ```swift
 let promise = firstly {
-    loginCC() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to initiate a cancellable promise chain
+    loginCC() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to
+              // initiate a cancellable promise chain
 }.then { creds in
     fetch(avatar: creds.user)
 }.done { image in
