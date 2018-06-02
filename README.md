@@ -11,15 +11,15 @@ The goals of this project are as follows:
 
 ```swift
 let promise = firstly {
-    loginCC() // 'CC' (aka cancel chain) methods return a CancellablePromise
+    loginCC() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to initiate a cancellable promise chain
 }.then { creds in
     fetch(avatar: creds.user)
 }.done { image in
     self.imageView = image
 }.catch(policy: .allErrors) { error in
-	if error.isCancelled {
-		// the chain has been cancelled!
-	}
+    if error.isCancelled {
+        // the chain has been cancelled!
+    }
 }
 //…
 promise.cancel()
