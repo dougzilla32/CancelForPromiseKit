@@ -10,19 +10,19 @@ The goals of this project are as follows:
 * **A streamlined way to cancel a promise chain, which rejects all associated promises and cancels all associated tasks. For example:**
 
 <pre><mark><b>let promise =</b></mark> firstly {
-    login<b>CC</b>() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to
+    login<mark><b>CC</b></mark>() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to
               // initiate a cancellable promise chain
 }.then { creds in
     fetch(avatar: creds.user)
 }.done { image in
     self.imageView = image
 }.catch(policy: .allErrors) { error in
-    if <span style="background-color: #FFFF00">error.isCancelled</span> {
+    if <mark><b>error.isCancelled</b></mark> {
         // the chain has been cancelled!
     }
 }
 //…
-<mark>promise.cancel()</mark>
+<mark><b>promise.cancel()</b></mark>
 </pre>
 
 Note: For all code samples, the differences between PromiseKit and CancelForPromiseKit are highlighted in bold.
@@ -43,7 +43,7 @@ import CancelForPromiseKit
 
 func updateWeather(forCity searchName: String) {
     refreshButton.startAnimating()
-    <mark>let context =</mark> firstly {
+    <mark><b>let context =</b></mark> firstly {
         getForecast(forCity: searchName)
     }.done { response in
         updateUI(forecast: response)
@@ -52,21 +52,21 @@ func updateWeather(forCity searchName: String) {
     }.catch { error in
         // Cancellation errors are ignored by default
         showAlert(error: error) 
-    }<mark>.cancelContext</mark>
+    }<mark><b>.cancelContext</b></mark>
 
     //…
 
     // Cancels EVERYTHING (however the 'ensure' block always executes regardless)
-    <mark>context.cancel()</mark>
+    <mark><b>context.cancel()</b></mark>
 }
 
-func getForecast(forCity name: String) -> <mark>Cancellable</mark>Promise<WeatherInfo> {
+func getForecast(forCity name: String) -> <mark><b>Cancellable</b></mark>Promise<WeatherInfo> {
     return firstly {
         Alamofire.request("https://autocomplete.weather.com/\(name)")
-            .responseDecodable<mark>CC</mark>(AutoCompleteCity.self)
+            .responseDecodable<mark><b>CC</b></mark>(AutoCompleteCity.self)
     }.then { city in
         Alamofire.request("https://forecast.weather.com/\(city.name)")
-            .responseDecodable<mark>CC</mark>(WeatherResponse.self)
+            .responseDecodable<mark><b>CC</b></mark>(WeatherResponse.self)
     }.map { response in
         format(response)
     }
@@ -79,12 +79,12 @@ This README has the same structure as the [PromiseKit README], with cancellation
 
 <pre><code>UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
-let fetchImage = URLSession.shared.dataTask<mark>CC</mark>(.promise, with: url).compactMap{ UIImage(data: $0.data) }
-let fetchLocation = CLLocationManager.requestLocation<mark>CC</mark>().lastValue
+let fetchImage = URLSession.shared.dataTask<mark><b>CC</b></mark>(.promise, with: url).compactMap{ UIImage(data: $0.data) }
+let fetchLocation = CLLocationManager.requestLocation<mark><b>CC</b></mark>().lastValue
 
 // Hold on to the 'CancelContext' rather than the promise chain so the
 // promises can be freed up.
-<mark>let context =</mark> firstly {
+<mark><b>let context =</b></mark> firstly {
     when(fulfilled: fetchImage, fetchLocation)
 }.done { image, location in
     self.imageView.image = image
@@ -95,12 +95,12 @@ let fetchLocation = CLLocationManager.requestLocation<mark>CC</mark>().lastValue
     // Will be invoked with a PromiseCancelledError when cancel is called on the context.
     // Use the default policy of .allErrorsExceptCancellation to ignore cancellation errors.
     self.show(UIAlertController(for: error), sender: self)
-}<mark>.cancelContext</mark>
+}<mark><b>.cancelContext</b></mark>
 
 //…
 
 // Cancel currently active tasks and reject all promises with PromiseCancelledError
-<mark>context.cancel()</mark>
+<mark><b>context.cancel()</b></mark>
 </code></pre>
 
 # Quick Start
@@ -123,10 +123,10 @@ The following functions are part of the core CancelForPromiseKit module:
 
 <pre><code>TODO: FIXME!!!
 Global functions
-	after<mark>CC</mark>(seconds:)
-	after<mark>CC</mark>(_ interval:)
+	after<mark><b>CC</b></mark>(seconds:)
+	after<mark><b>CC</b></mark>(_ interval:)
 	
-<mark>CancellablePromise</mark> methods
+<mark><b>CancellablePromise</b></mark> methods
 	value(_ value:)
 	init(task:resolver:)
 	init(task:bridge:)
@@ -153,27 +153,27 @@ The default CocoaPod provides the core cancellable promises and the extension fo
 eg:
 
 <pre><code>pod "CancelForPromiseKit/MapKit"
-# MKDirections().calculate<mark>CC</mark>().then { /*…*/ }
+# MKDirections().calculate<mark><b>CC</b></mark>().then { /*…*/ }
 
 pod "CancelForPromiseKit/CoreLocation"
-# CLLocationManager.requestLocation<mark>CC</mark>().then { /*…*/ }
+# CLLocationManager.requestLocation<mark><b>CC</b></mark>().then { /*…*/ }
 </code></pre>
 
 As with PromiseKit, all extensions are separate repositories.  Here is a complete list of CancelForPromiseKit extensions listing the specific functions that support cancellation (PromiseKit extensions without any functions supporting cancellation are omitted):
 
 [Alamofire][Alamofire]  
 <pre><code>Alamofire.DataRequest
-	response<mark>CC</mark>(\_:queue:)
-	responseData<mark>CC</mark>(queue:)
-	responseString<mark>CC</mark>(queue:)
-	responseJSON<mark>CC</mark>(queue:options:)
-	responsePropertyList<mark>CC</mark>(queue:options:)
-	responseDecodable<mark>CC</mark><T>(queue::decoder:)
-	responseDecodable<mark>CC</mark><T>(_ type:queue:decoder:)
+	response<mark><b>CC</b></mark>(\_:queue:)
+	responseData<mark><b>CC</b></mark>(queue:)
+	responseString<mark><b>CC</b></mark>(queue:)
+	responseJSON<mark><b>CC</b></mark>(queue:options:)
+	responsePropertyList<mark><b>CC</b></mark>(queue:options:)
+	responseDecodable<mark><b>CC</b></mark><T>(queue::decoder:)
+	responseDecodable<mark><b>CC</b></mark><T>(_ type:queue:decoder:)
 
 Alamofire.DownloadRequest
-	response<mark>CC</mark>(_:queue:)
-	responseData<mark>CC</mark>(queue:)
+	response<mark><b>CC</b></mark>(_:queue:)
+	responseData<mark><b>CC</b></mark>(queue:)
 </code></pre>
 
 [Bolts](http://github.com/dougzilla32/CancelForPromiseKit-Bolts)  
@@ -182,13 +182,13 @@ Alamofire.DownloadRequest
 [Foundation][Foundation]  
 
 <pre><code>Process
-	launch<mark>CC</mark>(_:)
+	launch<mark><b>CC</b></mark>(_:)
 		
 URLSession
-	dataTask<mark>CC</mark>(_:with:)
-	uploadTask<mark>CC</mark>(_:with:from:)
-	uploadTask<mark>CC</mark>(_:with:fromFile:)
-	downloadTask<mark>CC</mark>(_:with:to:)
+	dataTask<mark><b>CC</b></mark>(_:with:)
+	uploadTask<mark><b>CC</b></mark>(_:with:from:)
+	uploadTask<mark><b>CC</b></mark>(_:with:fromFile:)
+	downloadTask<mark><b>CC</b></mark>(_:with:to:)
 </code></pre>
 
 [MapKit](http://github.com/dougzilla32/CancelForPromiseKit-MapKit)  
@@ -214,19 +214,19 @@ All the networking library extensions supported by PromiseKit are now simple to 
 <pre><code>// pod 'CancelForPromiseKit/Alamofire'
 // # https://github.com/dougzilla32/CancelForPromiseKit-Alamofire
 
-<mark>let context =</mark> firstly {
+<mark><b>let context =</b></mark> firstly {
     Alamofire
         .request("http://example.com", method: .post, parameters: params)
-        .responseDecodable<mark>CC</mark>(Foo.self, cancel: context)
+        .responseDecodable<mark><b>CC</b></mark>(Foo.self, cancel: context)
 }.done { foo in
     //…
 }.catch { error in
     //…
-}<mark>.cancelContext</mark>
+}<mark><b>.cancelContext</b></mark>
 
 //…
 
-<mark>context.cancel()</mark>
+<mark><b>context.cancel()</b></mark>
 </code></pre>
 
 [OMGHTTPURLRQ]:
@@ -235,19 +235,19 @@ All the networking library extensions supported by PromiseKit are now simple to 
 // pod 'CancelForPromiseKit/OMGHTTPURLRQ'
 // # https://github.com/dougzilla32/CancelForPromiseKit-OMGHTTPURLRQ
 
-<mark>let context =</mark> firstly {
-    URLSession.shared.POST<mark>CC</mark>("http://example.com", JSON: params)
+<mark><b>let context =</b></mark> firstly {
+    URLSession.shared.POST<mark><b>CC</b></mark>("http://example.com", JSON: params)
 }.map {
     try JSONDecoder().decoder(Foo.self, with: $0.data)
 }.done { foo in
     //…
 }.catch { error in
     //…
-}<mark>.cancelContext</mark>
+}<mark><b>.cancelContext</b></mark>
 
 //…
 
-<mark>context.cancel()</mark>
+<mark><b>context.cancel()</b></mark>
 </code></pre>
 
 And (of course) plain `URLSession` from [Foundation]:
@@ -255,19 +255,19 @@ And (of course) plain `URLSession` from [Foundation]:
 <pre><code>// pod 'CancelForPromiseKit/Foundation'
 // # https://github.com/dougzilla32/CancelForPromiseKit-Foundation
 
-<mark>let context =</mark> firstly {
-    URLSession.shared.dataTask<mark>CC</mark>(.promise, with: try makeUrlRequest())
+<mark><b>let context =</b></mark> firstly {
+    URLSession.shared.dataTask<mark><b>CC</b></mark>(.promise, with: try makeUrlRequest())
 }.map {
     try JSONDecoder().decode(Foo.self, with: $0.data)
 }.done { foo in
     //…
 }.catch { error in
     //…
-}<mark>.cancelContext</mark>
+}<mark><b>.cancelContext</b></mark>
 
 //…
 
-<mark>context.cancel()</mark>
+<mark><b>context.cancel()</b></mark>
 
 func makeUrlRequest() throws -> URLRequest {
     var rq = URLRequest(url: url)
