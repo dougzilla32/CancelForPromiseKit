@@ -9,22 +9,24 @@ The goals of this project are as follows:
 
 * **A streamlined way to cancel a promise chain, which rejects all associated promises and cancels all associated tasks. For example:**
 
-```swift
-let promise = firstly {
-    loginCC() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to
+<pre><code><mark>let promise =</mark> firstly {
+    login<mark>CC</mark>() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to
               // initiate a cancellable promise chain
 }.then { creds in
     fetch(avatar: creds.user)
 }.done { image in
     self.imageView = image
 }.catch(policy: .allErrors) { error in
-    if error.isCancelled {
+    if <mark>error.isCancelled</mark> {
         // the chain has been cancelled!
     }
 }
 //…
-promise.cancel()
-```
+<mark>promise.cancel()</mark>
+</code></pre>
+
+Note: For all code samples, the differences between PromiseKit and CancelForPromiseKit are highlighted.
+
 * **Ensure that subsequent code blocks in a promise chain are _NEVER_ called after the chain has been cancelled**
 
 * **Provide cancellable varients for all appropriate PromiseKit extensions (e.g. Foundation, CoreLocation, Alamofire)**
@@ -33,19 +35,56 @@ promise.cancel()
 
 * **A simple way to make new types of cancellable promises**
 
+* **Ensure branches are properly cancelled.  For example:**
+
+<pre><code>import Alamofire
+import PromiseKit
+import CancelForPromiseKit
+
+func updateWeather(forCity searchName: String) {
+    refreshButton.startAnimating()
+    <mark>let context =</mark> firstly {
+        getForecast(forCity: searchName)
+    }.done { response in
+        updateUI(forecast: response)
+    }.ensure {
+        refreshButton.stopAnimating()
+    }.catch { error in
+        // Cancellation errors are ignored by default
+        showAlert(error: error) 
+    }<mark>.cancelContext</mark>
+
+    //…
+
+    // Cancels EVERYTHING (however the 'ensure' block always executes regardless)
+    <mark>context.cancel()</mark>
+}
+
+func getForecast(forCity name: String) -> <mark>Cancellable</mark>Promise<WeatherInfo> {
+    return firstly {
+        Alamofire.request("https://autocomplete.weather.com/\(name)")
+            .responseDecodable<mark>CC</mark>(AutoCompleteCity.self)
+    }.then { city in
+        Alamofire.request("https://forecast.weather.com/\(city.name)")
+            .responseDecodable<mark>CC</mark>(WeatherResponse.self)
+    }.map { response in
+        format(response)
+    }
+}
+</code></pre>
+
 CancelForPromiseKit defines it's extensions as methods and functions with the 'CC' (cancel chain) suffix.
 
 This README has the same structure as the [PromiseKit README], with cancellation added to the sample code blocks:
 
-```swift
-UIApplication.shared.isNetworkActivityIndicatorVisible = true
+<pre><code>UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
-let fetchImage = URLSession.shared.dataTaskCC(.promise, with: url).compactMap{ UIImage(data: $0.data) }
-let fetchLocation = CLLocationManager.requestLocationCC().lastValue
+let fetchImage = URLSession.shared.dataTask<mark>CC</mark>(.promise, with: url).compactMap{ UIImage(data: $0.data) }
+let fetchLocation = CLLocationManager.requestLocation<mark>CC</mark>().lastValue
 
 // Hold on to the 'CancelContext' rather than the promise chain so the
 // promises can be freed up.
-let context = firstly {
+<mark>let context =</mark> firstly {
     when(fulfilled: fetchImage, fetchLocation)
 }.done { image, location in
     self.imageView.image = image
@@ -56,26 +95,25 @@ let context = firstly {
     // Will be invoked with a PromiseCancelledError when cancel is called on the context.
     // Use the default policy of .allErrorsExceptCancellation to ignore cancellation errors.
     self.show(UIAlertController(for: error), sender: self)
-}.cancelContext
+}<mark>.cancelContext</mark>
 
 //…
 
 // Cancel currently active tasks and reject all promises with PromiseCancelledError
-context.cancel()
-```
+<mark>context.cancel()</mark>
+</code></pre>
 
 # Quick Start
 
 In your [Podfile]:
 
-```ruby
-use_frameworks!
+<pre><code>use_frameworks!
 
 target "Change Me!" do
   pod "PromiseKit", "~> 6.0"
   pod "CancelForPromiseKit", "~> 1.0"
 end
-```
+</code></pre>
 
 CancelForPromiseKit has the same platform and XCode support as PromiseKit
 
@@ -83,14 +121,17 @@ CancelForPromiseKit has the same platform and XCode support as PromiseKit
 
 The following functions are part of the core CancelForPromiseKit module:
 
-	Global functions
-		after(seconds:cancel:)
-		after(_ interval:cancel:)
-		
-	Promise extensions
-		value(_ value: cancel:)
-		init(cancel:resolver:)
-		init(cancel:task:resolver:)
+<pre><code>TODO: FIXME!!!
+Global functions
+	after<mark>CC</mark>(seconds:)
+	after<mark>CC</mark>(_ interval:)
+	
+<mark>CancellablePromise</mark> methods
+	value(_ value:)
+	init(task:resolver:)
+	init(task:bridge:)
+	init(task:error:)
+</code></pre>
 
 * Handbook
   * [Getting Started](Documentation/GettingStarted.md)
@@ -111,44 +152,44 @@ CancelForPromiseKit provides the same extensions and functions as PromiseKit so 
 The default CocoaPod provides the core cancellable promises and the extension for Foundation. The other extensions are available by specifying additional subspecs in your `Podfile`,
 eg:
 
-```ruby
-pod "CancelForPromiseKit/MapKit"
-# MKDirections().calculateCC().then { /*…*/ }
+<pre><code>pod "CancelForPromiseKit/MapKit"
+# MKDirections().calculate<mark>CC</mark>().then { /*…*/ }
 
 pod "CancelForPromiseKit/CoreLocation"
-# CLLocationManager.requestLocationCC().then { /*…*/ }
-```
+# CLLocationManager.requestLocation<mark>CC</mark>().then { /*…*/ }
+</code></pre>
 
 As with PromiseKit, all extensions are separate repositories.  Here is a complete list of CancelForPromiseKit extensions listing the specific functions that support cancellation (PromiseKit extensions without any functions supporting cancellation are omitted):
 
 [Alamofire][Alamofire]  
+<pre><code>Alamofire.DataRequest
+	response<mark>CC</mark>(\_:queue:)
+	responseData<mark>CC</mark>(queue:)
+	responseString<mark>CC</mark>(queue:)
+	responseJSON<mark>CC</mark>(queue:options:)
+	responsePropertyList<mark>CC</mark>(queue:options:)
+	responseDecodable<mark>CC</mark><T>(queue::decoder:)
+	responseDecodable<mark>CC</mark><T>(_ type:queue:decoder:)
 
-	Alamofire.DataRequest
-		responseCC(_:queue:)
-		responseDataCC(queue:)
-		responseStringCC(queue:)
-		responseJSONCC(queue:options:)
-		responsePropertyListCC(queue:options:)
-		responseDecodableCC<T>(queue::decoder:)
-		responseDecodableCC<T>(_ type:queue:decoder:)
-
-	Alamofire.DownloadRequest
-		responseCC(_:queue:)
-		responseDataCC(queue:)
+Alamofire.DownloadRequest
+	response<mark>CC</mark>(_:queue:)
+	responseData<mark>CC</mark>(queue:)
+</code></pre>
 
 [Bolts](http://github.com/dougzilla32/CancelForPromiseKit-Bolts)  
 [Cloudkit](http://github.com/dougzilla32/CancelForPromiseKit-CloudKit)  
 [CoreLocation](http://github.com/dougzilla32/CancelForPromiseKit-CoreLocation)  
 [Foundation][Foundation]  
 
-	Process
-		launchCC(_:)
+<pre><code>Process
+	launch<mark>CC</mark>(_:)
 		
-	URLSession
-		dataTaskCC(_:with:)
-		uploadTaskCC(_:with:from:)
-		uploadTaskCC(_:with:fromFile:)
-		downloadTaskCC(_:with:to:)
+URLSession
+	dataTask<mark>CC</mark>(_:with:)
+	uploadTask<mark>CC</mark>(_:with:from:)
+	uploadTask<mark>CC</mark>(_:with:fromFile:)
+	downloadTask<mark>CC</mark>(_:with:to:)
+</code></pre>
 
 [MapKit](http://github.com/dougzilla32/CancelForPromiseKit-MapKit)  
 [OMGHTTPURLRQ][OMGHTTPURLRQ]  
@@ -159,9 +200,8 @@ As with PromiseKit, all extensions are separate repositories.  Here is a complet
 
 As with PromiseKit, extensions are optional:
 
-```ruby
-pod "CancelForPromiseKit/CorePromise", "~> 1.0"
-```
+<pre><code>pod "CancelForPromiseKit/CorePromise", "~> 1.0"
+</code></pre>
 
 > *Note* Carthage installations come with no extensions by default.
 
@@ -171,66 +211,63 @@ All the networking library extensions supported by PromiseKit are now simple to 
 
 [Alamofire]:
 
-```swift
-// pod 'CancelForPromiseKit/Alamofire'
+<pre><code>// pod 'CancelForPromiseKit/Alamofire'
 // # https://github.com/dougzilla32/CancelForPromiseKit-Alamofire
 
-let context = firstly {
+<mark>let context =</mark> firstly {
     Alamofire
         .request("http://example.com", method: .post, parameters: params)
-        .responseDecodableCC(Foo.self, cancel: context)
+        .responseDecodable<mark>CC</mark>(Foo.self, cancel: context)
 }.done { foo in
     //…
 }.catch { error in
     //…
-}.cancelContext
+}<mark>.cancelContext</mark>
 
 //…
 
-context.cancel()
-```
+<mark>context.cancel()</mark>
+</code></pre>
 
 [OMGHTTPURLRQ]:
 
-```swift
+<pre><code>
 // pod 'CancelForPromiseKit/OMGHTTPURLRQ'
 // # https://github.com/dougzilla32/CancelForPromiseKit-OMGHTTPURLRQ
 
-let context = firstly {
-    URLSession.shared.POSTCC("http://example.com", JSON: params)
+<mark>let context =</mark> firstly {
+    URLSession.shared.POST<mark>CC</mark>("http://example.com", JSON: params)
 }.map {
     try JSONDecoder().decoder(Foo.self, with: $0.data)
 }.done { foo in
     //…
 }.catch { error in
     //…
-}.cancelContext
+}<mark>.cancelContext</mark>
 
 //…
 
-context.cancel()
-```
+<mark>context.cancel()</mark>
+</code></pre>
 
 And (of course) plain `URLSession` from [Foundation]:
 
-```swift
-// pod 'CancelForPromiseKit/Foundation'
+<pre><code>// pod 'CancelForPromiseKit/Foundation'
 // # https://github.com/dougzilla32/CancelForPromiseKit-Foundation
 
-let context = firstly {
-    URLSession.shared.dataTaskCC(.promise, with: try makeUrlRequest())
+<mark>let context =</mark> firstly {
+    URLSession.shared.dataTask<mark>CC</mark>(.promise, with: try makeUrlRequest())
 }.map {
     try JSONDecoder().decode(Foo.self, with: $0.data)
 }.done { foo in
     //…
 }.catch { error in
     //…
-}.cancelContext
+}<mark>.cancelContext</mark>
 
 //…
 
-context.cancel()
-
+<mark>context.cancel()</mark>
 
 func makeUrlRequest() throws -> URLRequest {
     var rq = URLRequest(url: url)
@@ -240,7 +277,7 @@ func makeUrlRequest() throws -> URLRequest {
     rq.httpBody = try JSONSerialization.jsonData(with: obj)
     return rq
 }
-```
+</code></pre>
 
 [badge-pod]: https://img.shields.io/cocoapods/v/CancelForPromiseKit.svg?label=version
 [badge-pms]: https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20SwiftPM-green.svg
