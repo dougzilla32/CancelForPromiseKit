@@ -9,7 +9,7 @@ The goals of this project are as follows:
 
 * **A streamlined way to cancel a promise chain, which rejects all associated promises and cancels all associated tasks. For example:**
 
-<pre><code><mark>let promise =</mark> firstly {
+<pre><mark>let promise =</mark> firstly {
     login<mark>CC</mark>() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to
               // initiate a cancellable promise chain
 }.then { creds in
@@ -23,7 +23,7 @@ The goals of this project are as follows:
 }
 //…
 <mark>promise.cancel()</mark>
-</code></pre>
+</pre>
 
 Note: For all code samples, the differences between PromiseKit and CancelForPromiseKit are highlighted.
 
