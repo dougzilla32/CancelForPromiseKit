@@ -17,7 +17,7 @@ The goals of this project are as follows:
 }.done { image in
     self.imageView = image
 }.catch(policy: .allErrors) { error in
-    if <mark>error.isCancelled</mark> {
+    if <span style="background-color: #FFFF00">error.isCancelled</span> {
         // the chain has been cancelled!
     }
 }
