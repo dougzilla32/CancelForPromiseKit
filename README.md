@@ -10,7 +10,7 @@ The goals of this project are as follows:
 * **A streamlined way to cancel a promise chain, which rejects all associated promises and cancels all associated tasks. For example:**
 
 <pre><span style="background-color: #FFFF00"><mark><b>let promise =</b></mark> </span>firstly {
-    login<mark>CC</mark>() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to
+    login<span style="background-color: #FFFF00">CC</span>() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to
               // initiate a cancellable promise chain
 }.then { creds in
     fetch(avatar: creds.user)
