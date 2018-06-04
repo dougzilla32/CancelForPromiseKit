@@ -239,7 +239,7 @@ As with PromiseKit, all extensions are separate repositories.  Here is a complet
 
 [Alamofire][Alamofire]  
 <pre><code>Alamofire.DataRequest
-	response<mark><b>CC</b></mark>(\_:queue:)
+	response<mark><b>CC</b></mark>(_:queue:)
 	responseData<mark><b>CC</b></mark>(queue:)
 	responseString<mark><b>CC</b></mark>(queue:)
 	responseJSON<mark><b>CC</b></mark>(queue:options:)
