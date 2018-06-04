@@ -286,6 +286,6 @@ public func whenCC(_ guarantees: Guarantee<Void>...) -> CancellableGuarantee<Voi
     return CancellableGuarantee(when(guarantees: guarantees))
 }
 
-public func whenCC(_ guarantees: [Guarantee<Void>]) -> CancellableGuarantee<Void> {
+public func whenCC(guarantees: [Guarantee<Void>]) -> CancellableGuarantee<Void> {
     return CancellableGuarantee(when(guarantees: guarantees))
 }

@@ -9,7 +9,7 @@ The goals of this project are as follows:
 
 * **A streamlined way to cancel a promise chain, which rejects all associated promises and cancels all associated tasks. For example:**
 
-<pre><mark><b>let promise =</b></mark> firstly {
+<pre><code><mark><b>let promise =</b></mark> firstly {
     login<mark><b>CC</b></mark>() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to
               // initiate a cancellable promise chain
 }.then { creds in
@@ -23,7 +23,7 @@ The goals of this project are as follows:
 }
 //…
 <mark><b>promise.cancel()</b></mark>
-</pre>
+</code></pre>
 
 Note: For all code samples, the differences between PromiseKit and CancelForPromiseKit are highlighted in bold.
 
@@ -117,33 +117,109 @@ end
 
 CancelForPromiseKit has the same platform and XCode support as PromiseKit
 
-# Documentation -- TBD
+# Documentation
 
-The following functions are part of the core CancelForPromiseKit module:
+The following functions and methods are part of the core CancelForPromiseKit module:
 
-<pre><code>TODO: FIXME!!!
-Global functions
+<pre><code>Global functions (all returning <mark><b>CancellablePromise</b></mark> unless otherwise noted)
 	after<mark><b>CC</b></mark>(seconds:)
 	after<mark><b>CC</b></mark>(_ interval:)
+
+	firstly(execute body:)       // Accepts body returning <mark><b>Cancellable</b></mark>Theanble
+	firstly<mark><b>CC</b></mark>(execute body:)     // Accepts body returning Theanble
+
+	hang(_ promise:)             // Accepts <mark><b>Cancellable</b></mark>Promise
 	
-<mark><b>CancellablePromise</b></mark> methods
-	value(_ value:)
+	race(_ thenables:)           // Accepts <mark><b>Cancellable</b></mark>Thenable
+	race(_ guarantees:)          // Accepts <mark><b>Cancellable</b></mark>Guarantee
+	race<mark><b>CC</b></mark>(_ thenables:)         // Accepts Theanable
+	race<mark><b>CC</b></mark>(_ guarantees:)        // Accepts Guarantee
+
+	when(fulfilled thenables:)   // Accepts <mark><b>Cancellable</b></mark>Thenable
+	when(fulfilled promiseIterator:concurrently:)   // Accepts <mark><b>Cancellable</b></mark>Promise
+	when<mark><b>CC</b></mark>(fulfilled thenables:) // Accepts Thenable
+	when<mark><b>CC</b></mark>(fulfilled promiseIterator:concurrently:) // Accepts Promise
+
+	// These functions return <mark><b>Cancellable</b></mark>Guarantee
+	when(resolved promises:)     // Accepts <mark><b>Cancellable</b></mark>Promise
+	when(_ guarantees:)          // Accepts <mark><b>Cancellable</b></mark>Guarantee
+	when(guarantees:)            // Accepts <mark><b>Cancellable</b></mark>Guarantee
+	when<mark><b>CC</b></mark>(resolved promises:)   // Accepts Promise
+	when<mark><b>CC</b></mark>(_ guarantees:)        // Accepts Guarantee
+	when<mark><b>CC</b></mark>(guarantees:)          // Accepts Guarantee
+
+
+<mark><b>CancellablePromise: CancellableThenable</b></mark>
+	<mark><b>Cancellable</b></mark>Promise.value(_ value:)
 	init(task:resolver:)
 	init(task:bridge:)
 	init(task:error:)
+	promise                      // The delegate Promise
+	result
+
+<mark><b>CancellableGuarantee: CancellableThenable</b></mark>
+	<mark><b>Cancellable</b></mark>Guarantee.value(_ value:)
+	init(task:resolver:)
+	init(task:bridge:)
+	init(task:error:)
+	guarantee                    // The delegate Guarantee
+	result
+
+<mark><b>CancellableThenable</b></mark>
+	thenable                     // The delegate Thenable
+	cancel(error:)               // Accepts optional Error to use for cancellation
+	cancelContext                // CancelContext for the cancel chain we are a member of
+	isCancelled
+	cancelAttempted
+	cancelledError
+	appendCancellableTask(task:reject:)
+	appendCancelContext(from:)
+	
+	then(on:_ body:)             // Accepts body returning <mark><b>Cancellable</b></mark>Thenable or Thenable
+	map(on:_ transform:)
+	compactMap(on:_ transform:)
+	done(on:_ body:)
+	get(on:_ body:)
+	asVoid()
+	
+	error
+	isPending
+	isResolved
+	isFulfilled
+	isRejected
+	value
+	
+	mapValues(on:_ transform:)
+	flatMapValues(on:_ transform:)
+	compactMapValues(on:_ transform:)
+	thenMap(on:_ transform:)     // Accepts transform returning <mark><b>Cancellable</b></mark>Thenable or Thenable
+	thenFlatMap(on:_ transform:) // Accepts transform returning <mark><b>Cancellable</b></mark>Thenable or Thenable
+	filterValues(on:_ isIncluded:)
+	firstValue
+	lastValue
+	sortedValues(on:)
+
+<mark><b>CancellableCatchable</b></mark>
+	catchable                    // The delegate Catchable
+	recover(on:policy:_ body:)   // Accepts body returning <mark><b>Cancellable</b></mark>Thenable or Thenable
+	recover(on:_ body:)          // Accepts body returning Void
+	ensure(on:_ body:)
+	ensureThen(on:_ body:)
+	finally(_ body:)
+	cauterize()
 </code></pre>
 
-* Handbook
-  * [Getting Started](Documentation/GettingStarted.md)
-  * [Promises: Common Patterns](Documentation/CommonPatterns.md)
-  * [Frequently Asked Questions](Documentation/FAQ.md)
-* Manual
-  * [Installation Guide](Documentation/Installation.md)
-  * [Troubleshooting](Documentation/Troubleshooting.md) (eg. solutions to common compile errors)
-  * [Appendix](Documentation/Appendix.md)
+[//]: # "* Handbook"
+[//]: # "  * [Getting Started](Documentation/GettingStarted.md)"
+[//]: # "  * [Promises: Common Patterns](Documentation/CommonPatterns.md)"
+[//]: # "  * [Frequently Asked Questions](Documentation/FAQ.md)"
+[//]: # "* Manual"
+[//]: # "  * [Installation Guide](Documentation/Installation.md)"
+[//]: # "  * [Troubleshooting](Documentation/Troubleshooting.md) (eg. solutions to common compile errors)"
+[//]: # "  * [Appendix](Documentation/Appendix.md)"
 
-If you are looking for a function’s documentation, then please note
-[our sources](Sources/) are thoroughly documented.
+[//]: # "If you are looking for a function’s documentation, then please note"
+[//]: # "[our sources](Sources/) are thoroughly documented."
 
 # Extensions
 

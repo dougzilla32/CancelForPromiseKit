@@ -81,6 +81,26 @@ public extension CancellableCatchMixin {
         return CancellablePromise(promise, context: self.cancelContext, cancelItems: cancelItems)
     }
     
+    func recover<V: Thenable>(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.T == M.T {
+        
+        let cancelBody = { (error: Error) throws -> V in
+            if let cancelledError = self.cancelContext.cancelledError {
+                if policy == .allErrorsExceptCancellation {
+                    throw cancelledError
+                } else {
+                    self.cancelContext.recover()
+                }
+            }
+            
+            self.cancelContext.removeItems(self.cancelItems, clearList: true)
+            
+            return try body(error)
+        }
+        
+        let promise = self.catchable.recover(on: on, policy: policy, cancelBody)
+        return CancellablePromise(promise, context: self.cancelContext)
+    }
+    
     func ensure(on: DispatchQueue? = conf.Q.return, _ body: @escaping () -> Void) -> CancellablePromise<M.T> {
         let rp = CancellablePromise<M.T>.pending()
         rp.promise.cancelContext = self.cancelContext
