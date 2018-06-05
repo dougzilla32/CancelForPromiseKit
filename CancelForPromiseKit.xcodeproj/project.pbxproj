@@ -268,6 +268,7 @@
 				630019021D596292003B4E30 /* Sources */,
 				630019181D596292003B4E30 /* Frameworks */,
 				91A2BAF520A96480007A6F30 /* ShellScript */,
+				91FC9E8920C661E1008B8EFA /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -367,6 +368,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n(cd Sources ; swiftlint)\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 		91A2BAF520A96480007A6F30 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -392,7 +394,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "for f in PromiseKit Alamofire OHHTTPStubs ; do\n    ln -fs $PODS_CONFIGURATION_BUILD_DIR/$f/$f.framework $PODS_CONFIGURATION_BUILD_DIR/$f.framework\ndone\n\n(\n    cd $BUILD_DIR/$CONFIGURATION$EFFECTIVE_PLATFORM_NAME\n    for test in *.xctest ; do\n        if [ \"$test\" != \"CPKCLTests.xctest\" ] ; then\n            ln -fs ../../../CPKCLTests.xctest/Contents/Frameworks/libswiftContacts.dylib $test/Contents/Frameworks/libswiftContacts.dylib\n        fi\n    done\n)\n";
+			shellScript = "for f in PromiseKit Alamofire OHHTTPStubs ; do\n    ln -fs $PODS_CONFIGURATION_BUILD_DIR/$f/$f.framework $PODS_CONFIGURATION_BUILD_DIR/$f.framework\ndone\n";
+			showEnvVarsInLog = 0;
+		};
+		91FC9E8920C661E1008B8EFA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "(\n    cd $BUILD_DIR/$CONFIGURATION$EFFECTIVE_PLATFORM_NAME\n    if [ -f \"CPKCLTests.xctest/Contents/Frameworks/libswiftContacts.dylib\" ] ; then\n        for test in *.xctest/Contents/Frameworks ; do\n            if [ \"$test\" != \"CPKCLTests.xctest/Contents/Frameworks\" ] ; then\n                ln -fs ../../../CPKCLTests.xctest/Contents/Frameworks/libswiftContacts.dylib $test/libswiftContacts.dylib\n            fi\n        done\n    fi\n )\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
