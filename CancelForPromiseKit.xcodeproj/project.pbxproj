@@ -288,6 +288,7 @@
 				63B0AC531D595E1B00FA21D9 /* Frameworks */,
 				63B0AC541D595E1B00FA21D9 /* Headers */,
 				91A2BAF320A9636C007A6F30 /* ShellScript */,
+				91FC9E8420C5CF52008B8EFA /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -379,6 +380,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n(cd Tests ; swiftlint)\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		91FC9E8420C5CF52008B8EFA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "for f in PromiseKit Alamofire OHHTTPStubs ; do\n    ln -fs $PODS_CONFIGURATION_BUILD_DIR/$f/$f.framework $PODS_CONFIGURATION_BUILD_DIR/$f.framework\ndone\n\n(\n    cd $BUILD_DIR/$CONFIGURATION$EFFECTIVE_PLATFORM_NAME\n    for test in *.xctest ; do\n        if [ \"$test\" != \"CPKCLTests.xctest\" ] ; then\n            ln -fs ../../../CPKCLTests.xctest/Contents/Frameworks/libswiftContacts.dylib $test/Contents/Frameworks/libswiftContacts.dylib\n        fi\n    done\n)\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -496,6 +510,12 @@
 				DYLIB_CURRENT_VERSION = 1;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Alamofire\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/OHHTTPStubs\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromiseKit\"",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
@@ -509,8 +529,15 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_DYLIB_INSTALL_NAME = "@rpath";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks @loader_path/Frameworks @loader_path/PromiseKit";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					"\"PromiseKit\"",
+				);
+				PODS_BUILD_DIR = "${BUILD_DIR}";
+				PODS_CONFIGURATION_BUILD_DIR = "${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
 				PRODUCT_BUNDLE_PACKAGE_TYPE = BNDL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -557,6 +584,12 @@
 				DYLIB_CURRENT_VERSION = 1;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Alamofire\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/OHHTTPStubs\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromiseKit\"",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -568,7 +601,14 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_DYLIB_INSTALL_NAME = "@rpath";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks @loader_path/Frameworks @loader_path/PromiseKit";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_LDFLAGS = (
+					"-framework",
+					"\"PromiseKit\"",
+				);
+				PODS_BUILD_DIR = "${BUILD_DIR}";
+				PODS_CONFIGURATION_BUILD_DIR = "${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
 				PRODUCT_BUNDLE_PACKAGE_TYPE = BNDL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -630,7 +670,6 @@
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_PACKAGE_TYPE = FMWK;
 				PRODUCT_NAME = CancelForPromiseKit;
 				SKIP_INSTALL = YES;
@@ -689,7 +728,6 @@
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_PACKAGE_TYPE = FMWK;
 				PRODUCT_NAME = CancelForPromiseKit;
 				SKIP_INSTALL = YES;
