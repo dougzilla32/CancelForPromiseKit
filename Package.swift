@@ -9,8 +9,8 @@ pkg.products = [
 
 let cpk: Target = .target(name: "CancelForPromiseKit")
 cpk.path = "Sources"
-cpk.swiftLanguageVersions = [3, 4]
-cpk.targets = [
+pkg.swiftLanguageVersions = [3, 4]
+pkg.targets = [
     cpk,
-    .testTarget(name: "A+", dependencies: ["CancelForPromiseKit"]),
+    .testTarget(name: "Core", dependencies: ["CancelForPromiseKit"], path: "Tests/CorePromise"),
 ]
