@@ -13,13 +13,13 @@ PODS:
   - OHHTTPStubs/OHPathHelpers (6.1.0)
   - OHHTTPStubs/Swift (6.1.0):
     - OHHTTPStubs/Default
-  - PromiseKit/Alamofire (6.2.5):
+  - PromiseKit/Alamofire (6.2.8):
     - Alamofire (~> 4.0)
     - PromiseKit/CorePromise
-  - PromiseKit/CoreLocation (6.2.5):
+  - PromiseKit/CoreLocation (6.2.8):
     - PromiseKit/CorePromise
-  - PromiseKit/CorePromise (6.2.5)
-  - PromiseKit/Foundation (6.2.5):
+  - PromiseKit/CorePromise (6.2.8)
+  - PromiseKit/Foundation (6.2.8):
     - PromiseKit/CorePromise
 
 DEPENDENCIES:
@@ -39,7 +39,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   OHHTTPStubs: 1e21c7d2c084b8153fc53d48400d8919d2d432d0
-  PromiseKit: a26828b0a8d5874960dfdb575b57a70790ec36f1
+  PromiseKit: 6788ce1a0ed5448b83d4aaf56b9fc49fb7647d32
 
 PODFILE CHECKSUM: 710a7e451d3f79197675c10b608e09923692feb8
 
