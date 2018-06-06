@@ -60,7 +60,7 @@ func updateWeather(forCity searchName: String) {
     <mark><b>context.cancel()</b></mark>
 }
 
-func getForecast(forCity name: String) -> <mark><b>Cancellable</b></mark>Promise<WeatherInfo> {
+func getForecast(forCity name: String) -> <mark><b>Cancellable</b></mark>Promise&lt;WeatherInfo&gt; {
     return firstly {
         Alamofire.request("https://autocomplete.weather.com/\(name)")
             .responseDecodable<mark><b>CC</b></mark>(AutoCompleteCity.self)
@@ -125,32 +125,32 @@ The following functions and methods are part of the core CancelForPromiseKit mod
 	after<mark><b>CC</b></mark>(seconds:)
 	after<mark><b>CC</b></mark>(_ interval:)
 
-	firstly(execute body:)       // Accepts body returning <mark><b>Cancellable</b></mark>Theanble
+	firstly(execute body:)       // Accepts body returning <mark><b>CancellableTheanble</b></mark>
 	firstly<mark><b>CC</b></mark>(execute body:)     // Accepts body returning Theanble
 
-	hang(_ promise:)             // Accepts <mark><b>Cancellable</b></mark>Promise
+	hang(_ promise:)             // Accepts <mark><b>CancellablePromise</b></mark>
 	
-	race(_ thenables:)           // Accepts <mark><b>Cancellable</b></mark>Thenable
-	race(_ guarantees:)          // Accepts <mark><b>Cancellable</b></mark>Guarantee
+	race(_ thenables:)           // Accepts <mark><b>CancellableThenable</b></mark>
+	race(_ guarantees:)          // Accepts <mark><b>CancellableGuarantee</b></mark>
 	race<mark><b>CC</b></mark>(_ thenables:)         // Accepts Theanable
 	race<mark><b>CC</b></mark>(_ guarantees:)        // Accepts Guarantee
 
-	when(fulfilled thenables:)   // Accepts <mark><b>Cancellable</b></mark>Thenable
-	when(fulfilled promiseIterator:concurrently:)   // Accepts <mark><b>Cancellable</b></mark>Promise
+	when(fulfilled thenables:)   // Accepts <mark><b>CancellableThenable</b></mark>
+	when(fulfilled promiseIterator:concurrently:)   // Accepts <mark><b>CancellablePromise</b></mark>
 	when<mark><b>CC</b></mark>(fulfilled thenables:) // Accepts Thenable
 	when<mark><b>CC</b></mark>(fulfilled promiseIterator:concurrently:) // Accepts Promise
 
-	// These functions return <mark><b>Cancellable</b></mark>Guarantee
-	when(resolved promises:)     // Accepts <mark><b>Cancellable</b></mark>Promise
-	when(_ guarantees:)          // Accepts <mark><b>Cancellable</b></mark>Guarantee
-	when(guarantees:)            // Accepts <mark><b>Cancellable</b></mark>Guarantee
+	// These functions return <mark><b>CancellableGuarantee</b></mark>
+	when(resolved promises:)     // Accepts <mark><b>CancellablePromise</b></mark>
+	when(_ guarantees:)          // Accepts <mark><b>CancellableGuarantee</b></mark>
+	when(guarantees:)            // Accepts <mark><b>CancellableGuarantee</b></mark>
 	when<mark><b>CC</b></mark>(resolved promises:)   // Accepts Promise
 	when<mark><b>CC</b></mark>(_ guarantees:)        // Accepts Guarantee
 	when<mark><b>CC</b></mark>(guarantees:)          // Accepts Guarantee
 
 
 <mark><b>CancellablePromise: CancellableThenable</b></mark>
-	<mark><b>Cancellable</b></mark>Promise.value(_ value:)
+	CancellablePromise.value(_ value:)
 	init(task:resolver:)
 	init(task:bridge:)
 	init(task:error:)
@@ -158,7 +158,7 @@ The following functions and methods are part of the core CancelForPromiseKit mod
 	result
 
 <mark><b>CancellableGuarantee: CancellableThenable</b></mark>
-	<mark><b>Cancellable</b></mark>Guarantee.value(_ value:)
+	CancellableGuarantee.value(_ value:)
 	init(task:resolver:)
 	init(task:bridge:)
 	init(task:error:)
@@ -175,7 +175,7 @@ The following functions and methods are part of the core CancelForPromiseKit mod
 	appendCancellableTask(task:reject:)
 	appendCancelContext(from:)
 	
-	then(on:_ body:)             // Accepts body returning <mark><b>Cancellable</b></mark>Thenable or Thenable
+	then(on:_ body:)             // Accepts body returning CancellableThenable or Thenable
 	map(on:_ transform:)
 	compactMap(on:_ transform:)
 	done(on:_ body:)
@@ -192,8 +192,8 @@ The following functions and methods are part of the core CancelForPromiseKit mod
 	mapValues(on:_ transform:)
 	flatMapValues(on:_ transform:)
 	compactMapValues(on:_ transform:)
-	thenMap(on:_ transform:)     // Accepts transform returning <mark><b>Cancellable</b></mark>Thenable or Thenable
-	thenFlatMap(on:_ transform:) // Accepts transform returning <mark><b>Cancellable</b></mark>Thenable or Thenable
+	thenMap(on:_ transform:)     // Accepts transform returning CancellableThenable or Thenable
+	thenFlatMap(on:_ transform:) // Accepts transform returning CancellableThenable or Thenable
 	filterValues(on:_ isIncluded:)
 	firstValue
 	lastValue
@@ -201,7 +201,7 @@ The following functions and methods are part of the core CancelForPromiseKit mod
 
 <mark><b>CancellableCatchable</b></mark>
 	catchable                    // The delegate Catchable
-	recover(on:policy:_ body:)   // Accepts body returning <mark><b>Cancellable</b></mark>Thenable or Thenable
+	recover(on:policy:_ body:)   // Accepts body returning CancellableThenable or Thenable
 	recover(on:_ body:)          // Accepts body returning Void
 	ensure(on:_ body:)
 	ensureThen(on:_ body:)
