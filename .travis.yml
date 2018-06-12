@@ -42,7 +42,7 @@ before_install:
     eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
   fi
 install:
-  pod install;
+  pod install --repo-update;
   case $PLAT in
   iOS|tvOS|macOS|watchOS)
     xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;;
