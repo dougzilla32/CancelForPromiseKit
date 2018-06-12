@@ -95,12 +95,19 @@ class CancelChain: XCTestCase {
         let d: XCTestExpectation?
         let e: XCTestExpectation?
         let cancelled: XCTestExpectation?
+        
+        let cancelA: Bool
+        let cancelB: Bool
+        let cancelC: Bool
+        let cancelD: Bool
+        let cancelE: Bool
     }
     
-    func cancelChainSetup(waitTime: TimeInterval, ex: exABCDE) {
+    func cancelChainSetup(ex: exABCDE) {
         {
             let c = cancelChainPromises()
-        
+            let exCancelCalled = expectation(description: "cancel called")
+
             c.pA.then { (_: A) -> CancellablePromise<A> in
                 self.trace("pA.then")
                 return firstly { () -> CancellablePromise<B> in
@@ -110,23 +117,48 @@ class CancelChain: XCTestCase {
                     self.trace("pB.then")
                     return firstly { () -> CancellablePromise<C> in
                         self.trace("pC.firstly")
+                        if ex.cancelB {
+                            self.trace("CANCEL")
+                            c.pA.cancel()
+                            exCancelCalled.fulfill()
+                        }
                         ex.b?.fulfill() ?? XCTFail("pB.then")
                         return c.pC
                     }.then { (_: C) -> CancellablePromise<D> in
                         ex.c?.fulfill() ?? XCTFail("pC.then")
+                        if ex.cancelC {
+                            self.trace("CANCEL")
+                            c.pA.cancel()
+                            exCancelCalled.fulfill()
+                        }
                         self.trace("pC.then")
                         return c.pD
                     }
                 }.then { (_: D) -> CancellablePromise<A> in
                     ex.d?.fulfill() ?? XCTFail("pD.done")
+                    if ex.cancelD {
+                        self.trace("CANCEL")
+                        c.pA.cancel()
+                        exCancelCalled.fulfill()
+                    }
                     return c.pA  // Intentional reuse of pA -- causes a loop that CancelContext must detect
                 }
             }.then { (_: A) -> CancellablePromise<E> in
                 self.trace("pA.then")
                 ex.a?.fulfill() ?? XCTFail("pA completed")
+                if ex.cancelA {
+                    self.trace("CANCEL")
+                    c.pA.cancel()
+                    exCancelCalled.fulfill()
+                }
                 return c.pE
             }.done { _ in
                 ex.e?.fulfill() ?? XCTFail("pE completed")
+                if ex.cancelE {
+                    self.trace("CANCEL")
+                    c.pA.cancel()
+                    exCancelCalled.fulfill()
+                }
                 self.trace("pE.done")
             }.catch(policy: .allErrors) {
                 self.trace("Error: \($0)")
@@ -135,13 +167,6 @@ class CancelChain: XCTestCase {
         
             self.trace("SETUP COMPLETE")
             
-            let exCancelCalled = expectation(description: "cancel called")
-            after(seconds: waitTime).done {
-                self.trace("CANCEL")
-                c.pA.cancel()
-                exCancelCalled.fulfill()
-            }
-
 #if swift(>=4.1)
             let expectations = [ex.a, ex.b, ex.c, ex.d, ex.e, ex.cancelled].compactMap { $0 }
 #else
@@ -149,19 +174,11 @@ class CancelChain: XCTestCase {
 #endif
             wait(for: expectations, timeout: 1)
             
-            if ex.cancelled == nil {
-                XCTAssert(!c.pA.cancelContext.cancelAttempted)
-                XCTAssert(!c.pB.cancelContext.cancelAttempted)
-                XCTAssert(!c.pC.cancelContext.cancelAttempted)
-                XCTAssert(!c.pD.cancelContext.cancelAttempted)
-                XCTAssert(!c.pE.cancelContext.cancelAttempted)
-            } else {
-                XCTAssert(c.pA.cancelContext.cancelAttempted)
-                XCTAssert(ex.a == nil || isFulfilled(c.pB) || c.pB.cancelContext.cancelAttempted)
-                XCTAssert(ex.b == nil || isFulfilled(c.pC) || c.pC.cancelContext.cancelAttempted)
-                XCTAssert(ex.c == nil || isFulfilled(c.pD) || c.pD.cancelContext.cancelAttempted)
-                XCTAssert(ex.d == nil || isFulfilled(c.pE) || c.pE.cancelContext.cancelAttempted)
-            }
+            XCTAssert(c.pA.cancelContext.cancelAttempted)
+            XCTAssert(ex.a == nil || isFulfilled(c.pB) || c.pB.cancelContext.cancelAttempted)
+            XCTAssert(ex.b == nil || isFulfilled(c.pC) || c.pC.cancelContext.cancelAttempted)
+            XCTAssert(ex.c == nil || isFulfilled(c.pD) || c.pD.cancelContext.cancelAttempted)
+            XCTAssert(ex.d == nil || isFulfilled(c.pE) || c.pE.cancelContext.cancelAttempted)
             
             wait(for: [exCancelCalled], timeout: 1)
         }()
@@ -189,8 +206,13 @@ class CancelChain: XCTestCase {
                          c: nil,
                          d: nil,
                          e: nil,
-                         cancelled: expectation(description: "cancelled"))
-        cancelChainSetup(waitTime: 0.125, ex: ex)
+                         cancelled: expectation(description: "cancelled"),
+                         cancelA: false,
+                         cancelB: true,
+                         cancelC: false,
+                         cancelD: false,
+                         cancelE: false)
+        cancelChainSetup(ex: ex)
     }
 
     func testCancelChainPC() {
@@ -199,18 +221,28 @@ class CancelChain: XCTestCase {
                          c: expectation(description: "pC completed"),
                          d: nil,
                          e: nil,
-                         cancelled: expectation(description: "cancelled"))
-        cancelChainSetup(waitTime: 0.175, ex: ex)
+                         cancelled: expectation(description: "cancelled"),
+                         cancelA: false,
+                         cancelB: false,
+                         cancelC: true,
+                         cancelD: false,
+                         cancelE: false)
+        cancelChainSetup(ex: ex)
     }
 
     func testCancelChainPAD() {
-        let ex = exABCDE(a: expectation(description: "pB completed"),
+        let ex = exABCDE(a: expectation(description: "pA completed"),
                          b: expectation(description: "pB completed"),
                          c: expectation(description: "pC completed"),
                          d: expectation(description: "pD completed"),
                          e: nil,
-                         cancelled: expectation(description: "cancelled"))
-        cancelChainSetup(waitTime: 0.225, ex: ex)
+                         cancelled: expectation(description: "cancelled"),
+                         cancelA: true,
+                         cancelB: false,
+                         cancelC: false,
+                         cancelD: false,
+                         cancelE: false)
+        cancelChainSetup(ex: ex)
     }
 
     func testCancelChainSuccess() {
@@ -219,7 +251,12 @@ class CancelChain: XCTestCase {
                          c: expectation(description: "pC completed"),
                          d: expectation(description: "pD completed"),
                          e: expectation(description: "pE completed"),
-                         cancelled: nil)
-        cancelChainSetup(waitTime: 0.5, ex: ex)
+                         cancelled: nil,
+                         cancelA: false,
+                         cancelB: false,
+                         cancelC: false,
+                         cancelD: false,
+                         cancelE: true)
+        cancelChainSetup(ex: ex)
     }
 }
