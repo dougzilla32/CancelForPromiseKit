@@ -169,7 +169,7 @@ public extension CancellableCatchMixin where M.T == Void {
     @discardableResult
     func recover(on: DispatchQueue? = conf.Q.map, _ body: @escaping(Error) -> Void) -> CancellableGuarantee<Void> {
         let guarantee: Guarantee<Void> = self.catchable.recover(on: on, body)
-        return CancellableGuarantee(guarantee, context: self.cancelContext)
+        return CancellableGuarantee(guarantee, cancelValue: nil, context: self.cancelContext)
     }
     
     /**
