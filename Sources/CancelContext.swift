@@ -23,8 +23,24 @@ public class CancelContext: Hashable, CustomStringConvertible {
         return cancelledError != nil
     }
     
-    let atomicSemaphore = DispatchSemaphore(value: 1)
-    public private(set) var cancelledError: Error?
+    // Atomic access to cancelledError
+    let cancelledErrorSemaphore = DispatchSemaphore(value: 1)
+    private var internalCancelledError: Error?
+    public private(set) var cancelledError: Error? {
+        get {
+            let error: Error?
+            cancelledErrorSemaphore.wait()
+            error = internalCancelledError
+            cancelledErrorSemaphore.signal()
+            return error
+        }
+        
+        set {
+            cancelledErrorSemaphore.wait()
+            internalCancelledError = newValue
+            cancelledErrorSemaphore.signal()
+        }
+    }
     
     init(description: CustomStringConvertible? = nil) {
         self.descriptionCSC = description
@@ -60,9 +76,7 @@ public class CancelContext: Hashable, CustomStringConvertible {
             error = PromiseCancelledError(file: file, function: function, line: line)
         }
 
-        atomicSemaphore.wait()
         cancelledError = error
-        atomicSemaphore.signal()
         
         for item in cancelItemList {
             item.cancel(error: error!, visited: visited, file: file, function: function, line: line)
