@@ -52,7 +52,7 @@ install:
 script:
   case $PLAT in
   iOS|tvOS|macOS)
-    xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit -destination "$DST" -quiet test -enableCodeCoverage YES;;
+    xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit -destination "$DST" test -enableCodeCoverage YES;;
   watchOS)
     ;;
   *)

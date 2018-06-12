@@ -71,7 +71,7 @@ public extension CancellableGuarantee {
         }
         
         let guarantee: Guarantee<Void> = self.guarantee.done(on: on, cancelBody)
-        return CancellableGuarantee<Void>(guarantee, context: self.cancelContext)
+        return CancellableGuarantee<Void>(guarantee, cancelValue: (), context: self.cancelContext)
     }
 
     func map<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, _ body: @escaping(T) -> U) -> CancellableGuarantee<U> {
@@ -138,7 +138,7 @@ extension CancellableGuarantee where T == Void {
     }
 
     class func createVoid(_ guarantee: Guarantee<T>, context: CancelContext? = nil) -> CancellableGuarantee<T> {
-        return CancellableGuarantee(guarantee, context: context)
+        return CancellableGuarantee(guarantee, cancelValue: (), context: context)
     }
 }
 #endif

@@ -142,7 +142,7 @@ class CancelChain: XCTestCase {
                 exCancelCalled.fulfill()
             }
 
-#if swift(>=3.2)
+#if swift(>=4.1)
             let expectations = [ex.a, ex.b, ex.c, ex.d, ex.e, ex.cancelled].compactMap { $0 }
 #else
             let expectations = [ex.a, ex.b, ex.c, ex.d, ex.e, ex.cancelled].flatMap { $0 }

@@ -677,7 +677,6 @@
 				PRODUCT_NAME = CancelForPromiseKit;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 			};
 			name = Debug;
@@ -734,7 +733,6 @@
 				PRODUCT_BUNDLE_PACKAGE_TYPE = FMWK;
 				PRODUCT_NAME = CancelForPromiseKit;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 			};
 			name = Release;

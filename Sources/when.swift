@@ -208,7 +208,7 @@ public func when(guarantees: [CancellableGuarantee<Void>]) -> CancellableGuarant
 }
 
 func asThenables<V: CancellableThenable>(_ cancellableThenables: [V]) -> [V.U] {
-    var thenables = [V.U]()
+    var thenables: [V.U] = []
     for ct in cancellableThenables {
         thenables.append(ct.thenable)
     }
@@ -283,9 +283,9 @@ public func whenCC<T>(resolved promises: [Promise<T>]) -> CancellableGuarantee<[
 }
 
 public func whenCC(_ guarantees: Guarantee<Void>...) -> CancellableGuarantee<Void> {
-    return CancellableGuarantee(when(guarantees: guarantees))
+    return CancellableGuarantee(when(guarantees: guarantees), cancelValue: ())
 }
 
 public func whenCC(guarantees: [Guarantee<Void>]) -> CancellableGuarantee<Void> {
-    return CancellableGuarantee(when(guarantees: guarantees))
+    return CancellableGuarantee(when(guarantees: guarantees), cancelValue: ())
 }
