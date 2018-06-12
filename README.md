@@ -5,74 +5,6 @@
 
 CancelForPromiseKit provides clear and concise cancellation abilities for [PromiseKit] and the [PromiseKit Extensions].  While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
 
-The goals of this project are as follows:
-
-* **A streamlined way to cancel a promise chain, which rejects all associated promises and cancels all associated tasks. For example:**
-
-<pre><code><mark><b>let promise =</b></mark> firstly {
-    login<mark><b>CC</b></mark>() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to
-              // initiate a cancellable promise chain
-}.then { creds in
-    fetch(avatar: creds.user)
-}.done { image in
-    self.imageView = image
-}.catch(policy: .allErrors) { error in
-    if <mark><b>error.isCancelled</b></mark> {
-        // the chain has been cancelled!
-    }
-}
-//…
-<mark><b>promise.cancel()</b></mark>
-</code></pre>
-
-Note: For all code samples, the differences between PromiseKit and CancelForPromiseKit are highlighted in bold.
-
-* **Ensure that subsequent code blocks in a promise chain are _NEVER_ called after the chain has been cancelled**
-
-* **Provide cancellable varients for all appropriate PromiseKit extensions (e.g. Foundation, CoreLocation, Alamofire)**
-
-* **Support cancellation for all PromiseKit primitives such as 'after', 'firstly', 'when', 'race'**
-
-* **A simple way to make new types of cancellable promises**
-
-* **Ensure branches are properly cancelled.  For example:**
-
-<pre><code>import Alamofire
-import PromiseKit
-import CancelForPromiseKit
-
-func updateWeather(forCity searchName: String) {
-    refreshButton.startAnimating()
-    <mark><b>let context =</b></mark> firstly {
-        getForecast(forCity: searchName)
-    }.done { response in
-        updateUI(forecast: response)
-    }.ensure {
-        refreshButton.stopAnimating()
-    }.catch { error in
-        // Cancellation errors are ignored by default
-        showAlert(error: error) 
-    }<mark><b>.cancelContext</b></mark>
-
-    //…
-
-    // Cancels EVERYTHING (however the 'ensure' block always executes regardless)
-    <mark><b>context.cancel()</b></mark>
-}
-
-func getForecast(forCity name: String) -> <mark><b>CancellablePromise</b></mark>&lt;WeatherInfo&gt; {
-    return firstly {
-        Alamofire.request("https://autocomplete.weather.com/\(name)")
-            .responseDecodable<mark><b>CC</b></mark>(AutoCompleteCity.self)
-    }.then { city in
-        Alamofire.request("https://forecast.weather.com/\(city.name)")
-            .responseDecodable<mark><b>CC</b></mark>(WeatherResponse.self)
-    }.map { response in
-        format(response)
-    }
-}
-</code></pre>
-
 CancelForPromiseKit defines it's extensions as methods and functions with the 'CC' (cancel chain) suffix.
 
 This README has the same structure as the [PromiseKit README], with cancellation added to the sample code blocks:
@@ -101,6 +33,76 @@ let fetchLocation = CLLocationManager.requestLocation<mark><b>CC</b></mark>().la
 
 // Cancel currently active tasks and reject all promises with PromiseCancelledError
 <mark><b>context.cancel()</b></mark>
+</code></pre>
+
+Note: For all code samples, the differences between PromiseKit and CancelForPromiseKit are highlighted in bold.
+
+# Goals
+
+The goals of this project are to:
+
+* **Provide a streamlined way to cancel a promise chain, which rejects all associated promises and cancels all associated tasks. For example:**
+
+<pre><code><mark><b>let promise =</b></mark> firstly {
+    login<mark><b>CC</b></mark>() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to
+              // initiate a cancellable promise chain
+}.then { creds in
+    fetch(avatar: creds.user)
+}.done { image in
+    self.imageView = image
+}.catch(policy: .allErrors) { error in
+    if <mark><b>error.isCancelled</b></mark> {
+        // the chain has been cancelled!
+    }
+}
+//…
+<mark><b>promise.cancel()</b></mark>
+</code></pre>
+
+* **Ensure that subsequent code blocks in a promise chain are _NEVER_ called after the chain has been cancelled**
+
+* **Provide cancellable varients for all appropriate PromiseKit extensions (e.g. Foundation, CoreLocation, Alamofire, etc.)**
+
+* **Support cancellation for all PromiseKit primitives such as 'after', 'firstly', 'when', 'race'**
+
+* **Provide a simple way to make new types of cancellable promises**
+
+* **Ensure promise branches are properly cancelled.  For example:**
+
+<pre><code>import Alamofire
+import PromiseKit
+import CancelForPromiseKit
+
+func updateWeather(forCity searchName: String) {
+    refreshButton.startAnimating()
+    <mark><b>let context =</b></mark> firstly {
+        getForecast(forCity: searchName)
+    }.done { response in
+        updateUI(forecast: response)
+    }.ensure {
+        refreshButton.stopAnimating()
+    }.catch { error in
+        // Cancellation errors are ignored by default
+        showAlert(error: error) 
+    }<mark><b>.cancelContext</b></mark>
+
+    //…
+
+    // <mark><b>**** Cancels EVERYTHING</b></mark> (however the 'ensure' block always executes regardless)
+    <mark><b>context.cancel()</b></mark>
+}
+
+func getForecast(forCity name: String) -> <mark><b>CancellablePromise</b></mark>&lt;WeatherInfo&gt; {
+    return firstly {
+        Alamofire.request("https://autocomplete.weather.com/\(name)")
+            .responseDecodable<mark><b>CC</b></mark>(AutoCompleteCity.self)
+    }.then { city in
+        Alamofire.request("https://forecast.weather.com/\(city.name)")
+            .responseDecodable<mark><b>CC</b></mark>(WeatherResponse.self)
+    }.map { response in
+        format(response)
+    }
+}
 </code></pre>
 
 # Quick Start

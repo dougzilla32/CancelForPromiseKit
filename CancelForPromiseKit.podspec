@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 # s.documentation_url = ''
   s.default_subspecs = 'CorePromise', 'Foundation'
   s.requires_arc = true
-  s.swift_version = '4.0'
+# s.swift_version = '4.0'
 
   # CocoaPods requires us to specify the root deployment targets
   # even though for us it is nonsense. Our root spec has no
