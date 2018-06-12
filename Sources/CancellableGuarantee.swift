@@ -128,10 +128,6 @@ extension CancellableGuarantee where T == Void {
         self.init(Guarantee(), cancelValue: (), context: context)
     }
 
-    public convenience init(_ guarantee: Guarantee<T>, context: CancelContext? = nil) {
-        self.init(guarantee, cancelValue: (), context: context)
-    }
-
     public convenience init(task: CancellableTask) {
         self.init()
         self.appendCancellableTask(task: task, reject: nil)

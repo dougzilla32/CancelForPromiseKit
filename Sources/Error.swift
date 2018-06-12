@@ -29,10 +29,12 @@ extension PromiseCancelledError: LocalizedError {
 func rawPointerDescription(obj: AnyObject) -> String {
     let id = ObjectIdentifier(obj)
     let idDesc = id.debugDescription
-    let index = idDesc.index(idDesc.startIndex, offsetBy: "\(type(of: id))".count)
+    let offsetString = "\(type(of: id))"
 #if swift(>=3.2)
+    let index = idDesc.index(idDesc.startIndex, offsetBy: offsetString.count)
     let pointerString = idDesc[index...]
 #else
+    let index = idDesc.index(idDesc.startIndex, offsetBy: offsetString.characters.count)
     let pointerString = idDesc.substring(from: index)
 #endif
     return "\(type(of: obj))\(pointerString)"

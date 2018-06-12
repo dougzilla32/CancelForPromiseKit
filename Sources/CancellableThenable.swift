@@ -47,7 +47,7 @@ public extension CancellableThenable {
         return self.cancelContext.cancelledError
     }
     
-    func then<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, line: UInt = #line, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.U.T> {
+    func then<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.U.T> {
 
         let description = PromiseDescription<V.U.T>()
         let cancelItems = CancelItemList()
@@ -64,12 +64,12 @@ public extension CancellableThenable {
             }
         }
         
-        let promise = self.thenable.then(on: on, file: file, line: line, cancelBody)
+        let promise = self.thenable.then(on: on, cancelBody)
         description.promise = promise
         return CancellablePromise(promise, context: self.cancelContext, cancelItems: cancelItems)
     }
     
-    func then<V: Thenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, line: UInt = #line, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
+    func then<V: Thenable>(on: DispatchQueue? = conf.Q.map, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
         let cancelBody = { (value: U.T) throws -> V in
             if let error = self.cancelContext.cancelledError {
                 throw error
@@ -79,7 +79,7 @@ public extension CancellableThenable {
             }
         }
         
-        let promise = self.thenable.then(on: on, file: file, line: line, cancelBody)
+        let promise = self.thenable.then(on: on, cancelBody)
         return CancellablePromise(promise, context: self.cancelContext)
     }
     
