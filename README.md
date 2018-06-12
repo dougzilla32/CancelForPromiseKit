@@ -60,7 +60,7 @@ func updateWeather(forCity searchName: String) {
     <mark><b>context.cancel()</b></mark>
 }
 
-func getForecast(forCity name: String) -> <mark><b>Cancellable</b></mark>Promise&lt;WeatherInfo&gt; {
+func getForecast(forCity name: String) -> <mark><b>CancellablePromise</b></mark>&lt;WeatherInfo&gt; {
     return firstly {
         Alamofire.request("https://autocomplete.weather.com/\(name)")
             .responseDecodable<mark><b>CC</b></mark>(AutoCompleteCity.self)

@@ -23,6 +23,7 @@ public class CancelContext: Hashable, CustomStringConvertible {
         return cancelledError != nil
     }
     
+    let atomicSemaphore = DispatchSemaphore(value: 1)
     public private(set) var cancelledError: Error?
     
     init(description: CustomStringConvertible? = nil) {
@@ -54,9 +55,17 @@ public class CancelContext: Hashable, CustomStringConvertible {
     }
     
     func cancel(error: Error? = nil, visited: Set<CancelContext>, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
-        cancelledError = error ?? PromiseCancelledError(file: file, function: function, line: line)
+        var error = error
+        if error == nil {
+            error = PromiseCancelledError(file: file, function: function, line: line)
+        }
+
+        atomicSemaphore.wait()
+        cancelledError = error
+        atomicSemaphore.signal()
+        
         for item in cancelItemList {
-            item.cancel(error: cancelledError!, visited: visited, file: file, function: function, line: line)
+            item.cancel(error: error!, visited: visited, file: file, function: function, line: line)
         }
     }
     
