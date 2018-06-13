@@ -5,6 +5,7 @@
 //  Created by Doug Stein on 5/3/18.
 //
 
+import Foundation
 import PromiseKit
 
 public class CancelContext: Hashable, CustomStringConvertible {

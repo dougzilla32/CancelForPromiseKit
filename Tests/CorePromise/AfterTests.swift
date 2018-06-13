@@ -5,6 +5,7 @@
 //  Created by Doug Stein on 4/30/18.
 //
 
+import Foundation
 import XCTest
 import PromiseKit
 import CancelForPromiseKit
@@ -119,7 +120,7 @@ class AfterTests: XCTestCase {
         let exComplete = expectation(description: "done is cancelled")
         
         let promise = CancellablePromise<Void> { seal in
-            seal.fulfill()
+            seal.fulfill(())
         }
         promise.done { _ in
             XCTFail("done not cancelled")

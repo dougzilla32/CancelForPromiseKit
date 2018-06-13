@@ -5,6 +5,7 @@
 //  Created by Doug Stein on 5/21/18.
 //
 
+import Foundation
 import PromiseKit
 import CancelForPromiseKit
 import XCTest
@@ -111,7 +112,7 @@ class CancellablePromiseTests: XCTestCase {
         let ex2 = expectation(description: "")
         
         let (promise, seal) = Promise<Void>.pending()
-        DispatchQueue.global(qos: .default).asyncAfter(deadline: DispatchTime.now() + 0.2) { seal.fulfill() }
+        DispatchQueue.global(qos: .default).asyncAfter(deadline: DispatchTime.now() + 0.2) { seal.fulfill(()) }
 
         CancellablePromise(promise).done { _ in
             XCTFail()

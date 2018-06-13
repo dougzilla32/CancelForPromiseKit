@@ -5,6 +5,7 @@
 //  Created by Doug Stein on 5/11/18.
 //
 
+import Foundation
 import PromiseKit
 
 public protocol CancellableThenable: class {

@@ -5,6 +5,7 @@
 //  Created by Doug Stein on 5/10/18.
 //
 
+import Foundation
 import PromiseKit
 
 /// A `CancellableGuarantee` is a functional abstraction around an asynchronous operation that cannot error but can be cancelled.

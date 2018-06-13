@@ -5,6 +5,7 @@
 //  Created by Doug Stein on 4/28/18.
 //
 
+import Foundation
 import PromiseKit
 
 public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {

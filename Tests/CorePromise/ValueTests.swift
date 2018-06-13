@@ -112,7 +112,7 @@ class ValueTests: XCTestCase {
         
         let promise = CancellablePromise<Void> { seal in
             usleep(100000)
-            seal.fulfill()
+            seal.fulfill(())
         }
         promise.then { () throws -> Promise<String> in
             XCTFail("then not cancelled")
@@ -131,7 +131,7 @@ class ValueTests: XCTestCase {
 
         let promise = CancellablePromise<Void> { seal in
             usleep(100000)
-            seal.fulfill()
+            seal.fulfill(())
         }
         promise.then { _ -> CancellablePromise<String> in
             XCTFail("then not cancelled")
