@@ -1,63 +1,9 @@
 [submodule "Extensions/Foundation"]
 	path = Extensions/Foundation
-	url = https://github.com/CancellablePromiseKit/Foundation.git
-[submodule "Extensions/UIKit"]
-	path = Extensions/UIKit
-	url = https://github.com/CancellablePromiseKit/UIKit.git
-[submodule "Extensions/Accounts"]
-	path = Extensions/Accounts
-	url = https://github.com/CancellablePromiseKit/Accounts.git
-[submodule "Extensions/MessagesUI"]
-	path = Extensions/MessagesUI
-	url = https://github.com/CancellablePromiseKit/MessagesUI.git
-[submodule "Extensions/WatchConnectivity"]
-	path = Extensions/WatchConnectivity
-	url = https://github.com/CancellablePromiseKit/WatchConnectivity.git
-[submodule "Extensions/Photos"]
-	path = Extensions/Photos
-	url = https://github.com/CancellablePromiseKit/Photos.git
-[submodule "Extensions/MapKit"]
-	path = Extensions/MapKit
-	url = https://github.com/CancellablePromiseKit/MapKit.git
-[submodule "Extensions/CloudKit"]
-	path = Extensions/CloudKit
-	url = https://github.com/CancellablePromiseKit/CloudKit.git
-[submodule "Extensions/AddressBook"]
-	path = Extensions/AddressBook
-	url = https://github.com/CancellablePromiseKit/AddressBook.git
-[submodule "Extensions/AssetsLibrary"]
-	path = Extensions/AssetsLibrary
-	url = https://github.com/CancellablePromiseKit/AssetsLibrary.git
+	url = https://github.com/dougzilla32/CancelForPromiseKit-Foundation
 [submodule "Extensions/CoreLocation"]
 	path = Extensions/CoreLocation
-	url = https://github.com/CancellablePromiseKit/CoreLocation.git
-[submodule "Extensions/QuartzCore"]
-	path = Extensions/QuartzCore
-	url = https://github.com/CancellablePromiseKit/QuartzCore.git
-[submodule "Extensions/Social"]
-	path = Extensions/Social
-	url = https://github.com/CancellablePromiseKit/Social.git
-[submodule "Extensions/StoreKit"]
-	path = Extensions/StoreKit
-	url = https://github.com/CancellablePromiseKit/StoreKit.git
-[submodule "Extensions/Bolts"]
-	path = Extensions/Bolts
-	url = https://github.com/CancellablePromiseKit/Bolts.git
-[submodule "Extensions/CoreBluetooth"]
-	path = Extensions/CoreBluetooth
-	url = https://github.com/CancellablePromiseKit/CoreBluetooth.git
-[submodule "Extensions/EventKit"]
-	path = Extensions/EventKit
-	url = https://github.com/CancellablePromiseKit/EventKit.git
-[submodule "Extensions/SystemConfiguration"]
-	path = Extensions/SystemConfiguration
-	url = https://github.com/CancellablePromiseKit/SystemConfiguration
+	url = https://github.com/dougzilla32/CancelForPromiseKit-CoreLocation
 [submodule "Extensions/Alamofire"]
 	path = Extensions/Alamofire
-	url = https://github.com/CancellablePromiseKit/Alamofire
-[submodule "Extensions/OMGHTTPURLRQ"]
-	path = Extensions/OMGHTTPURLRQ
-	url = https://github.com/CancellablePromiseKit/OMGHTTPURLRQ
-[submodule "Extensions/AVFoundation"]
-	path = Extensions/AVFoundation
-	url = https://github.com/CancellablePromiseKit/AVFoundation
+	url = https://github.com/dougzilla32/CancelForPromiseKit-Alamofire
