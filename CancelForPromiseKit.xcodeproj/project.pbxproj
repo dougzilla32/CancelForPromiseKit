@@ -74,6 +74,8 @@
 		91195B4820ACB9F500074F63 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; name = .swiftlint.yml; path = Sources/.swiftlint.yml; sourceTree = "<group>"; };
 		91195B5720AF556000074F63 /* CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomStringConvertible.swift; path = Sources/CustomStringConvertible.swift; sourceTree = "<group>"; };
 		912C815020D1DF330097534B /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		912C815120D1EA8B0097534B /* .gitmodules */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitmodules; sourceTree = "<group>"; };
+		912C815220D1EAB70097534B /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		912F4C1D209BED250037EF4C /* CancellableTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CancellableTask.swift; path = Sources/CancellableTask.swift; sourceTree = "<group>"; };
 		913ADD9E20C10F3D001F2B57 /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		91436DBD20A0EC3B004E99DB /* CancelForPromiseKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = CancelForPromiseKit.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -169,8 +171,11 @@
 				635893961D5BE4F900F14B55 /* CancelForPromiseKit.podspec */,
 				912C815020D1DF330097534B /* Cartfile */,
 				635893951D5BE4F900F14B55 /* Package.swift */,
+				913ADD9E20C10F3D001F2B57 /* .travis.yml */,
 				63B0AC6C1D595E6300FA21D9 /* Info.plist */,
 				635893941D5BE4F900F14B55 /* LICENSE */,
+				912C815120D1EA8B0097534B /* .gitmodules */,
+				912C815220D1EAB70097534B /* .gitignore */,
 			);
 			name = Podspec;
 			sourceTree = "<group>";
@@ -188,7 +193,6 @@
 			isa = PBXGroup;
 			children = (
 				635893971D5BE4F900F14B55 /* README.md */,
-				913ADD9E20C10F3D001F2B57 /* .travis.yml */,
 				91436DBD20A0EC3B004E99DB /* CancelForPromiseKit.playground */,
 				63B0AC601D595E4C00FA21D9 /* Sources */,
 				635D64061D59630200BC0AF5 /* Tests */,

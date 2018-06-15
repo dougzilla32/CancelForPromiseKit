@@ -1,9 +1,0 @@
-[submodule "Extensions/Foundation"]
-	path = Extensions/Foundation
-	url = https://github.com/dougzilla32/CancelForPromiseKit-Foundation
-[submodule "Extensions/CoreLocation"]
-	path = Extensions/CoreLocation
-	url = https://github.com/dougzilla32/CancelForPromiseKit-CoreLocation
-[submodule "Extensions/Alamofire"]
-	path = Extensions/Alamofire
-	url = https://github.com/dougzilla32/CancelForPromiseKit-Alamofire
