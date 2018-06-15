@@ -33,8 +33,8 @@ matrix:
 #    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=3.2,name=Apple Watch - 38mm"', os: osx, language: swift}
 #    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=4.3,name=Apple Watch - 38mm"', os: osx, language: swift}
 
-    - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWFT=3'}
-    - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWFT=4'}
+#    - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWFT=3'}
+#    - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWFT=4'}
 
 before_install:
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
@@ -56,7 +56,7 @@ script:
   watchOS)
     ;;
   *)
-    echo TODO swift test -Xswiftc -swift-version -Xswiftc $SWFT;;
+    swift test -Xswiftc -swift-version -Xswiftc $SWFT;;
   esac
 after_success:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
