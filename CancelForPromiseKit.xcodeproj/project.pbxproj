@@ -14,7 +14,6 @@
 		91195B4720AC134000074F63 /* race.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91195B4420AC134000074F63 /* race.swift */; };
 		91195B5920AF565100074F63 /* CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91195B5720AF556000074F63 /* CustomStringConvertible.swift */; };
 		912F4C1E209BED250037EF4C /* CancellableTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912F4C1D209BED250037EF4C /* CancellableTask.swift */; };
-		91436DB420A0EB19004E99DB /* Pods_CancelForPromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E9F9F85F4A972A4688E45CD /* Pods_CancelForPromiseKit.framework */; };
 		916DAD6F20B3DBFB001AF0D7 /* CancellablePromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DAD6E20B3DBFB001AF0D7 /* CancellablePromiseTests.swift */; };
 		916DAD7120B4B130001AF0D7 /* CancellablePromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DAD7020B4B130001AF0D7 /* CancellablePromise.swift */; };
 		916DAD7320B4B43C001AF0D7 /* CancellableGuarantee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DAD7220B4B43C001AF0D7 /* CancellableGuarantee.swift */; };
@@ -57,7 +56,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0E9F9F85F4A972A4688E45CD /* Pods_CancelForPromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CancelForPromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		630019221D596292003B4E30 /* CPKCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CPKCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		635893941D5BE4F900F14B55 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		635893951D5BE4F900F14B55 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
@@ -129,7 +127,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				91436DB420A0EB19004E99DB /* Pods_CancelForPromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,7 +248,6 @@
 		7CED5C5FF05FBAC1AD6922F9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0E9F9F85F4A972A4688E45CD /* Pods_CancelForPromiseKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
