@@ -369,6 +369,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n(cd Tests ; swiftlint)\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 		91FC9E8420C5CF52008B8EFA /* Symlink Cocoapods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
