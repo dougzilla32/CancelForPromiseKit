@@ -163,7 +163,7 @@
 			path = Tests/CorePromise;
 			sourceTree = "<group>";
 		};
-		635893991D5BE51700F14B55 /* Podspec */ = {
+		635893991D5BE51700F14B55 /* Config */ = {
 			isa = PBXGroup;
 			children = (
 				635893961D5BE4F900F14B55 /* CancelForPromiseKit.podspec */,
@@ -176,7 +176,7 @@
 				912C815120D1EA8B0097534B /* .gitmodules */,
 				912C815220D1EAB70097534B /* .gitignore */,
 			);
-			name = Podspec;
+			name = Config;
 			sourceTree = "<group>";
 		};
 		635D64061D59630200BC0AF5 /* Tests */ = {
@@ -195,7 +195,7 @@
 				91436DBD20A0EC3B004E99DB /* CancelForPromiseKit.playground */,
 				63B0AC601D595E4C00FA21D9 /* Sources */,
 				635D64061D59630200BC0AF5 /* Tests */,
-				635893991D5BE51700F14B55 /* Podspec */,
+				635893991D5BE51700F14B55 /* Config */,
 				72F348650562B3413ED1FD69 /* Pods */,
 				63B0AC581D595E1B00FA21D9 /* Products */,
 				7CED5C5FF05FBAC1AD6922F9 /* Frameworks */,
@@ -531,7 +531,7 @@
 				);
 				PODS_BUILD_DIR = "${BUILD_DIR}";
 				PODS_CONFIGURATION_BUILD_DIR = "${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cpk;
 				PRODUCT_BUNDLE_PACKAGE_TYPE = BNDL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "macosx appletvsimulator appletvos watchsimulator iphonesimulator watchos iphoneos";
@@ -603,7 +603,7 @@
 				);
 				PODS_BUILD_DIR = "${BUILD_DIR}";
 				PODS_CONFIGURATION_BUILD_DIR = "${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cpk;
 				PRODUCT_BUNDLE_PACKAGE_TYPE = BNDL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "macosx appletvsimulator appletvos watchsimulator iphonesimulator watchos iphoneos";
