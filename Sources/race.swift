@@ -8,7 +8,7 @@
 import PromiseKit
 
 /**
- Resolves with the first resolving cancellable promise from a set of cancellable promises. Calling 'cancel' on the
+ Resolves with the first resolving cancellable promise from a set of cancellable promises. Calling `cancel` on the
  race promise cancels all pending promises.
 
      let racePromise = race(promise1, promise2, promise3).then { winner in
@@ -28,7 +28,7 @@ public func race<V: CancellableThenable>(_ thenables: V...) -> CancellablePromis
 }
 
 /**
- Resolves with the first resolving promise from a set of promises. Calling 'cancel' on the
+ Resolves with the first resolving promise from a set of promises. Calling `cancel` on the
  race promise cancels all pending promises.
 
      let racePromise = race(promise1, promise2, promise3).then { winner in
@@ -56,7 +56,7 @@ public func race<V: CancellableThenable>(_ thenables: [V]) -> CancellablePromise
 }
 
 /**
- Resolves with the first resolving Guarantee from a set of cancellable guarantees. Calling 'cancel' on the
+ Resolves with the first resolving Guarantee from a set of cancellable guarantees. Calling `cancel` on the
  race promise cancels all pending guarantees.
 
      let racePromise = race(guarantee1, guarantee2, guarantee3).then { winner in
@@ -111,16 +111,17 @@ private func race<T>(_ gs: [Guarantee<T>]) -> Guarantee<T> {
     return guarantee
 }
 
-// MARK: CC wrapper functions
-
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
 public func raceCC<U: Thenable>(_ thenables: U...) -> CancellablePromise<U.T> {
     return CancellablePromise(race(thenables))
 }
 
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
 public func raceCC<U: Thenable>(_ thenables: [U]) -> CancellablePromise<U.T> {
     return CancellablePromise(race(thenables))
 }
 
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
 public func raceCC<T>(_ guarantees: Guarantee<T>..., cancelValue: T? = nil) -> CancellableGuarantee<T> {
     return CancellableGuarantee(race(guarantees), cancelValue: cancelValue)
 }

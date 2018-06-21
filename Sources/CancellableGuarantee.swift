@@ -8,23 +8,32 @@
 import Foundation
 import PromiseKit
 
-/// A `CancellableGuarantee` is a functional abstraction around an asynchronous operation that cannot error but can be cancelled.
-/// When a guarantee is cancelled any associated tasks are cancelled but the chain completes successfully.  In this situation the
-/// guarantee would successfully resolve with a value that indicates cancellation -- perhaps an error, 'nil', an empty
-/// string, or a zero length array.
+/**
+ A `CancellableGuarantee` is a functional abstraction around an asynchronous operation that can be cancelled but cannot error.
+ 
+ When a cancellable guarantee is cancelled any associated tasks are cancelled but the chain completes successfully.  In this situation the guarantee would successfully resolve with whatever value the task returns after being cancelled -- perhaps an error, `nil`, an empty string, or a zero length array.  Alternatively, the `cancelValue` optional parameter explicitly specifies a value to use when the guarantee is cancelled.
+ 
+ - See: `Thenable`
+ */
 public class CancellableGuarantee<T>: CancellableThenable {
+    /// Delegate `guarantee` for this CancellableGuarantee
+    public var guarantee: Guarantee<T>
+    
+    /// Type of the delegate `thenable`
     public typealias U = Guarantee<T>
     
+    /// Delegate `thenable` for this CancellableGuarantee
     public var thenable: U {
         return guarantee
     }
     
-    public var guarantee: Guarantee<T>
-    
+    /// CancelContext associated with this CancellableGuarantee
     public var cancelContext: CancelContext
     
+    /// Tracks the cancel items for this CancellableGuarantee.  These items are removed from the associated CancelContext when the guarantee resolves.
     public var cancelItems: CancelItemList
     
+    /// Override value to use for resolution after the CancellableGuarantee is cancelled.  If `nil` (default) then do not override the resolved value when the CancellableGuarantee is cancelled.
     public let cancelValue: T?
     
     init(_ guarantee: Guarantee<T>, cancelValue: T? = nil, context: CancelContext? = nil) {
@@ -34,20 +43,27 @@ public class CancellableGuarantee<T>: CancellableThenable {
         self.cancelItems = CancelItemList()
     }
     
-    /// Initialize a new cancellable guarantee that can be resolved with the provided `Resolver`.
+    /**
+     Initialize a pending `CancellableGuarantee` that can be resolved with the provided closure’s parameter.
+     - Parameter task: cancellable task
+     - Parameter cancelValue: optional override value to use when cancelled
+     - Parameter resolver: invoked to resolve the `CancellableGuarantee`
+     */
     public convenience init(task: CancellableTask? = nil, cancelValue: T? = nil, resolver body: ((T) -> Void) -> Void) {
         self.init(Guarantee(resolver: body), cancelValue: cancelValue)
         self.appendCancellableTask(task: task, reject: nil)
     }
     
-    /// - Returns: a tuple of a new cancellable pending guarantee and its `Resolver`.
+    /// - Parameter cancelValue: optional override value to use when cancelled
+    /// - Returns: a tuple of a pending `CancellableGuarantee` and a function that resolves it.
     public class func pending(cancelValue: T? = nil) -> (guarantee: CancellableGuarantee<T>, resolve: (T) -> Void) {
         let rg = Guarantee<T>.pending()
         return (guarantee: CancellableGuarantee(rg.guarantee, cancelValue: cancelValue), resolve: rg.resolve)
     }
     
-    /// - Returns: a new fulfilled cancellable guarantee.
-    public class func value(_ value: T, cancelValue: T? = nil) -> CancellableGuarantee<T> {
+    /// - Parameter cancelValue: optional override value to use when cancelled
+    /// - Returns: a `CancellableGuarantee` sealed with the provided value.
+    public class func valueCC(_ value: T, cancelValue: T? = nil) -> CancellableGuarantee<T> {
         return CancellableGuarantee(Guarantee.value(value), cancelValue: cancelValue)
     }
     
@@ -63,6 +79,7 @@ public class CancellableGuarantee<T>: CancellableThenable {
 }
 
 public extension CancellableGuarantee {
+    /// - See: `CancellableThenable.done(on:_:)`
     @discardableResult
     func done(on: DispatchQueue? = conf.Q.return, cancelValue: T? = nil, _ body: @escaping(T) -> Void) -> CancellableGuarantee<Void> {
         let cancelBody = { (value: T) -> Void in
@@ -75,6 +92,7 @@ public extension CancellableGuarantee {
         return CancellableGuarantee<Void>(guarantee, cancelValue: (), context: self.cancelContext)
     }
 
+    /// - See: `CancellableThenable.map(on:_:)`
     func map<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, _ body: @escaping(T) -> U) -> CancellableGuarantee<U> {
         let cancelBody = { (value: T) -> U in
             let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
@@ -86,6 +104,7 @@ public extension CancellableGuarantee {
         return CancellableGuarantee<U>(guarantee, cancelValue: cancelValue, context: self.cancelContext)
     }
     
+    /// - See: `CancellableThenable.then(on:_:)`
     @discardableResult
     func then<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, _ body: @escaping(T) -> CancellableGuarantee<U>) -> CancellableGuarantee<U> {
         let cancelBody = { (value: T) -> Guarantee<U> in
@@ -99,8 +118,9 @@ public extension CancellableGuarantee {
         return CancellableGuarantee<U>(guarantee, cancelValue: cancelValue, context: self.cancelContext)
     }
 
+    /// - See: `CancellableThenable.thenCC(on:_:)`
     @discardableResult
-    func then<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, _ body: @escaping(T) -> Guarantee<U>) -> CancellableGuarantee<U> {
+    func thenCC<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, _ body: @escaping(T) -> Guarantee<U>) -> CancellableGuarantee<U> {
         let cancelBody = { (value: T) -> Guarantee<U> in
             let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
             return body(value)
@@ -110,6 +130,7 @@ public extension CancellableGuarantee {
         return CancellableGuarantee<U>(guarantee, cancelValue: cancelValue, context: self.cancelContext)
     }
 
+    /// - See: `CancellableThenable.asVoid()`
     public func asVoid() -> CancellableGuarantee<Void> {
         return map(on: nil) { _ in }
     }
@@ -123,16 +144,49 @@ public extension CancellableGuarantee {
     }
 }
 
+public extension CancellableGuarantee where T: Sequence {
+
+    /**
+     `CancellableGuarantee<[T]>` => `T` -> `CancellableGuarantee<U>` => `CancellableGuarantee<[U]>`
+
+         let context = firstly {
+             .valueCC([1,2,3])
+         }.thenMap {
+             .value($0 * 2)
+         }.done {
+             // $0 => [2,4,6]
+         }.cancelContext
+
+         //…
+     
+         context.cancel()
+     */
+    func thenMap<V>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) -> CancellableGuarantee<V>) -> CancellableGuarantee<[V]> {
+        return then(on: on) {
+            when(fulfilled: $0.map(transform))
+        }.recover {
+            // if happens then is bug inside PromiseKit
+            fatalError(String(describing: $0))
+        }
+    }
+}
+
 #if swift(>=3.1)
 extension CancellableGuarantee where T == Void {
+    /// Initializes a new cancellable guarantee fulfilled with `Void`
+    /// - Parameter context: optional `CancelContext` to associate with this `CancellableGuarantee`
     public convenience init(context: CancelContext? = nil) {
         self.init(Guarantee(), cancelValue: (), context: context)
     }
 
-    public convenience init(_ guarantee: Guarantee<T>, context: CancelContext? = nil) {
+    /// Initializes a new cancellable guarantee fulfilled with `Void` bound to the provided `Guarantee`
+    /// - Parameter guarantee: `Guarantee` to bind
+    /// - Parameter context: optional `CancelContext` to associate with this `CancellableGuarantee`
+    convenience init(_ guarantee: Guarantee<T>, context: CancelContext? = nil) {
         self.init(guarantee, cancelValue: (), context: context)
     }
 
+    /// Initializes a new promise fulfilled with `Void` and with the given `CancellableTask`
     public convenience init(task: CancellableTask) {
         self.init()
         self.appendCancellableTask(task: task, reject: nil)

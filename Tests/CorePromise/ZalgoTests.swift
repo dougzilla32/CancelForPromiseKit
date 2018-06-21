@@ -5,7 +5,7 @@ import PromiseKit
 class ZalgoTests: XCTestCase {
     func test1() {
         var resolved = false
-        CancellablePromise.value(1).done(on: nil) { _ in
+        CancellablePromise.valueCC(1).done(on: nil) { _ in
             resolved = true
         }.catch(policy: .allErrors) { _ in
             resolved = false
@@ -14,7 +14,7 @@ class ZalgoTests: XCTestCase {
     }
 
     func test2() {
-        let p1 = CancellablePromise.value(1).map(on: nil) { _ in
+        let p1 = CancellablePromise.valueCC(1).map(on: nil) { _ in
             return 2
         }
         p1.cancel()
@@ -78,7 +78,7 @@ class ZalgoTests: XCTestCase {
     // return a sealed promise from its own zalgo’d then handler doesn’t hang
     func test4() {
         let ex = expectation(description: "")
-        let p1 = CancellablePromise.value(1)
+        let p1 = CancellablePromise.valueCC(1)
         p1.then(on: nil) { _ -> CancellablePromise<Int> in
             ex.fulfill()
             return p1

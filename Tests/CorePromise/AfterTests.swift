@@ -88,7 +88,7 @@ class AfterTests: XCTestCase {
         
         let exCancelComplete = expectation(description: "after completes")
         
-        // Test 'afterCC' to ensure it is fulfilled if not cancelled
+        // Test `afterCC` to ensure it is fulfilled if not cancelled
         let cancelIgnoreAfterPromise = afterCC(seconds: 0)
         cancelIgnoreAfterPromise.done {
             exCancelComplete.fulfill()
@@ -96,7 +96,7 @@ class AfterTests: XCTestCase {
             XCTFail("cancellableAfterPromise failed with error: \(error)")
         }
         
-        // Test 'afterCC' to ensure it is cancelled
+        // Test `afterCC` to ensure it is cancelled
         let cancellableAfterPromise = afterCC(seconds: 0)
         cancellableAfterPromise.done {
             XCTFail("cancellableAfter not cancelled")
@@ -104,7 +104,7 @@ class AfterTests: XCTestCase {
             XCTFail("cancellableAfterPromise failed with error: \(error)")
         }.cancel()
         
-        // Test 'afterCC' to ensure it is cancelled and throws a 'CancellableError'
+        // Test `afterCC` to ensure it is cancelled and throws a `CancellableError`
         let exCancel = expectation(description: "after cancels")
         let cancellableAfterPromiseWithError = afterCC(seconds: 0)
         cancellableAfterPromiseWithError.done {

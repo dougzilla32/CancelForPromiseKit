@@ -12,7 +12,7 @@ func promise3() ->
 }
 
 let context = firstly {
-    CancellablePromise.value(1)
+    CancellablePromise.valueCC(1)
 }.map { _ in
     2
 }.then { _ in

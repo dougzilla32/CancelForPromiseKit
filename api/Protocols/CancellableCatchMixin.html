@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CancellableCatchMixin Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/CancellableCatchMixin" class="dashAnchor"></a>
+    <a title="CancellableCatchMixin Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">CancelForPromiseKit Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/dougzilla32/CancelForPromiseKit"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fgithub%2Ecom%2Fdougzilla32%2FCancelForPromiseKit%2Fdocsets%2FCancelForPromiseKit%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">CancelForPromiseKit Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        CancellableCatchMixin Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/CPKFinalizer.html">CPKFinalizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/CancelContext.html">CancelContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:19CancelForPromiseKit0A8ItemListC">CancelItemList</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/CancellableGuarantee.html">CancellableGuarantee</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/CancellablePromise.html">CancellablePromise</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/PromiseCancelledError.html">PromiseCancelledError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Guarantee.html">Guarantee</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Optional.html">Optional</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit7afterCCAA011CancellableC0CyytG8Dispatch0H12TimeIntervalOF">afterCC(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit7afterCCAA011CancellableC0CyytGSd7seconds_tF">afterCC(seconds:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit7firstlyAA011CancellableC0Cy1U_1TQZGxyKc7execute_tAA0F8ThenableRzlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit9firstlyCCAA011CancellableC0Cy1TQzGxyKc7execute_t0cD08ThenableRzlF">firstlyCC(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit9firstlyCCAA011CancellableC0CyxG0cD09GuaranteeCyxGyc7execute_tlF">firstlyCC(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4hangxAA011CancellableC0CyxGKlF">hang(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4raceAA011CancellableC0Cy1U_1TQZGSayxGAA0F8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4raceAA011CancellableC0Cy1U_1TQZGxd_tAA0F8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4raceAA20CancellableGuaranteeCyxGAEd_xSg11cancelValuetlF">race(_:cancelValue:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6raceCCAA011CancellableC0Cy1TQzGSayxG0cD08ThenableRzlF">raceCC(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6raceCCAA011CancellableC0Cy1TQzGxd_t0cD08ThenableRzlF">raceCC(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6raceCCAA20CancellableGuaranteeCyxG0cD00H0CyxGd_xSg11cancelValuetlF">raceCC(_:cancelValue:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCyytGAEd_tF">when(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0CySay1U_1TQZGGSayxG9fulfilled_tAA0F8ThenableRzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0CyytGSayxG9fulfilled_tAA0F8ThenableRzyt1U_1TRTzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0CyytGx9fulfilledd_tAA0F8ThenableRzyt1U_1TRTzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_tGx9fulfilled_q_tAA0F8ThenableRzAaKR_r0_lF">when(fulfilled:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_AE_AFQY0_tGx9fulfilled_q_q0_tAA0F8ThenableRzAaLR_AaLR0_r1_lF">when(fulfilled:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_AE_AFQY0_AE_AFQY1_tGx9fulfilled_q_q0_q1_tAA0F8ThenableRzAaMR_AaMR0_AaMR1_r2_lF">when(fulfilled:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_AE_AFQY0_AE_AFQY1_AE_AFQY2_tGx9fulfilled_q_q0_q1_q2_tAA0F8ThenableRzAaNR_AaNR0_AaNR1_AaNR2_r3_lF">when(fulfilled:_:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0CySay7Element_1U1TQZGGx9fulfilled_Si12concurrentlyts16IteratorProtocolRzAA0F8ThenableAERpzlF">when(fulfilled:concurrently:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCyytGSayAEG10guarantees_tF">when(guarantees:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCySay0cD06ResultOyxGGGAA0fC0CyxG8resolvedd_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCySay0cD06ResultOyxGGGSayAA0fC0CyxGG8resolved_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCyytG0cD00H0CyytGd_tF">whenCC(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0CySay1TQzGGSayxG9fulfilled_t0cD08ThenableRzlF">whenCC(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0CyytGSayxG9fulfilled_t0cD08ThenableRzyt1TRtzlF">whenCC(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0CyytGx9fulfilledd_t0cD08ThenableRzyt1TRtzlF">whenCC(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_tGx9fulfilled_q_t0cD08ThenableRzAjKR_r0_lF">whenCC(fulfilled:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_AEQy0_tGx9fulfilled_q_q0_t0cD08ThenableRzAkLR_AkLR0_r1_lF">whenCC(fulfilled:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_AEQy0_AEQy1_tGx9fulfilled_q_q0_q1_t0cD08ThenableRzAlMR_AlMR0_AlMR1_r2_lF">whenCC(fulfilled:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_AEQy0_AEQy1_AEQy2_tGx9fulfilled_q_q0_q1_q2_t0cD08ThenableRzAmNR_AmNR0_AmNR1_AmNR2_r3_lF">whenCC(fulfilled:_:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0CySay7Element_1TQZGGx9fulfilled_Si12concurrentlyts16IteratorProtocolRz0cD08ThenableAERpzlF">whenCC(fulfilled:concurrently:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCyytGSay0cD00H0CyytGG10guarantees_tF">whenCC(guarantees:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCySay0cD06ResultOyxGGGAE0C0CyxG8resolvedd_tlF">whenCC(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCySay0cD06ResultOyxGGGSayAE0C0CyxGG8resolved_tlF">whenCC(resolved:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/CancellableCatchMixin.html">CancellableCatchMixin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/CancellableTask.html">CancellableTask</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/CancellableThenable.html">CancellableThenable</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>CancellableCatchMixin</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">CancellableCatchMixin</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/CancellableThenable.html">CancellableThenable</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>Provides <code>catch</code> and <code>recover</code> to your object that conforms to <code><a href="../Protocols/CancellableThenable.html">CancellableThenable</a></code></p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit21CancellableCatchMixinP1M"></a>
+                    <a name="//apple_ref/swift/Alias/M" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Type of the delegate <code><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP9catchable1MQzvp">catchable</a></code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">M</span> <span class="p">:</span> <span class="kt">CatchMixin</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/CancellableCatchable.swift#L14">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit21CancellableCatchMixinP9catchable1MQzvp"></a>
+                    <a name="//apple_ref/swift/Property/catchable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit21CancellableCatchMixinP9catchable1MQzvp">catchable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate <code>catchable</code> for this CancellablePromise</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">catchable</span><span class="p">:</span> <span class="kt"><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/CancellableCatchable.swift#L17">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit21CancellableCatchMixinPAAE5catchAA12CPKFinalizerCSo13DispatchQueueCSg2on_0cD00F6PolicyO6policyys5Error_pctF"></a>
+                    <a name="//apple_ref/swift/Method/catch(on:policy:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit21CancellableCatchMixinPAAE5catchAA12CPKFinalizerCSo13DispatchQueueCSg2on_0cD00F6PolicyO6policyys5Error_pctF">catch(on:policy:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure executes when this cancellable promise rejects.</p>
+
+<p>Rejecting a promise cascades: rejecting all subsequent promises (unless
+recover is invoked) thus you will typically place your catch at the end
+of a chain. Often utility promises will not have a catch, instead
+delegating the error handling to the caller.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <a href="https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation">Cancellation</a>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="p">`</span><span class="nv">catch</span><span class="p">`(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="k">return</span><span class="p">,</span> <span class="nv">policy</span><span class="p">:</span> <span class="kt">CatchPolicy</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">catchPolicy</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Error)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/CPKFinalizer.html">CPKFinalizer</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>policy</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The default policy does not execute your handler for cancellation errors.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The handler to execute if this promise is rejected.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A promise finalizer.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/CancellableCatchable.swift#L36-L38">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit21CancellableCatchMixinPAAE7recoverAA0eC0Cy1M_1TQZGSo13DispatchQueueCSg2on_0cD00F6PolicyO6policyqd__s5Error_pKctAA0E8ThenableRd__1U_AHQYd__AIRSlF"></a>
+                    <a name="//apple_ref/swift/Method/recover(on:policy:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit21CancellableCatchMixinPAAE7recoverAA0eC0Cy1M_1TQZGSo13DispatchQueueCSg2on_0cD00F6PolicyO6policyqd__s5Error_pKctAA0E8ThenableRd__1U_AHQYd__AIRSlF">recover(on:policy:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure executes when this cancellable promise rejects.</p>
+
+<p>Unlike <code>catch</code>, <code>recover</code> continues the chain.
+Use <code>recover</code> in circumstances where recovering the chain from certain errors is a possibility. For example:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">context</span> <span class="o">=</span> <span class="n">firstly</span> <span class="p">{</span>
+    <span class="kt">CLLocationManager</span><span class="o">.</span><span class="nf">requestLocation</span><span class="p">()</span>
+<span class="p">}</span><span class="o">.</span><span class="n">recover</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="n">error</span> <span class="o">==</span> <span class="kt">CLError</span><span class="o">.</span><span class="n">unknownLocation</span> <span class="k">else</span> <span class="p">{</span> <span class="k">throw</span> <span class="n">error</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="o">.</span><span class="nf">value</span><span class="p">(</span><span class="kt">CLLocation</span><span class="o">.</span><span class="n">chicago</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">cancelContext</span>
+
+<span class="c1">//…</span>
+
+<span class="n">context</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <a href="https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation">Cancellation</a>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">recover</span><span class="o">&lt;</span><span class="kt">V</span><span class="p">:</span> <span class="kt"><a href="../Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">policy</span><span class="p">:</span> <span class="kt">CatchPolicy</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">catchPolicy</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Error)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">V</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a></span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">V</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span> <span class="o">==</span> <span class="kt"><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a></span><span class="o">.</span><span class="kt">T</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>policy</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The default policy does not execute your handler for cancellation errors.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The handler to execute if this promise is rejected.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/CancellableCatchable.swift#L116-L140">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit21CancellableCatchMixinPAAE9recoverCCAA0eC0Cy1TQyd__GSo13DispatchQueueCSg2on_0cD00F6PolicyO6policyqd__s5Error_pKctAN8ThenableRd__1M_AGQZAHRSlF"></a>
+                    <a name="//apple_ref/swift/Method/recoverCC(on:policy:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit21CancellableCatchMixinPAAE9recoverCCAA0eC0Cy1TQyd__GSo13DispatchQueueCSg2on_0cD00F6PolicyO6policyqd__s5Error_pKctAN8ThenableRd__1M_AGQZAHRSlF">recoverCC(on:policy:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure executes when this cancellable promise rejects.</p>
+
+<p>Unlike <code>catch</code>, <code>recover</code> continues the chain.
+Use <code>recover</code> in circumstances where recovering the chain from certain errors is a possibility. For example:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">context</span> <span class="o">=</span> <span class="n">firstly</span> <span class="p">{</span>
+    <span class="kt">CLLocationManager</span><span class="o">.</span><span class="nf">requestLocation</span><span class="p">()</span>
+<span class="p">}</span><span class="o">.</span><span class="n">recover</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="n">error</span> <span class="o">==</span> <span class="kt">CLError</span><span class="o">.</span><span class="n">unknownLocation</span> <span class="k">else</span> <span class="p">{</span> <span class="k">throw</span> <span class="n">error</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="o">.</span><span class="nf">value</span><span class="p">(</span><span class="kt">CLLocation</span><span class="o">.</span><span class="n">chicago</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">cancelContext</span>
+
+<span class="c1">//…</span>
+
+<span class="n">context</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <a href="https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation">Cancellation</a>
+
+</div>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">recoverCC</span><span class="o">&lt;</span><span class="kt">V</span><span class="p">:</span> <span class="kt">Thenable</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">policy</span><span class="p">:</span> <span class="kt">CatchPolicy</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">catchPolicy</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Error)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">V</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a></span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">V</span><span class="o">.</span><span class="kt">T</span> <span class="o">==</span> <span class="kt"><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a></span><span class="o">.</span><span class="kt">T</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>policy</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The default policy does not execute your handler for cancellation errors.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The handler to execute if this promise is rejected.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/CancellableCatchable.swift#L165-L183">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit21CancellableCatchMixinPAAE7recoverAA0E9GuaranteeCy1M_1TQZGSo13DispatchQueueCSg2on_AISg11cancelValueAJs5Error_pctF"></a>
+                    <a name="//apple_ref/swift/Method/recover(on:cancelValue:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit21CancellableCatchMixinPAAE7recoverAA0E9GuaranteeCy1M_1TQZGSo13DispatchQueueCSg2on_AISg11cancelValueAJs5Error_pctF">recover(on:cancelValue:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure executes when this promise rejects.
+This variant of <code>recover</code> requires the handler to return a Guarantee, thus it returns a Guarantee itself and your closure cannot <code>throw</code>.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Note it is logically impossible for this to take a <code>catchPolicy</code>, thus <code>allErrors</code> are handled.
+
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <a href="http://promisekit.org/docs/">Cancellation</a>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="nf">recover</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">cancelValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a></span><span class="o">.</span><span class="kt">T</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Error)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a></span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a></span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cancelValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>optional override value to use when cancelled</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The handler to execute if this promise is rejected.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/CancellableCatchable.swift#L195-L211">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit21CancellableCatchMixinPAAE9recoverCCAA0E9GuaranteeCy1M_1TQZGSo13DispatchQueueCSg2on_AISg11cancelValue0cD00J0CyAIGs5Error_pctF"></a>
+                    <a name="//apple_ref/swift/Method/recoverCC(on:cancelValue:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit21CancellableCatchMixinPAAE9recoverCCAA0E9GuaranteeCy1M_1TQZGSo13DispatchQueueCSg2on_AISg11cancelValue0cD00J0CyAIGs5Error_pctF">recoverCC(on:cancelValue:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure executes when this promise rejects.
+This variant of <code>recover</code> requires the handler to return a Guarantee, thus it returns a Guarantee itself and your closure cannot <code>throw</code>.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Note it is logically impossible for this to take a <code>catchPolicy</code>, thus <code>allErrors</code> are handled.
+
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <a href="https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation">Cancellation</a>
+
+</div>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="nf">recoverCC</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">cancelValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a></span><span class="o">.</span><span class="kt">T</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Error)</span> <span class="o">-&gt;</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a></span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a></span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cancelValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>optional override value to use when cancelled</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The handler to execute if this promise is rejected.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/CancellableCatchable.swift#L224-L240">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit21CancellableCatchMixinPAAE6ensureAA0eC0Cy1M_1TQZGSo13DispatchQueueCSg2on_yyctF"></a>
+                    <a name="//apple_ref/swift/Method/ensure(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit21CancellableCatchMixinPAAE6ensureAA0eC0Cy1M_1TQZGSo13DispatchQueueCSg2on_yyctF">ensure(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure executes when this cancellable promise resolves, whether it rejects or not.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">context</span> <span class="o">=</span> <span class="n">firstly</span> <span class="p">{</span>
+    <span class="kt">UIApplication</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">networkActivityIndicatorVisible</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="c1">//…  returns a cancellable promise</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span><span class="o">.</span><span class="n">ensure</span> <span class="p">{</span>
+    <span class="kt">UIApplication</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">networkActivityIndicatorVisible</span> <span class="o">=</span> <span class="kc">false</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span><span class="o">.</span><span class="n">cancelContext</span>
+
+<span class="c1">//…</span>
+
+<span class="n">context</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">ensure</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="k">return</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a></span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure that executes when this promise resolves.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise, resolved with this promise’s resolution.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/CancellableCatchable.swift#L264-L283">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit21CancellableCatchMixinPAAE10ensureThenAA0eC0Cy1M_1TQZGSo13DispatchQueueCSg2on_AFyytGyctF"></a>
+                    <a name="//apple_ref/swift/Method/ensureThen(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit21CancellableCatchMixinPAAE10ensureThenAA0eC0Cy1M_1TQZGSo13DispatchQueueCSg2on_AFyytGyctF">ensureThen(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure executes when this cancellable promise resolves, whether it rejects or not.
+The chain waits on the returned <code><a href="../Classes/CancellablePromise.html">CancellablePromise&lt;Void&gt;</a></code>.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">context</span> <span class="o">=</span> <span class="n">firstly</span> <span class="p">{</span>
+    <span class="nf">setup</span><span class="p">()</span> <span class="c1">// returns a cancellable promise</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span><span class="o">.</span><span class="n">ensureThen</span> <span class="p">{</span>
+    <span class="nf">teardown</span><span class="p">()</span>  <span class="c1">// -&gt; CancellablePromise&lt;Void&gt;</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span><span class="o">.</span><span class="n">cancelContext</span>
+
+<span class="c1">//…</span>
+
+<span class="n">context</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">ensureThen</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="k">return</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/CancellableCatchMixin.html#/s:19CancelForPromiseKit21CancellableCatchMixinP1M">M</a></span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure that executes when this promise resolves.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new cancellable promise, resolved with this promise’s resolution.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/CancellableCatchable.swift#L307-L332">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit21CancellableCatchMixinPAAE9cauterizeyyF"></a>
+                    <a name="//apple_ref/swift/Method/cauterize()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit21CancellableCatchMixinPAAE9cauterizeyyF">cauterize()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Consumes the Swift unused-result warning.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    You should <code>catch</code>, but in situations where you know you don’t need a <code>catch</code>, <code>cauterize</code> makes your intentions clear.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">cauterize</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/CancellableCatchable.swift#L338-L342">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit21CancellableCatchMixinPAAyt1M_1TRTzrlE7recoverAA0E9GuaranteeCyytGSo13DispatchQueueCSg2on_ys5Error_pctF"></a>
+                    <a name="//apple_ref/swift/Method/recover(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit21CancellableCatchMixinPAAyt1M_1TRTzrlE7recoverAA0E9GuaranteeCyytGSo13DispatchQueueCSg2on_ys5Error_pctF">recover(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure executes when this cancellable promise rejects.</p>
+
+<p>This variant of <code>recover</code> is specialized for <code>Void</code> promises and de-errors your chain returning a <code><a href="../Classes/CancellableGuarantee.html">CancellableGuarantee</a></code>, thus you cannot <code>throw</code> and you must handle all errors including cancellation.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <a href="https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation">Cancellation</a>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="nf">recover</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Error)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The handler to execute if this promise is rejected.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/CancellableCatchable.swift#L356-L359">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit21CancellableCatchMixinPAAyt1M_1TRTzrlE7recoverAA0eC0CyytGSo13DispatchQueueCSg2on_0cD00F6PolicyO6policyys5Error_pKctF"></a>
+                    <a name="//apple_ref/swift/Method/recover(on:policy:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit21CancellableCatchMixinPAAyt1M_1TRTzrlE7recoverAA0eC0CyytGSo13DispatchQueueCSg2on_0cD00F6PolicyO6policyys5Error_pKctF">recover(on:policy:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure executes when this cancellable promise rejects.</p>
+
+<p>This variant of <code>recover</code> ensures that no error is thrown from the handler and allows specifying a catch policy.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <a href="https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation">Cancellation</a>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">recover</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">policy</span><span class="p">:</span> <span class="kt">CatchPolicy</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">catchPolicy</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Error)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>policy</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The default policy does not execute your handler for cancellation errors.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The handler to execute if this promise is rejected.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/CancellableCatchable.swift#L371-L382">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="https://github.com/dougzilla32" target="_blank" rel="external">Doug</a>. All rights reserved. (Last updated: 2018-06-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

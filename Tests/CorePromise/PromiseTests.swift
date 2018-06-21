@@ -68,7 +68,7 @@ class PromiseTests: XCTestCase {
         XCTAssertEqual(CancellablePromise<String>(error: Error.dummy).promise.debugDescription, "Promise<String>.rejected(Error.dummy)")
 
         XCTAssertEqual("\(CancellablePromise<Int>.pending().promise.promise)", "Promise(…Int)")
-        XCTAssertEqual("\(CancellablePromise.value(3).promise)", "Promise(3)")
+        XCTAssertEqual("\(CancellablePromise.valueCC(3).promise)", "Promise(3)")
         XCTAssertEqual("\(CancellablePromise<Void>(error: Error.dummy).promise)", "Promise(dummy)")
     }
 
@@ -83,7 +83,7 @@ class PromiseTests: XCTestCase {
 
         _ = CancellablePromise<Error>.pending()
 
-        _ = CancellablePromise.value(Error.dummy)
+        _ = CancellablePromise.valueCC(Error.dummy)
 
         _ = CancellablePromise().map { Error.dummy }
     }
@@ -122,7 +122,7 @@ class PromiseTests: XCTestCase {
     }
 
     func testWait() throws {
-        let p = afterCC(.milliseconds(100)).then(on: nil){ CancellablePromise.value(1) }
+        let p = afterCC(.milliseconds(100)).then(on: nil){ CancellablePromise.valueCC(1) }
         p.cancel()
         do {
             _ = try p.wait()
@@ -143,7 +143,7 @@ class PromiseTests: XCTestCase {
 
     func testPipeForResolved() {
         let ex = expectation(description: "")
-        CancellablePromise.value(1).done {
+        CancellablePromise.valueCC(1).done {
             XCTFail()
             XCTAssertEqual(1, $0)
         }.catch(policy: .allErrors) {

@@ -16,7 +16,7 @@ class CancellablePromiseTests: XCTestCase {
         let p = CancellablePromise<Int>.pending()
         p.promise.then { (val: Int) -> CancellablePromise<String> in
             print(val)
-            return CancellablePromise.value("hi")
+            return CancellablePromise.valueCC("hi")
         }.done { _ in
             XCTFail()
             ex.fulfill()
@@ -32,10 +32,10 @@ class CancellablePromiseTests: XCTestCase {
     func testFirstly() {
         let ex = expectation(description: "")
         firstly {
-            return CancellablePromise.value(3)
+            return CancellablePromise.valueCC(3)
         }.then { (_: Int) -> CancellablePromise<String> in
             XCTFail()
-            return CancellablePromise.value("hi")
+            return .valueCC("hi")
         }.done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -51,7 +51,7 @@ class CancellablePromiseTests: XCTestCase {
             return Promise.value(3)
         }.then { (_: Int) -> CancellablePromise<String> in
             XCTFail()
-            return CancellablePromise.value("hi")
+            return .valueCC("hi")
         }.done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -64,9 +64,9 @@ class CancellablePromiseTests: XCTestCase {
     func testThenMapSuccess() {
         let ex = expectation(description: "")
         firstly {
-            CancellablePromise.value([1,2,3])
+            CancellablePromise.valueCC([1,2,3])
         }.thenMap { (integer: Int) -> CancellablePromise<Int> in
-            return CancellablePromise.value(integer * 2)
+            return .valueCC(integer * 2)
         }.done { _ in
             ex.fulfill()
             // $0 => [2,4,6]
@@ -79,10 +79,10 @@ class CancellablePromiseTests: XCTestCase {
     func testThenMapCancel() {
         let ex = expectation(description: "")
         firstly {
-            CancellablePromise.value([1,2,3])
+            CancellablePromise.valueCC([1,2,3])
         }.thenMap { (integer: Int) -> CancellablePromise<Int> in
             XCTFail()
-            return CancellablePromise.value(integer * 2)
+            return .valueCC(integer * 2)
         }.done { _ in
             XCTFail()
             // $0 => [2,4,6]
@@ -95,10 +95,10 @@ class CancellablePromiseTests: XCTestCase {
     func testChain() {
         let ex = expectation(description: "")
         firstly {
-            CancellablePromise.value(1)
+            CancellablePromise.valueCC(1)
         }.then { (integer: Int) -> CancellablePromise<Int> in
             XCTFail()
-            return CancellablePromise.value(integer * 2)
+            return .valueCC(integer * 2)
         }.done { _ in
             // $0 => [2,4,6]
         }.catch(policy: .allErrors) {

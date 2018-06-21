@@ -7,7 +7,7 @@ class RaceTests: XCTestCase {
         let ex = expectation(description: "")
         let after1 = afterCC(.milliseconds(10))
         let after2 = afterCC(seconds: 1)
-        race(after1.then{ CancellablePromise.value(1) }, after2.map { 2 }).done { index in
+        race(after1.then{ CancellablePromise.valueCC(1) }, after2.map { 2 }).done { index in
             XCTFail()
             XCTAssertEqual(index, 1)
         }.catch(policy: .allErrors) {

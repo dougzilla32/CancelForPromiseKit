@@ -8,40 +8,22 @@
 import Foundation
 import PromiseKit
 
+/**
+ Keeps track of all promises in a promise chain with pending or currently running tasks, and cancels them all when `cancel` is called.
+ */
 public class CancelContext: Hashable, CustomStringConvertible {
+    /// - See: `Hashable`
     public lazy var hashValue: Int = {
         return ObjectIdentifier(self).hashValue
     }()
     
+    /// - See: `Hashable`
     public static func == (lhs: CancelContext, rhs: CancelContext) -> Bool {
         return lhs === rhs
     }
     
     private var cancelItemList = [CancelItem]()
     private var cancelItemSet = Set<CancelItem>()
-    
-    public var cancelAttempted: Bool {
-        return cancelledError != nil
-    }
-    
-    // Atomic access to cancelledError
-    let cancelledErrorSemaphore = DispatchSemaphore(value: 1)
-    private var internalCancelledError: Error?
-    public private(set) var cancelledError: Error? {
-        get {
-            let error: Error?
-            cancelledErrorSemaphore.wait()
-            error = internalCancelledError
-            cancelledErrorSemaphore.signal()
-            return error
-        }
-        
-        set {
-            cancelledErrorSemaphore.wait()
-            internalCancelledError = newValue
-            cancelledErrorSemaphore.signal()
-        }
-    }
     
     init(description: CustomStringConvertible? = nil) {
         self.descriptionCSC = description
@@ -67,6 +49,11 @@ public class CancelContext: Hashable, CustomStringConvertible {
         return rv
     }
 
+    /**
+     Cancel all members of the promise chain and their associated asynchronous operations.
+     
+     - Parameter error: Specifies the cancellation error to use for the cancel operation, defaults to `nil` which will create a new `PromiseCancelledError`
+     */
     public func cancel(error: Error? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
         self.cancel(error: error, visited: Set<CancelContext>(), file: file, function: function, line: line)
     }
@@ -84,11 +71,43 @@ public class CancelContext: Hashable, CustomStringConvertible {
         }
     }
     
+    /**
+     True if all members of the promise chain have been successfully cancelled, false otherwise.
+     */
     public var isCancelled: Bool {
         for item in cancelItemList where !item.isCancelled {
             return false
         }
         return true
+    }
+    
+    /**
+     True if `cancel` has been called on the CancelContext associated with this promise, false otherwise.  `cancelAttempted` will be true if `cancel` is called on any promise in the chain.
+     */
+    public var cancelAttempted: Bool {
+        return cancelledError != nil
+    }
+    
+    // Atomic access to cancelledError
+    let cancelledErrorSemaphore = DispatchSemaphore(value: 1)
+    private var internalCancelledError: Error?
+    /**
+     The cancellation error generated when the promise is cancelled, or `nil` if not cancelled.
+     */
+    public private(set) var cancelledError: Error? {
+        get {
+            let error: Error?
+            cancelledErrorSemaphore.wait()
+            error = internalCancelledError
+            cancelledErrorSemaphore.signal()
+            return error
+        }
+        
+        set {
+            cancelledErrorSemaphore.wait()
+            internalCancelledError = newValue
+            cancelledErrorSemaphore.signal()
+        }
     }
     
     func append<Z: CancellableThenable>(task: CancellableTask?, reject: ((Error) -> Void)?, thenable: Z) {
@@ -156,7 +175,7 @@ public class CancelContext: Hashable, CustomStringConvertible {
         }
         
         var currentIndex = 1
-        // The 'list' parameter should match a block of items in the cancelItemList, remove them from the cancelItemList
+        // The `list` parameter should match a block of items in the cancelItemList, remove them from the cancelItemList
         // in one operation for efficiency
         if cancelItemSet.remove(list.items[0]) != nil {
             let removeIndex = cancelItemList.index(of: list.items[0])!
@@ -182,6 +201,7 @@ public class CancelContext: Hashable, CustomStringConvertible {
     }
 }
 
+/// Tracks the cancel items for a CancellablePromise.  These items are removed from the associated CancelContext when the promise resolves.
 public class CancelItemList {
     fileprivate var items = [CancelItem]()
     

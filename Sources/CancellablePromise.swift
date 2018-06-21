@@ -8,23 +8,37 @@
 import Foundation
 import PromiseKit
 
+/**
+ A `CancellablePromise` is a functional abstraction around a failable and cancellable asynchronous operation.
+ 
+ At runtime the promise can become a member of a chain of promises, where the `cancelContext` is used to track and cancel (if desired) all promises in this chain.
+ 
+ - See: `CancellableThenable`
+ */
 public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
+    /// Delegate `promise` for this CancellablePromise
     public let promise: Promise<T>
     
+    /// Type of the delegate `thenable`
     public typealias U = Promise<T>
     
+    /// Delegate `thenable` for this CancellablePromise
     public var thenable: U {
         return promise
     }
 
+    /// Type of the delegate `catchable`
     public typealias M = Promise<T>
     
+    /// Delegate `catchable` for this CancellablePromise
     public var catchable: M {
         return promise
     }
     
+    /// The CancelContext associated with this CancellablePromise
     public var cancelContext: CancelContext
     
+    /// Tracks the cancel items for this CancellablePromise.  These items are removed from the associated CancelContext when the promise resolves.
     public var cancelItems: CancelItemList
     
     init(_ promise: Promise<T>, context: CancelContext? = nil, cancelItems: CancelItemList? = nil) {
@@ -74,7 +88,7 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
     }
     
     /// - Returns: a new fulfilled cancellable promise.
-    public class func value(_ value: T) -> CancellablePromise<T> {
+    public class func valueCC(_ value: T) -> CancellablePromise<T> {
         var reject: ((Error) -> Void)!
         
         let promise = Promise<T> { seal in
@@ -88,11 +102,13 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
     }
 
     /// Internal function required for `Thenable` conformance.
+    /// - See: `Thenable.pipe`
     public func pipe(to: @escaping (Result<T>) -> Void) {
         promise.pipe(to: to)
     }
     
     /// - Returns: The current `Result` for this cancellable promise.
+    /// - See: `Thenable.result`
     public var result: Result<T>? {
         return promise.result
     }
@@ -118,11 +134,12 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
 
 #if swift(>=3.1)
 extension CancellablePromise where T == Void {
-    /// Initializes a new promise fulfilled with `Void`
+    /// Initializes a new cancellable promise fulfilled with `Void`
     public convenience init() {
         self.init(Promise())
     }
 
+    /// Initializes a new cancellable promise fulfilled with `Void` and with the given `CancellableTask`
     public convenience init(task: CancellableTask) {
         self.init()
         self.appendCancellableTask(task: task, reject: nil)

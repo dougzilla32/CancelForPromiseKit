@@ -288,7 +288,7 @@ class WrapTests: XCTestCase {
 #endif
 
     func testIsFulfilled() {
-        let p1 = CancellablePromise.value(())
+        let p1 = CancellablePromise.valueCC(())
         p1.cancel()
         XCTAssertTrue(p1.result?.isFulfilled ?? false)
         XCTAssertTrue(p1.isCancelled)

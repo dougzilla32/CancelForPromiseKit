@@ -8,7 +8,7 @@ class HangTests: XCTestCase {
         do {
             let p = afterCC(seconds: 0.02).then { _ -> CancellablePromise<Int> in
                 XCTFail()
-                return .value(1)
+                return .valueCC(1)
             }
             p.cancel()
             let value = try hang(p)

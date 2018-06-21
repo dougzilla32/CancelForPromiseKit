@@ -8,10 +8,26 @@
 import Foundation
 import PromiseKit
 
+/**
+     afterCC(seconds: 1.5).then {
+         //…
+     }
+
+- Returns: A cancellable promise that resolves after the specified duration.
+ - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
+*/
 public func afterCC(seconds: TimeInterval) -> CancellablePromise<Void> {
     return at(time: DispatchTime.now() + seconds)
 }
 
+/**
+     after(.seconds(2)).then {
+         //…
+     }
+
+ - Returns: A cancellable promise that resolves after the specified duration.
+ - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
+*/
 public func afterCC(_ interval: DispatchTimeInterval) -> CancellablePromise<Void> {
     return at(time: DispatchTime.now() + interval)
 }

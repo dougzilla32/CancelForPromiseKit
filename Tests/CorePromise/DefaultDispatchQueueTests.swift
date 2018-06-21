@@ -23,7 +23,7 @@ class CPKDefaultDispatchQueueTest: XCTestCase {
     func testOverrodeDefaultThenQueue() {
         let ex = expectation(description: "resolving")
 
-        let p = CancellablePromise.value(1)
+        let p = CancellablePromise.valueCC(1)
         p.cancel()
         p.then { _ -> CancellablePromise<Void> in
             XCTFail()
@@ -58,7 +58,7 @@ class CPKDefaultDispatchQueueTest: XCTestCase {
         let ex = expectation(description: "resolving")
         let ex2 = expectation(description: "catching")
 
-        let p = CancellablePromise.value(1)
+        let p = CancellablePromise.valueCC(1)
         p.cancel()
         p.ensure {
             ex.fulfill()

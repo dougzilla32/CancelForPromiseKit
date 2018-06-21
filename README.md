@@ -1,11 +1,9 @@
 # CancelForPromiseKit
-![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit] [![Build Status](https://travis-ci.org/dougzilla32/CancelForPromiseKit.svg?branch=master)](https://travis-ci.org/dougzilla32/CancelForPromiseKit)
+![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit] [![Build Status](https://travis-ci.org/dougzilla32/CancelForPromiseKit.svg?branch=master)](https://travis-ci.org/dougzilla32/CancelForPromiseKit) ![badge-docs]
 
 ---
 
 CancelForPromiseKit provides clear and concise cancellation abilities for [PromiseKit] and the [PromiseKit Extensions].  While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
-
-CancelForPromiseKit defines it's extensions as methods and functions with the 'CC' (cancel chain) suffix.
 
 This README has the same structure as the [PromiseKit README], with cancellation added to the sample code blocks:
 
@@ -14,7 +12,7 @@ This README has the same structure as the [PromiseKit README], with cancellation
 let fetchImage = URLSession.shared.dataTask<mark><b>CC</b></mark>(.promise, with: url).compactMap{ UIImage(data: $0.data) }
 let fetchLocation = CLLocationManager.requestLocation<mark><b>CC</b></mark>().lastValue
 
-// Hold on to the 'CancelContext' rather than the promise chain so the
+// Hold on to the <b>CancelContext</b> rather than the promise chain so the
 // promises can be freed up.
 <mark><b>let context =</b></mark> firstly {
     when(fulfilled: fetchImage, fetchLocation)
@@ -44,7 +42,7 @@ The goals of this project are to:
 * **Provide a streamlined way to cancel a promise chain, which rejects all associated promises and cancels all associated tasks. For example:**
 
 <pre><code><mark><b>let promise =</b></mark> firstly {
-    login<mark><b>CC</b></mark>() // Use 'CC' (a.k.a. cancel chain) methods or CancellablePromise to
+    login<mark><b>CC</b></mark>() // Use <b>CC</b> (a.k.a. cancel chain) methods or CancellablePromise to
               // initiate a cancellable promise chain
 }.then { creds in
     fetch(avatar: creds.user)
@@ -121,7 +119,8 @@ CancelForPromiseKit has the same platform and XCode support as PromiseKit
 
 # Documentation
 
-The following functions and methods are part of the core CancelForPromiseKit module:
+The following functions and methods are part of the core CancelForPromiseKit module.  Functions and Methods with the <b>CC</b> suffix create a new CancellablePromise,
+and those without the <b>CC</b> suffix accept an existing CancellablePromise:
 
 <pre><code>Global functions (all returning <mark><b>CancellablePromise</b></mark> unless otherwise noted)
 	after<mark><b>CC</b></mark>(seconds:)
@@ -362,6 +361,7 @@ func makeUrlRequest() throws -> URLRequest {
 [badge-languages]: https://img.shields.io/badge/languages-Swift-orange.svg
 [badge-platforms]: https://img.shields.io/cocoapods/p/CancelForPromiseKit.svg
 [badge-mit]: https://img.shields.io/badge/license-MIT-blue.svg
+[badge-docs]: https://github.com/dougzilla32/CancelForPromiseKit/api/badge.svg
 [PromiseKit]: https://github.com/mxcl/PromiseKit
 [PromiseKit Extensions]: https://github.com/PromiseKit
 [PromiseKit README]: https://github.com/mxcl/PromiseKit/blob/master/README.md

@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Functions  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Section/Functions" class="dashAnchor"></a>
+    <a title="Functions  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">CancelForPromiseKit Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/dougzilla32/CancelForPromiseKit"><img src="img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fgithub%2Ecom%2Fdougzilla32%2FCancelForPromiseKit%2Fdocsets%2FCancelForPromiseKit%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">CancelForPromiseKit Reference</a>
+        <img id="carat" src="img/carat.png" />
+        Functions  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/CPKFinalizer.html">CPKFinalizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/CancelContext.html">CancelContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes.html#/s:19CancelForPromiseKit0A8ItemListC">CancelItemList</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/CancellablePromise.html">CancellablePromise</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/PromiseCancelledError.html">PromiseCancelledError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Guarantee.html">Guarantee</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Optional.html">Optional</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit7afterCCAA011CancellableC0CyytG8Dispatch0H12TimeIntervalOF">afterCC(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit7afterCCAA011CancellableC0CyytGSd7seconds_tF">afterCC(seconds:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit7firstlyAA011CancellableC0Cy1U_1TQZGxyKc7execute_tAA0F8ThenableRzlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit9firstlyCCAA011CancellableC0Cy1TQzGxyKc7execute_t0cD08ThenableRzlF">firstlyCC(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit9firstlyCCAA011CancellableC0CyxG0cD09GuaranteeCyxGyc7execute_tlF">firstlyCC(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4hangxAA011CancellableC0CyxGKlF">hang(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4raceAA011CancellableC0Cy1U_1TQZGSayxGAA0F8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4raceAA011CancellableC0Cy1U_1TQZGxd_tAA0F8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4raceAA20CancellableGuaranteeCyxGAEd_xSg11cancelValuetlF">race(_:cancelValue:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6raceCCAA011CancellableC0Cy1TQzGSayxG0cD08ThenableRzlF">raceCC(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6raceCCAA011CancellableC0Cy1TQzGxd_t0cD08ThenableRzlF">raceCC(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6raceCCAA20CancellableGuaranteeCyxG0cD00H0CyxGd_xSg11cancelValuetlF">raceCC(_:cancelValue:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCyytGAEd_tF">when(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0CySay1U_1TQZGGSayxG9fulfilled_tAA0F8ThenableRzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0CyytGSayxG9fulfilled_tAA0F8ThenableRzyt1U_1TRTzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0CyytGx9fulfilledd_tAA0F8ThenableRzyt1U_1TRTzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_tGx9fulfilled_q_tAA0F8ThenableRzAaKR_r0_lF">when(fulfilled:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_AE_AFQY0_tGx9fulfilled_q_q0_tAA0F8ThenableRzAaLR_AaLR0_r1_lF">when(fulfilled:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_AE_AFQY0_AE_AFQY1_tGx9fulfilled_q_q0_q1_tAA0F8ThenableRzAaMR_AaMR0_AaMR1_r2_lF">when(fulfilled:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_AE_AFQY0_AE_AFQY1_AE_AFQY2_tGx9fulfilled_q_q0_q1_q2_tAA0F8ThenableRzAaNR_AaNR0_AaNR1_AaNR2_r3_lF">when(fulfilled:_:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0CySay7Element_1U1TQZGGx9fulfilled_Si12concurrentlyts16IteratorProtocolRzAA0F8ThenableAERpzlF">when(fulfilled:concurrently:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCyytGSayAEG10guarantees_tF">when(guarantees:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCySay0cD06ResultOyxGGGAA0fC0CyxG8resolvedd_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCySay0cD06ResultOyxGGGSayAA0fC0CyxGG8resolved_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCyytG0cD00H0CyytGd_tF">whenCC(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0CySay1TQzGGSayxG9fulfilled_t0cD08ThenableRzlF">whenCC(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0CyytGSayxG9fulfilled_t0cD08ThenableRzyt1TRtzlF">whenCC(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0CyytGx9fulfilledd_t0cD08ThenableRzyt1TRtzlF">whenCC(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_tGx9fulfilled_q_t0cD08ThenableRzAjKR_r0_lF">whenCC(fulfilled:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_AEQy0_tGx9fulfilled_q_q0_t0cD08ThenableRzAkLR_AkLR0_r1_lF">whenCC(fulfilled:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_AEQy0_AEQy1_tGx9fulfilled_q_q0_q1_t0cD08ThenableRzAlMR_AlMR0_AlMR1_r2_lF">whenCC(fulfilled:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_AEQy0_AEQy1_AEQy2_tGx9fulfilled_q_q0_q1_q2_t0cD08ThenableRzAmNR_AmNR0_AmNR1_AmNR2_r3_lF">whenCC(fulfilled:_:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6whenCCAA011CancellableC0CySay7Element_1TQZGGx9fulfilled_Si12concurrentlyts16IteratorProtocolRz0cD08ThenableAERpzlF">whenCC(fulfilled:concurrently:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCyytGSay0cD00H0CyytGG10guarantees_tF">whenCC(guarantees:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCySay0cD06ResultOyxGGGAE0C0CyxG8resolvedd_tlF">whenCC(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCySay0cD06ResultOyxGGGSayAE0C0CyxGG8resolved_tlF">whenCC(resolved:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/CancellableCatchMixin.html">CancellableCatchMixin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/CancellableTask.html">CancellableTask</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/CancellableThenable.html">CancellableThenable</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Functions</h1>
+            <p>The following functions are available globally.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit7afterCCAA011CancellableC0CyytGSd7seconds_tF"></a>
+                    <a name="//apple_ref/swift/Function/afterCC(seconds:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit7afterCCAA011CancellableC0CyytGSd7seconds_tF">afterCC(seconds:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <pre class="highlight swift"><code> <span class="nf">afterCC</span><span class="p">(</span><span class="nv">seconds</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+     <span class="c1">//…</span>
+ <span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">afterCC</span><span class="p">(</span><span class="nv">seconds</span><span class="p">:</span> <span class="kt">TimeInterval</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A cancellable promise that resolves after the specified duration.
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div></p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/after.swift#L19-L21">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit7afterCCAA011CancellableC0CyytG8Dispatch0H12TimeIntervalOF"></a>
+                    <a name="//apple_ref/swift/Function/afterCC(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit7afterCCAA011CancellableC0CyytG8Dispatch0H12TimeIntervalOF">afterCC(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <pre class="highlight swift"><code><span class="nf">after</span><span class="p">(</span><span class="o">.</span><span class="nf">seconds</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">afterCC</span><span class="p">(</span><span class="n">_</span> <span class="nv">interval</span><span class="p">:</span> <span class="kt">DispatchTimeInterval</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A cancellable promise that resolves after the specified duration.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/after.swift#L31-L33">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit7firstlyAA011CancellableC0Cy1U_1TQZGxyKc7execute_tAA0F8ThenableRzlF"></a>
+                    <a name="//apple_ref/swift/Function/firstly(execute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit7firstlyAA011CancellableC0Cy1U_1TQZGxyKc7execute_tAA0F8ThenableRzlF">firstly(execute:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>firstly</code> for cancellable promises.</p>
+
+<p>Compare:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">context</span> <span class="o">=</span> <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTaskCC</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url1</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTaskCC</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url2</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTaskCC</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url3</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">cancelContext</span>
+
+<span class="c1">// ...</span>
+
+<span class="n">context</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+
+<p>With:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">context</span> <span class="o">=</span> <span class="n">firstly</span> <span class="p">{</span>
+    <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTaskCC</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url1</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTaskCC</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url2</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTaskCC</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url3</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">cancelContext</span>
+
+<span class="c1">// ...</span>
+
+<span class="n">context</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    the block you pass excecutes immediately on the current thread/queue.
+
+</div>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    firstly(execute: () -&gt; Thenable)
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">firstly</span><span class="o">&lt;</span><span class="kt">V</span><span class="o">&gt;</span><span class="p">(</span><span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">V</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">V</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/firstly.swift#L43-L52">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit9firstlyCCAA011CancellableC0Cy1TQzGxyKc7execute_t0cD08ThenableRzlF"></a>
+                    <a name="//apple_ref/swift/Function/firstlyCC(execute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit9firstlyCCAA011CancellableC0Cy1TQzGxyKc7execute_t0cD08ThenableRzlF">firstlyCC(execute:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Varient of <code>firstly</code> that converts Thenable to CancellablePromise.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">firstlyCC</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Thenable</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/firstly.swift#L59-L65">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit9firstlyCCAA011CancellableC0CyxG0cD09GuaranteeCyxGyc7execute_tlF"></a>
+                    <a name="//apple_ref/swift/Function/firstlyCC(execute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit9firstlyCCAA011CancellableC0CyxG0cD09GuaranteeCyxGyc7execute_tlF">firstlyCC(execute:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Varient of <code>firstly</code> that converts Guarantee to CancellablePromise.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">firstlyCC</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/firstly.swift#L72-L74">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4hangxAA011CancellableC0CyxGKlF"></a>
+                    <a name="//apple_ref/swift/Function/hang(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4hangxAA011CancellableC0CyxGKlF">hang(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Runs the active run-loop until the provided promise resolves.</p>
+
+<p>Simply calls <code>hang</code> directly on the delegate promise, so the behavior is exactly the same with Promise and CancellablePromise.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">hang</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">promise</span><span class="p">:</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">T</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/hang.swift#L15-L17">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4raceAA011CancellableC0Cy1U_1TQZGxd_tAA0F8ThenableRzlF"></a>
+                    <a name="//apple_ref/swift/Function/race(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4raceAA011CancellableC0Cy1U_1TQZGxd_tAA0F8ThenableRzlF">race(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Resolves with the first resolving cancellable promise from a set of cancellable promises. Calling <code>cancel</code> on the
+race promise cancels all pending promises.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">racePromise</span> <span class="o">=</span> <span class="nf">race</span><span class="p">(</span><span class="n">promise1</span><span class="p">,</span> <span class="n">promise2</span><span class="p">,</span> <span class="n">promise3</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">winner</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+
+<span class="c1">//…</span>
+
+<span class="n">racePromise</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    If any of the provided promises reject, the returned promise is rejected.
+
+</div>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    aborts if the array is empty.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">race</span><span class="o">&lt;</span><span class="kt">V</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">thenables</span><span class="p">:</span> <span class="kt">V</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">V</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that resolves when the first promise in the provided promises resolves.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/race.swift#L26-L28">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4raceAA011CancellableC0Cy1U_1TQZGSayxGAA0F8ThenableRzlF"></a>
+                    <a name="//apple_ref/swift/Function/race(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4raceAA011CancellableC0Cy1U_1TQZGSayxGAA0F8ThenableRzlF">race(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Resolves with the first resolving promise from a set of promises. Calling <code>cancel</code> on the
+race promise cancels all pending promises.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">racePromise</span> <span class="o">=</span> <span class="nf">race</span><span class="p">(</span><span class="n">promise1</span><span class="p">,</span> <span class="n">promise2</span><span class="p">,</span> <span class="n">promise3</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">winner</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+
+<span class="c1">//…</span>
+
+<span class="n">racePromise</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    If any of the provided promises reject, the returned promise is rejected.
+
+</div>
+<div class="aside aside-remark">
+    <p class="aside-title">Remark</p>
+    Returns promise rejected with PMKError.badInput if empty array provided
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">race</span><span class="o">&lt;</span><span class="kt">V</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">thenables</span><span class="p">:</span> <span class="p">[</span><span class="kt">V</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">V</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that resolves when the first promise in the provided promises resolves.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/race.swift#L46-L56">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4raceAA20CancellableGuaranteeCyxGAEd_xSg11cancelValuetlF"></a>
+                    <a name="//apple_ref/swift/Function/race(_:cancelValue:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4raceAA20CancellableGuaranteeCyxGAEd_xSg11cancelValuetlF">race(_:cancelValue:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Resolves with the first resolving Guarantee from a set of cancellable guarantees. Calling <code>cancel</code> on the
+race promise cancels all pending guarantees.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">racePromise</span> <span class="o">=</span> <span class="nf">race</span><span class="p">(</span><span class="n">guarantee1</span><span class="p">,</span> <span class="n">guarantee2</span><span class="p">,</span> <span class="n">guarantee3</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">winner</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+
+<span class="c1">//…</span>
+
+<span class="n">racePromise</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    If any of the provided promises reject, the returned promise is rejected.
+
+</div>
+<div class="aside aside-remark">
+    <p class="aside-title">Remark</p>
+    Returns promise rejected with PMKError.badInput if empty array provided
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">race</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">guarantees</span><span class="p">:</span> <span class="kt"><a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;...</span><span class="p">,</span> <span class="nv">cancelValue</span><span class="p">:</span> <span class="kt">T</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new guarantee that resolves when the first promise in the provided promises resolves.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/race.swift#L74-L80">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6raceCCAA011CancellableC0Cy1TQzGxd_t0cD08ThenableRzlF"></a>
+                    <a name="//apple_ref/swift/Function/raceCC(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6raceCCAA011CancellableC0Cy1TQzGxd_t0cD08ThenableRzlF">raceCC(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">raceCC</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">thenables</span><span class="p">:</span> <span class="kt">U</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Thenable</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/race.swift#L115-L117">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6raceCCAA011CancellableC0Cy1TQzGSayxG0cD08ThenableRzlF"></a>
+                    <a name="//apple_ref/swift/Function/raceCC(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6raceCCAA011CancellableC0Cy1TQzGSayxG0cD08ThenableRzlF">raceCC(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">raceCC</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">thenables</span><span class="p">:</span> <span class="p">[</span><span class="kt">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Thenable</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/race.swift#L120-L122">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6raceCCAA20CancellableGuaranteeCyxG0cD00H0CyxGd_xSg11cancelValuetlF"></a>
+                    <a name="//apple_ref/swift/Function/raceCC(_:cancelValue:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6raceCCAA20CancellableGuaranteeCyxG0cD00H0CyxGd_xSg11cancelValuetlF">raceCC(_:cancelValue:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">raceCC</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">guarantees</span><span class="p">:</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;...</span><span class="p">,</span> <span class="nv">cancelValue</span><span class="p">:</span> <span class="kt">T</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/race.swift#L125-L127">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4whenAA011CancellableC0CySay1U_1TQZGGSayxG9fulfilled_tAA0F8ThenableRzlF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4whenAA011CancellableC0CySay1U_1TQZGGSayxG9fulfilled_tAA0F8ThenableRzlF">when(fulfilled:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill.</p>
+
+<p>For example:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">p</span> <span class="o">=</span> <span class="nf">when</span><span class="p">(</span><span class="nv">fulfilled</span><span class="p">:</span> <span class="n">promise1</span><span class="p">,</span> <span class="n">promise2</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">results</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">error</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="kt">URLError</span><span class="o">.</span><span class="nv">notConnectedToInternet</span><span class="p">:</span>
+        <span class="c1">//…</span>
+    <span class="k">case</span> <span class="kt">CLError</span><span class="o">.</span><span class="nv">denied</span><span class="p">:</span>
+        <span class="c1">//…</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//…</span>
+
+<span class="n">p</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If <em>any</em> of the provided promises reject, the returned promise is immediately rejected with that error.
+
+</div>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    In the event of rejection the other promises will continue to resolve and, as per any other promise, will either fulfill or reject. This is the right pattern for <code>getter</code> style asynchronous tasks, but often for <code>setter</code> tasks (eg. storing data on a server), you most likely will need to wait on all tasks and then act based on which have succeeded and which have failed, in such situations use <code><a href="Functions.html#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCySay0cD06ResultOyxGGGAA0fC0CyxG8resolvedd_tlF">when(resolved:)</a></code>.
+
+</div>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <code>when</code> provides <code>NSProgress</code>.
+
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="Functions.html#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCySay0cD06ResultOyxGGGAA0fC0CyxG8resolvedd_tlF">when(resolved:)</a></code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">V</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">thenables</span><span class="p">:</span> <span class="p">[</span><span class="kt">V</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">V</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>promises</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The promises upon which to wait before the returned promise resolves.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that resolves when all the provided promises fulfill or one of the provided promises rejects.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L39-L45">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4whenAA011CancellableC0CyytGx9fulfilledd_tAA0F8ThenableRzyt1U_1TRTzlF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4whenAA011CancellableC0CyytGx9fulfilledd_tAA0F8ThenableRzyt1U_1TRTzlF">when(fulfilled:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill, unless cancelled before completion.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">V</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">promises</span><span class="p">:</span> <span class="kt">V</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span> <span class="o">==</span> <span class="kt">Void</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L48-L54">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4whenAA011CancellableC0CyytGSayxG9fulfilled_tAA0F8ThenableRzyt1U_1TRTzlF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4whenAA011CancellableC0CyytGSayxG9fulfilled_tAA0F8ThenableRzyt1U_1TRTzlF">when(fulfilled:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill, unless cancelled before completion.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">V</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">promises</span><span class="p">:</span> <span class="p">[</span><span class="kt">V</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span> <span class="o">==</span> <span class="kt">Void</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L57-L63">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_tGx9fulfilled_q_tAA0F8ThenableRzAaKR_r0_lF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_tGx9fulfilled_q_tAA0F8ThenableRzAaKR_r0_lF">when(fulfilled:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill, unless cancelled before completion.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">,</span> <span class="kt">V</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">pu</span><span class="p">:</span> <span class="kt">U</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pv</span><span class="p">:</span> <span class="kt">V</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="p">(</span><span class="kt">U</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="p">,</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L66-L69">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_AE_AFQY0_tGx9fulfilled_q_q0_tAA0F8ThenableRzAaLR_AaLR0_r1_lF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_AE_AFQY0_tGx9fulfilled_q_q0_tAA0F8ThenableRzAaLR_AaLR0_r1_lF">when(fulfilled:_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill, unless cancelled before completion.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">,</span> <span class="kt">V</span><span class="p">,</span> <span class="kt">W</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">pu</span><span class="p">:</span> <span class="kt">U</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pv</span><span class="p">:</span> <span class="kt">V</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pw</span><span class="p">:</span> <span class="kt">W</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="p">(</span><span class="kt">U</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">W</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="p">,</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="p">,</span> <span class="kt">W</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L72-L75">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_AE_AFQY0_AE_AFQY1_tGx9fulfilled_q_q0_q1_tAA0F8ThenableRzAaMR_AaMR0_AaMR1_r2_lF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:_:_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_AE_AFQY0_AE_AFQY1_tGx9fulfilled_q_q0_q1_tAA0F8ThenableRzAaMR_AaMR0_AaMR1_r2_lF">when(fulfilled:_:_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill, unless cancelled before completion.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">,</span> <span class="kt">V</span><span class="p">,</span> <span class="kt">W</span><span class="p">,</span> <span class="kt">X</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">pu</span><span class="p">:</span> <span class="kt">U</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pv</span><span class="p">:</span> <span class="kt">V</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pw</span><span class="p">:</span> <span class="kt">W</span><span class="p">,</span> <span class="n">_</span> <span class="nv">px</span><span class="p">:</span> <span class="kt">X</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="p">(</span><span class="kt">U</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">W</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">X</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="p">,</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="p">,</span> <span class="kt">W</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="p">,</span> <span class="kt">X</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L78-L81">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_AE_AFQY0_AE_AFQY1_AE_AFQY2_tGx9fulfilled_q_q0_q1_q2_tAA0F8ThenableRzAaNR_AaNR0_AaNR1_AaNR2_r3_lF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:_:_:_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4whenAA011CancellableC0Cy1U_1TQZ_AE_AFQY_AE_AFQY0_AE_AFQY1_AE_AFQY2_tGx9fulfilled_q_q0_q1_q2_tAA0F8ThenableRzAaNR_AaNR0_AaNR1_AaNR2_r3_lF">when(fulfilled:_:_:_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill, unless cancelled before completion.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">,</span> <span class="kt">V</span><span class="p">,</span> <span class="kt">W</span><span class="p">,</span> <span class="kt">X</span><span class="p">,</span> <span class="kt">Y</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">pu</span><span class="p">:</span> <span class="kt">U</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pv</span><span class="p">:</span> <span class="kt">V</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pw</span><span class="p">:</span> <span class="kt">W</span><span class="p">,</span> <span class="n">_</span> <span class="nv">px</span><span class="p">:</span> <span class="kt">X</span><span class="p">,</span> <span class="n">_</span> <span class="nv">py</span><span class="p">:</span> <span class="kt">Y</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="p">(</span><span class="kt">U</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">W</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">X</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">Y</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="p">,</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="p">,</span> <span class="kt">W</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="p">,</span> <span class="kt">X</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="p">,</span> <span class="kt">Y</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L84-L87">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4whenAA011CancellableC0CySay7Element_1U1TQZGGx9fulfilled_Si12concurrentlyts16IteratorProtocolRzAA0F8ThenableAERpzlF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:concurrently:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4whenAA011CancellableC0CySay7Element_1U1TQZGGx9fulfilled_Si12concurrentlyts16IteratorProtocolRzAA0F8ThenableAERpzlF">when(fulfilled:concurrently:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Generate promises at a limited rate and wait for all to fulfill.  Call <code>cancel</code> on the returned promise to cancel all currently
+pending promises.</p>
+
+<p>For example:</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">downloadFile</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CancellablePromise</span><span class="o">&lt;</span><span class="kt">Data</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+
+<span class="k">let</span> <span class="nv">urls</span><span class="p">:</span> <span class="p">[</span><span class="kt">URL</span><span class="p">]</span> <span class="o">=</span> <span class="cm">/*…
+</span></code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">It</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">promiseIterator</span><span class="p">:</span> <span class="kt">It</span><span class="p">,</span> <span class="nv">concurrently</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">It</span><span class="o">.</span><span class="kt">Element</span><span class="o">.</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">It</span> <span class="p">:</span> <span class="kt">IteratorProtocol</span><span class="p">,</span> <span class="kt">It</span><span class="o">.</span><span class="kt">Element</span> <span class="p">:</span> <span class="kt"><a href="Protocols/CancellableThenable.html">CancellableThenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L127-L153">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCySay0cD06ResultOyxGGGAA0fC0CyxG8resolvedd_tlF"></a>
+                    <a name="//apple_ref/swift/Function/when(resolved:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCySay0cD06ResultOyxGGGAA0fC0CyxG8resolvedd_tlF">when(resolved:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Waits on all provided promises.</p>
+
+<p><code><a href="Functions.html#/s:19CancelForPromiseKit4whenAA011CancellableC0CySay1U_1TQZGGSayxG9fulfilled_tAA0F8ThenableRzlF">when(fulfilled:)</a></code> rejects as soon as one of the provided promises rejects. <code>when(resolved:)</code> waits on all provided promises and <em>never</em>
+rejects.  When cancelled, all promises will attempt to be cancelled and those that are successfully cancelled will have a result of
+PromiseCancelledError.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">p</span> <span class="o">=</span> <span class="nf">when</span><span class="p">(</span><span class="nv">resolved</span><span class="p">:</span> <span class="n">promise1</span><span class="p">,</span> <span class="n">promise2</span><span class="p">,</span> <span class="n">promise3</span><span class="p">,</span> <span class="nv">cancel</span><span class="p">:</span> <span class="n">context</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">results</span> <span class="k">in</span>
+    <span class="k">for</span> <span class="n">result</span> <span class="k">in</span> <span class="n">results</span> <span class="k">where</span> <span class="k">case</span> <span class="o">.</span><span class="nf">fulfilled</span><span class="p">(</span><span class="k">let</span> <span class="nv">value</span><span class="p">)</span> <span class="p">{</span>
+       <span class="c1">//…</span>
+    <span class="p">}</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="c1">// invalid! Never rejects</span>
+<span class="p">}</span>
+
+<span class="c1">//…</span>
+
+<span class="n">p</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    The returned guarantee cannot be rejected.
+
+</div>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Any promises that error are implicitly consumed.
+
+</div>
+<div class="aside aside-remark">
+    <p class="aside-title">Remark</p>
+    Doesn&rsquo;t take CancellableThenable due to protocol associatedtype paradox
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">resolved</span> <span class="nv">promises</span><span class="p">:</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">Result</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new guarantee that resolves once all the provided promises resolve. The array is ordered the same as the input, ie. the result order is <em>not</em> resolution order.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L179-L181">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCySay0cD06ResultOyxGGGSayAA0fC0CyxGG8resolved_tlF"></a>
+                    <a name="//apple_ref/swift/Function/when(resolved:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCySay0cD06ResultOyxGGGSayAA0fC0CyxGG8resolved_tlF">when(resolved:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Waits on all provided promises.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">resolved</span> <span class="nv">promises</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">Result</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L184-L194">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCyytGAEd_tF"></a>
+                    <a name="//apple_ref/swift/Function/when(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCyytGAEd_tF">when(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Waits on all provided Guarantees.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">when</span><span class="p">(</span><span class="n">_</span> <span class="nv">guarantees</span><span class="p">:</span> <span class="kt"><a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L197-L199">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCyytGSayAEG10guarantees_tF"></a>
+                    <a name="//apple_ref/swift/Function/when(guarantees:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit4whenAA20CancellableGuaranteeCyytGSayAEG10guarantees_tF">when(guarantees:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Waits on all provided Guarantees.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">when</span><span class="p">(</span><span class="nv">guarantees</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L202-L208">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6whenCCAA011CancellableC0CyytGx9fulfilledd_t0cD08ThenableRzyt1TRtzlF"></a>
+                    <a name="//apple_ref/swift/Function/whenCC(fulfilled:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6whenCCAA011CancellableC0CyytGx9fulfilledd_t0cD08ThenableRzyt1TRtzlF">whenCC(fulfilled:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill, unless cancelled before completion.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">whenCC</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">promises</span><span class="p">:</span> <span class="kt">U</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Thenable</span><span class="p">,</span> <span class="kt">U</span><span class="o">.</span><span class="kt">T</span> <span class="o">==</span> <span class="kt">Void</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L237-L239">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6whenCCAA011CancellableC0CyytGSayxG9fulfilled_t0cD08ThenableRzyt1TRtzlF"></a>
+                    <a name="//apple_ref/swift/Function/whenCC(fulfilled:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6whenCCAA011CancellableC0CyytGSayxG9fulfilled_t0cD08ThenableRzyt1TRtzlF">whenCC(fulfilled:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill, unless cancelled before completion.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">whenCC</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">promises</span><span class="p">:</span> <span class="p">[</span><span class="kt">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Thenable</span><span class="p">,</span> <span class="kt">U</span><span class="o">.</span><span class="kt">T</span> <span class="o">==</span> <span class="kt">Void</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L244-L246">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6whenCCAA011CancellableC0CySay1TQzGGSayxG9fulfilled_t0cD08ThenableRzlF"></a>
+                    <a name="//apple_ref/swift/Function/whenCC(fulfilled:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6whenCCAA011CancellableC0CySay1TQzGGSayxG9fulfilled_t0cD08ThenableRzlF">whenCC(fulfilled:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">whenCC</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">thenables</span><span class="p">:</span> <span class="p">[</span><span class="kt">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Thenable</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L249-L251">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_tGx9fulfilled_q_t0cD08ThenableRzAjKR_r0_lF"></a>
+                    <a name="//apple_ref/swift/Function/whenCC(fulfilled:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_tGx9fulfilled_q_t0cD08ThenableRzAjKR_r0_lF">whenCC(fulfilled:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill, unless cancelled before completion.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">whenCC</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">,</span> <span class="kt">V</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">pu</span><span class="p">:</span> <span class="kt">U</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pv</span><span class="p">:</span> <span class="kt">V</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="p">(</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">T</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Thenable</span><span class="p">,</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt">Thenable</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L256-L258">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_AEQy0_tGx9fulfilled_q_q0_t0cD08ThenableRzAkLR_AkLR0_r1_lF"></a>
+                    <a name="//apple_ref/swift/Function/whenCC(fulfilled:_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_AEQy0_tGx9fulfilled_q_q0_t0cD08ThenableRzAkLR_AkLR0_r1_lF">whenCC(fulfilled:_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill, unless cancelled before completion.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">whenCC</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">,</span> <span class="kt">V</span><span class="p">,</span> <span class="kt">W</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">pu</span><span class="p">:</span> <span class="kt">U</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pv</span><span class="p">:</span> <span class="kt">V</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pw</span><span class="p">:</span> <span class="kt">W</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="p">(</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">W</span><span class="o">.</span><span class="kt">T</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Thenable</span><span class="p">,</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt">Thenable</span><span class="p">,</span> <span class="kt">W</span> <span class="p">:</span> <span class="kt">Thenable</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L263-L265">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_AEQy0_AEQy1_tGx9fulfilled_q_q0_q1_t0cD08ThenableRzAlMR_AlMR0_AlMR1_r2_lF"></a>
+                    <a name="//apple_ref/swift/Function/whenCC(fulfilled:_:_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_AEQy0_AEQy1_tGx9fulfilled_q_q0_q1_t0cD08ThenableRzAlMR_AlMR0_AlMR1_r2_lF">whenCC(fulfilled:_:_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill, unless cancelled before completion.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">whenCC</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">,</span> <span class="kt">V</span><span class="p">,</span> <span class="kt">W</span><span class="p">,</span> <span class="kt">X</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">pu</span><span class="p">:</span> <span class="kt">U</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pv</span><span class="p">:</span> <span class="kt">V</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pw</span><span class="p">:</span> <span class="kt">W</span><span class="p">,</span> <span class="n">_</span> <span class="nv">px</span><span class="p">:</span> <span class="kt">X</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="p">(</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">W</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">X</span><span class="o">.</span><span class="kt">T</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Thenable</span><span class="p">,</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt">Thenable</span><span class="p">,</span> <span class="kt">W</span> <span class="p">:</span> <span class="kt">Thenable</span><span class="p">,</span> <span class="kt">X</span> <span class="p">:</span> <span class="kt">Thenable</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L270-L272">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_AEQy0_AEQy1_AEQy2_tGx9fulfilled_q_q0_q1_q2_t0cD08ThenableRzAmNR_AmNR0_AmNR1_AmNR2_r3_lF"></a>
+                    <a name="//apple_ref/swift/Function/whenCC(fulfilled:_:_:_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6whenCCAA011CancellableC0Cy1TQz_AEQy_AEQy0_AEQy1_AEQy2_tGx9fulfilled_q_q0_q1_q2_t0cD08ThenableRzAmNR_AmNR0_AmNR1_AmNR2_r3_lF">whenCC(fulfilled:_:_:_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill, unless cancelled before completion.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">whenCC</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">,</span> <span class="kt">V</span><span class="p">,</span> <span class="kt">W</span><span class="p">,</span> <span class="kt">X</span><span class="p">,</span> <span class="kt">Y</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">pu</span><span class="p">:</span> <span class="kt">U</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pv</span><span class="p">:</span> <span class="kt">V</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pw</span><span class="p">:</span> <span class="kt">W</span><span class="p">,</span> <span class="n">_</span> <span class="nv">px</span><span class="p">:</span> <span class="kt">X</span><span class="p">,</span> <span class="n">_</span> <span class="nv">py</span><span class="p">:</span> <span class="kt">Y</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="p">(</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">W</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">X</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">Y</span><span class="o">.</span><span class="kt">T</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Thenable</span><span class="p">,</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt">Thenable</span><span class="p">,</span> <span class="kt">W</span> <span class="p">:</span> <span class="kt">Thenable</span><span class="p">,</span> <span class="kt">X</span> <span class="p">:</span> <span class="kt">Thenable</span><span class="p">,</span> <span class="kt">Y</span> <span class="p">:</span> <span class="kt">Thenable</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L277-L279">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6whenCCAA011CancellableC0CySay7Element_1TQZGGx9fulfilled_Si12concurrentlyts16IteratorProtocolRz0cD08ThenableAERpzlF"></a>
+                    <a name="//apple_ref/swift/Function/whenCC(fulfilled:concurrently:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6whenCCAA011CancellableC0CySay7Element_1TQZGGx9fulfilled_Si12concurrentlyts16IteratorProtocolRz0cD08ThenableAERpzlF">whenCC(fulfilled:concurrently:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise, and those without the <code>CC</code> suffix accept an existing CancellablePromise.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">whenCC</span><span class="o">&lt;</span><span class="kt">It</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">promiseIterator</span><span class="p">:</span> <span class="kt">It</span><span class="p">,</span> <span class="nv">concurrently</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellablePromise.html">CancellablePromise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">It</span><span class="o">.</span><span class="kt">Element</span><span class="o">.</span><span class="kt">T</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">It</span> <span class="p">:</span> <span class="kt">IteratorProtocol</span><span class="p">,</span> <span class="kt">It</span><span class="o">.</span><span class="kt">Element</span> <span class="p">:</span> <span class="kt">Thenable</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L282-L287">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCySay0cD06ResultOyxGGGAE0C0CyxG8resolvedd_tlF"></a>
+                    <a name="//apple_ref/swift/Function/whenCC(resolved:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCySay0cD06ResultOyxGGGAE0C0CyxG8resolvedd_tlF">whenCC(resolved:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise or CancellableGuarantee, and those without the <code>CC</code> suffix accept an existing
+CancellablePromise or CancellableGuarantee.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">whenCC</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">resolved</span> <span class="nv">promises</span><span class="p">:</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">Result</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L291-L293">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCySay0cD06ResultOyxGGGSayAE0C0CyxGG8resolved_tlF"></a>
+                    <a name="//apple_ref/swift/Function/whenCC(resolved:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCySay0cD06ResultOyxGGGSayAE0C0CyxGG8resolved_tlF">whenCC(resolved:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise or CancellableGuarantee, and those without the <code>CC</code> suffix accept an existing
+CancellablePromise or CancellableGuarantee.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">whenCC</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">resolved</span> <span class="nv">promises</span><span class="p">:</span> <span class="p">[</span><span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">Result</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L297-L299">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCyytG0cD00H0CyytGd_tF"></a>
+                    <a name="//apple_ref/swift/Function/whenCC(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCyytG0cD00H0CyytGd_tF">whenCC(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise or CancellableGuarantee, and those without the <code>CC</code> suffix accept an existing
+CancellablePromise or CancellableGuarantee.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">whenCC</span><span class="p">(</span><span class="n">_</span> <span class="nv">guarantees</span><span class="p">:</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L303-L305">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCyytGSay0cD00H0CyytGG10guarantees_tF"></a>
+                    <a name="//apple_ref/swift/Function/whenCC(guarantees:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:19CancelForPromiseKit6whenCCAA20CancellableGuaranteeCyytGSay0cD00H0CyytGG10guarantees_tF">whenCC(guarantees:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Methods with the <code>CC</code> suffix create a new CancellablePromise or CancellableGuarantee, and those without the <code>CC</code> suffix accept an existing
+CancellablePromise or CancellableGuarantee.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">whenCC</span><span class="p">(</span><span class="nv">guarantees</span><span class="p">:</span> <span class="p">[</span><span class="kt">Guarantee</span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/CancellableGuarantee.html">CancellableGuarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/dougzilla32/CancelForPromiseKit/tree/master/Sources/when.swift#L309-L311">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="https://github.com/dougzilla32" target="_blank" rel="external">Doug</a>. All rights reserved. (Last updated: 2018-06-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

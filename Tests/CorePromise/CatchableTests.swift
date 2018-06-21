@@ -134,7 +134,7 @@ extension CatchableTests {
         func helper(error: Swift.Error) {
             let ex = expectation(description: "")
             CancellablePromise<Int>(error: error).recover { _ in
-                return CancellablePromise.value(2)
+                return CancellablePromise.valueCC(2)
             }.done { _ in
                 XCTFail()
             }.catch(policy: .allErrors, ex.fulfill).cancel()
@@ -147,9 +147,9 @@ extension CatchableTests {
 
     func test__full_recover__fulfilled_path() {
         let ex = expectation(description: "")
-        CancellablePromise.value(1).recover { _ -> CancellablePromise<Int> in
+        CancellablePromise.valueCC(1).recover { _ -> CancellablePromise<Int> in
             XCTFail()
-            return CancellablePromise.value(2)
+            return CancellablePromise.valueCC(2)
         }.done { _ in
             XCTFail()
         }.catch(policy: .allErrors) { error in
@@ -168,7 +168,7 @@ extension CatchableTests {
                 }
                 guard x < 1 else { throw err }
                 x += 1
-                return .value(x)
+                return .valueCC(x)
             }.done { _ in
                 if policy == .allErrorsExceptCancellation {
                     XCTFail()
@@ -216,7 +216,7 @@ extension CatchableTests {
         let ex = expectation(description: "")
         CancellablePromise<Int>(error: Error.cancelled).recover(policy: .allErrorsExceptCancellation) { _ -> CancellablePromise<Int> in
             XCTFail()
-            return .value(1)
+            return .valueCC(1)
         }.catch(policy: .allErrors) {
             XCTAssertEqual(Error.cancelled, $0 as? Error)
             ex.fulfill()
@@ -226,7 +226,7 @@ extension CatchableTests {
 
     func test__conditional_recover__fulfilled_path() {
         let ex = expectation(description: "")
-        CancellablePromise.value(1).recover { err -> CancellablePromise<Int> in
+        CancellablePromise.valueCC(1).recover { err -> CancellablePromise<Int> in
             XCTFail()
             throw err
         }.done {
@@ -241,7 +241,7 @@ extension CatchableTests {
     func testEnsureThen_Error() {
         let ex = expectation(description: "")
 
-        let p = CancellablePromise.value(1).done {
+        let p = CancellablePromise.valueCC(1).done {
             XCTAssertEqual($0, 1)
             throw Error.dummy
         }.ensureThen {
@@ -259,7 +259,7 @@ extension CatchableTests {
     func testEnsureThen_Value() {
         let ex = expectation(description: "")
 
-        CancellablePromise.value(1).ensureThen {
+        CancellablePromise.valueCC(1).ensureThen {
             afterCC(seconds: 0.01)
         }.done { _ in
             XCTFail()

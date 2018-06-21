@@ -87,7 +87,7 @@ public func when<U: CancellableThenable, V: CancellableThenable, W: CancellableT
 }
 
 /**
- Generate promises at a limited rate and wait for all to fulfill.  Call 'cancel' on the returned promise to cancel all currently
+ Generate promises at a limited rate and wait for all to fulfill.  Call `cancel` on the returned promise to cancel all currently
  pending promises.
 
  For example:
@@ -183,7 +183,7 @@ public func when<T>(resolved promises: CancellablePromise<T>...) -> CancellableG
 /// Waits on all provided promises.
 public func when<T>(resolved promises: [CancellablePromise<T>]) -> CancellableGuarantee<[Result<T>]> {
     guard !promises.isEmpty else {
-        return CancellableGuarantee.value([])
+        return .valueCC([])
     }
     
     let rg = when(resolved: promises)
@@ -231,42 +231,54 @@ func asGuarantees<T>(_ cancellableGuarantees: [CancellableGuarantee<T>]) -> [Gua
     return guarantees
 }
 
-// MARK: CC wrapper functions
-
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
+///
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
 public func whenCC<U: Thenable>(fulfilled promises: U...) -> CancellablePromise<Void> where U.T == Void {
     return CancellablePromise(when(fulfilled: promises))
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
+///
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
 public func whenCC<U: Thenable>(fulfilled promises: [U]) -> CancellablePromise<Void> where U.T == Void {
     return CancellablePromise(when(fulfilled: promises))
 }
 
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
 public func whenCC<U: Thenable>(fulfilled thenables: [U]) -> CancellablePromise<[U.T]> {
     return CancellablePromise(when(fulfilled: thenables))
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
+///
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
 public func whenCC<U: Thenable, V: Thenable>(fulfilled pu: U, _ pv: V) -> CancellablePromise<(U.T, V.T)> {
     return CancellablePromise(when(fulfilled: pu, pv))
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
+///
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
 public func whenCC<U: Thenable, V: Thenable, W: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W) -> CancellablePromise<(U.T, V.T, W.T)> {
     return CancellablePromise(when(fulfilled: pu, pv, pw))
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
+///
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
 public func whenCC<U: Thenable, V: Thenable, W: Thenable, X: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X) -> CancellablePromise<(U.T, V.T, W.T, X.T)> {
     return CancellablePromise(when(fulfilled: pu, pv, pw, px))
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
+///
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
 public func whenCC<U: Thenable, V: Thenable, W: Thenable, X: Thenable, Y: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X, _ py: Y) -> CancellablePromise<(U.T, V.T, W.T, X.T, Y.T)> {
     return CancellablePromise(when(fulfilled: pu, pv, pw, px, py))
 }
 
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
 public func whenCC<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrently: Int) -> CancellablePromise<[It.Element.T]> where It.Element: Thenable {
     guard concurrently > 0 else {
         return CancellablePromise(error: PMKError.badInput)
@@ -274,18 +286,26 @@ public func whenCC<It: IteratorProtocol>(fulfilled promiseIterator: It, concurre
     return CancellablePromise(when(fulfilled: promiseIterator, concurrently: concurrently))
 }
 
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise or CancellableGuarantee, and those without the `CC` suffix accept an existing
+///   CancellablePromise or CancellableGuarantee.
 public func whenCC<T>(resolved promises: Promise<T>...) -> CancellableGuarantee<[Result<T>]> {
     return CancellableGuarantee(when(resolved: promises))
 }
 
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise or CancellableGuarantee, and those without the `CC` suffix accept an existing
+///   CancellablePromise or CancellableGuarantee.
 public func whenCC<T>(resolved promises: [Promise<T>]) -> CancellableGuarantee<[Result<T>]> {
     return CancellableGuarantee(when(resolved: promises))
 }
 
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise or CancellableGuarantee, and those without the `CC` suffix accept an existing
+///   CancellablePromise or CancellableGuarantee.
 public func whenCC(_ guarantees: Guarantee<Void>...) -> CancellableGuarantee<Void> {
     return CancellableGuarantee(when(guarantees: guarantees), cancelValue: ())
 }
 
+/// - Note: Methods with the `CC` suffix create a new CancellablePromise or CancellableGuarantee, and those without the `CC` suffix accept an existing
+///   CancellablePromise or CancellableGuarantee.
 public func whenCC(guarantees: [Guarantee<Void>]) -> CancellableGuarantee<Void> {
     return CancellableGuarantee(when(guarantees: guarantees), cancelValue: ())
 }

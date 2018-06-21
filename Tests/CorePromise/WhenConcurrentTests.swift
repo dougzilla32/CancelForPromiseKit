@@ -114,7 +114,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 if number != 0 {
                     return CancellablePromise(error: expectedError)
                 } else {
-                    return .value(100500 / number)
+                    return .valueCC(100500 / number)
                 }
             }
         }
@@ -154,7 +154,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 if number != 0 {
                     return CancellablePromise(error: expectedError)
                 } else {
-                    return .value(100500 / number)
+                    return .valueCC(100500 / number)
                 }
             }
         }
@@ -185,7 +185,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
 
             return afterCC(.milliseconds(10)).then(on: .main) { _ -> CancellablePromise<Int> in
                 currentConcurrently -= 1
-                return .value(number * number)
+                return .valueCC(number * number)
             }
         }
 
@@ -216,7 +216,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
 
             return afterCC(.milliseconds(10)).then(on: .main) { _ -> CancellablePromise<Int> in
                 currentConcurrently -= 1
-                return .value(number * number)
+                return .valueCC(number * number)
             }
         }
 

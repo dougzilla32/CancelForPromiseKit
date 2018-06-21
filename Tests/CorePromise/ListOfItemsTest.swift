@@ -47,7 +47,7 @@ class ListOfItemsTest: XCTestCase {
         }
         
         var currentIndex = 1
-        // The 'list' parameter should match a block of items in the cancelItemList, remove them from the cancelItemList
+        // The `list` parameter should match a block of items in the cancelItemList, remove them from the cancelItemList
         // in one operation for efficiency
         if cancelItemSet.remove(list.items[0]) != nil {
             let removeIndex = cancelItemList.index(of: list.items[0])!

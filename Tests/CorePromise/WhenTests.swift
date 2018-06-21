@@ -27,10 +27,10 @@ class WhenTests: XCTestCase {
 
     func testInt() {
         let e1 = expectation(description: "")
-        let p1 = CancellablePromise.value(1)
-        let p2 = CancellablePromise.value(2)
-        let p3 = CancellablePromise.value(3)
-        let p4 = CancellablePromise.value(4)
+        let p1 = CancellablePromise.valueCC(1)
+        let p2 = CancellablePromise.valueCC(2)
+        let p3 = CancellablePromise.valueCC(3)
+        let p4 = CancellablePromise.valueCC(4)
 
         when(fulfilled: [p1, p2, p3, p4]).done { _ in
             XCTFail()
@@ -42,8 +42,8 @@ class WhenTests: XCTestCase {
 
     func testDoubleTupleSucceed() {
         let e1 = expectation(description: "")
-        let p1 = CancellablePromise.value(1)
-        let p2 = CancellablePromise.value("abc")
+        let p1 = CancellablePromise.valueCC(1)
+        let p2 = CancellablePromise.valueCC("abc")
         when(fulfilled: p1, p2).done{ x, y in
             XCTAssertEqual(x, 1)
             XCTAssertEqual(y, "abc")
@@ -54,8 +54,8 @@ class WhenTests: XCTestCase {
 
     func testDoubleTupleCancel() {
         let e1 = expectation(description: "")
-        let p1 = CancellablePromise.value(1)
-        let p2 = CancellablePromise.value("abc")
+        let p1 = CancellablePromise.valueCC(1)
+        let p2 = CancellablePromise.valueCC("abc")
         when(fulfilled: p1, p2).done{ _, _ in
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -66,9 +66,9 @@ class WhenTests: XCTestCase {
 
     func testTripleTuple() {
         let e1 = expectation(description: "")
-        let p1 = CancellablePromise.value(1)
-        let p2 = CancellablePromise.value("abc")
-        let p3 = CancellablePromise.value(     1.0)
+        let p1 = CancellablePromise.valueCC(1)
+        let p2 = CancellablePromise.valueCC("abc")
+        let p3 = CancellablePromise.valueCC(     1.0)
         when(fulfilled: p1, p2, p3).done { _, _, _ in
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -79,10 +79,10 @@ class WhenTests: XCTestCase {
 
     func testQuadrupleTuple() {
         let e1 = expectation(description: "")
-        let p1 = CancellablePromise.value(1)
-        let p2 = CancellablePromise.value("abc")
-        let p3 = CancellablePromise.value(1.0)
-        let p4 = CancellablePromise.value(true)
+        let p1 = CancellablePromise.valueCC(1)
+        let p2 = CancellablePromise.valueCC("abc")
+        let p3 = CancellablePromise.valueCC(1.0)
+        let p4 = CancellablePromise.valueCC(true)
         when(fulfilled: p1, p2, p3, p4).done { _, _, _, _ in
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -93,11 +93,11 @@ class WhenTests: XCTestCase {
 
     func testQuintupleTuple() {
         let e1 = expectation(description: "")
-        let p1 = CancellablePromise.value(1)
-        let p2 = CancellablePromise.value("abc")
-        let p3 = CancellablePromise.value(1.0)
-        let p4 = CancellablePromise.value(true)
-        let p5 = CancellablePromise.value("a" as Character)
+        let p1 = CancellablePromise.valueCC(1)
+        let p2 = CancellablePromise.valueCC("abc")
+        let p3 = CancellablePromise.valueCC(1.0)
+        let p4 = CancellablePromise.valueCC(true)
+        let p5 = CancellablePromise.valueCC("a" as Character)
         when(fulfilled: p1, p2, p3, p4, p5).done { _, _, _, _, _ in
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -108,10 +108,10 @@ class WhenTests: XCTestCase {
 
     func testVoid() {
         let e1 = expectation(description: "")
-        let p1 = CancellablePromise.value(1).done { _ in }
-        let p2 = CancellablePromise.value(2).done { _ in }
-        let p3 = CancellablePromise.value(3).done { _ in }
-        let p4 = CancellablePromise.value(4).done { _ in }
+        let p1 = CancellablePromise.valueCC(1).done { _ in }
+        let p2 = CancellablePromise.valueCC(2).done { _ in }
+        let p3 = CancellablePromise.valueCC(3).done { _ in }
+        let p4 = CancellablePromise.valueCC(4).done { _ in }
 
         when(fulfilled: p1, p2, p3, p4).done {
             XCTFail()
@@ -128,7 +128,7 @@ class WhenTests: XCTestCase {
         let e1 = expectation(description: "")
         let p1 = afterCC(.milliseconds(100)).map{ true }
         let p2: CancellablePromise<Bool> = afterCC(.milliseconds(200)).map{ throw Error.dummy }
-        let p3 = CancellablePromise.value(false)
+        let p3 = CancellablePromise.valueCC(false)
             
         when(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
             $0.isCancelled ? e1.fulfill() : XCTFail()
