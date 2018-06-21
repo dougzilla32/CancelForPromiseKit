@@ -361,7 +361,7 @@ func makeUrlRequest() throws -> URLRequest {
 [badge-languages]: https://img.shields.io/badge/languages-Swift-orange.svg
 [badge-platforms]: https://img.shields.io/cocoapods/p/CancelForPromiseKit.svg
 [badge-mit]: https://img.shields.io/badge/license-MIT-blue.svg
-[badge-docs]: https://github.com/dougzilla32/CancelForPromiseKit/api/badge.svg
+[badge-docs]: https://github.com/dougzilla32/CancelForPromiseKit/tree/master/api/badge.svg
 [PromiseKit]: https://github.com/mxcl/PromiseKit
 [PromiseKit Extensions]: https://github.com/PromiseKit
 [PromiseKit README]: https://github.com/mxcl/PromiseKit/blob/master/README.md
