@@ -42,7 +42,7 @@ public class CancellableGuarantee<T>: CancellableThenable {
      - Parameter cancelValue: optional override value to use when cancelled
      - Parameter context: optional `CancelContext` to associate with this `CancellableGuarantee`
      */
-    public init(_ guarantee: Guarantee<T>, cancelValue: T? = nil, context: CancelContext? = nil) {
+    init(_ guarantee: Guarantee<T>, cancelValue: T? = nil, context: CancelContext? = nil) {
         self.guarantee = guarantee
         self.cancelValue = cancelValue
         self.cancelContext = context ?? CancelContext()
