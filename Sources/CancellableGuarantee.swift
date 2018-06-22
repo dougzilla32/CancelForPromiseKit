@@ -36,7 +36,13 @@ public class CancellableGuarantee<T>: CancellableThenable {
     /// Override value to use for resolution after the CancellableGuarantee is cancelled.  If `nil` (default) then do not override the resolved value when the CancellableGuarantee is cancelled.
     public let cancelValue: T?
     
-    init(_ guarantee: Guarantee<T>, cancelValue: T? = nil, context: CancelContext? = nil) {
+    /**
+     Initializes a new cancellable guarantee bound to the provided `Guarantee`
+     - Parameter guarantee: `Guarantee` to bind
+     - Parameter cancelValue: optional override value to use when cancelled
+     - Parameter context: optional `CancelContext` to associate with this `CancellableGuarantee`
+     */
+    public init(_ guarantee: Guarantee<T>, cancelValue: T? = nil, context: CancelContext? = nil) {
         self.guarantee = guarantee
         self.cancelValue = cancelValue
         self.cancelContext = context ?? CancelContext()
@@ -182,7 +188,7 @@ extension CancellableGuarantee where T == Void {
     /// Initializes a new cancellable guarantee fulfilled with `Void` bound to the provided `Guarantee`
     /// - Parameter guarantee: `Guarantee` to bind
     /// - Parameter context: optional `CancelContext` to associate with this `CancellableGuarantee`
-    convenience init(_ guarantee: Guarantee<T>, context: CancelContext? = nil) {
+    public convenience init(_ guarantee: Guarantee<T>, context: CancelContext? = nil) {
         self.init(guarantee, cancelValue: (), context: context)
     }
 
