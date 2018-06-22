@@ -264,6 +264,7 @@
 				630019021D596292003B4E30 /* Sources */,
 				630019181D596292003B4E30 /* Frameworks */,
 				91A2BAF520A96480007A6F30 /* SwiftLint */,
+				91B92B2C20DCB4AD00CCEADB /* Embed Carthage Frameworks */,
 			);
 			buildRules = (
 			);
@@ -363,6 +364,22 @@
 			shellScript = "if which swiftlint >/dev/null; then\n(cd Tests ; swiftlint)\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		91B92B2C20DCB4AD00CCEADB /* Embed Carthage Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				PromiseKit,
+			);
+			name = "Embed Carthage Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "case \"$PLATFORM_NAME\" in\n    macosx) plat=Mac;;\n    iphone*) plat=iOS;;\n    watch*) plat=watchOS;;\n    appletv*) plat=tvOS;;\n    *) echo \"error: Unknown PLATFORM_NAME: $PLATFORM_NAME\"; exit 1;;\nesac\n\nCARTHAGE_BUILD_DIR=\"$SRCROOT\"/Carthage/Build/$plat\nif [ -d \"$CARTHAGE_BUILD_DIR\" ] ; then\n    for (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\n        VAR=SCRIPT_INPUT_FILE_$n\n        framework=$(basename \"${!VAR}\")\n        export SCRIPT_INPUT_FILE_$n=\"$CARTHAGE_BUILD_DIR\"/\"$framework\".framework\n    done\n\n    /usr/local/bin/carthage copy-frameworks || exit\n\n    for (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\n        VAR=SCRIPT_INPUT_FILE_$n\n        source=${!VAR}.dSYM\n        dest=${BUILT_PRODUCTS_DIR}/$(basename \"$source\")\n        ditto \"$source\" \"$dest\" || exit\n    done\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		91FC9E8420C5CF52008B8EFA /* Symlink Cocoapods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
@@ -375,7 +392,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "for f in PromiseKit Alamofire OHHTTPStubs ; do\n    ln -fs $PODS_CONFIGURATION_BUILD_DIR/$f/$f.framework $PODS_CONFIGURATION_BUILD_DIR/$f.framework\ndone\n";
+			shellScript = "for f in PromiseKit Alamofire OHHTTPStubs ; do\n    if [ -d \"$PODS_CONFIGURATION_BUILD_DIR/$f/$f.framework\" ] ; then\n        ln -fs $PODS_CONFIGURATION_BUILD_DIR/$f/$f.framework $PODS_CONFIGURATION_BUILD_DIR/$f.framework ;\n    fi\ndone\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -717,6 +734,7 @@
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
+				"LD_MAP_FILE_PATH[arch=*]" = "$(TARGET_TEMP_DIR)/$(PRODUCT_NAME)-LinkMap-$(CURRENT_VARIANT)-$(CURRENT_ARCH).txt";
 				PRODUCT_BUNDLE_PACKAGE_TYPE = FMWK;
 				PRODUCT_NAME = CancelForPromiseKit;
 				SKIP_INSTALL = YES;

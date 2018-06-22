@@ -33,31 +33,44 @@ matrix:
 #   - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=3.2,name=Apple Watch - 38mm"', os: osx, language: swift}
 #   - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=4.3,name=Apple Watch - 38mm"', os: osx, language: swift}
 
-#   - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWFT=3'}
-#   - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWFT=4'}
+    - {osx_image: xcode9.3,     env: 'SWFT=3.3 PLAT=macOS DST="arch=x86_64" DEPEND="Carthage""',     os: osx, language: swift}
+    - {osx_image: xcode9.3,     env: 'SWFT=4.1 PLAT=macOS DST="arch=x86_64" DEPEND="Carthage""',     os: osx, language: swift}
+
+    - {os: osx, osx_image: xcode9.3, sudo: required, language: swift, env: 'SWFT=3 DEPEND="SPM""'}
+    - {os: osx, osx_image: xcode9.3, sudo: required, language: swift, env: 'SWFT=4 DEPEND="SPM""'}
+
+#   - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWFT=3 DEPEND="SPM"'}
+#   - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWFT=4 DEPEND="SPM"'}
 
 before_install:
-  if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-    export SWIFT_VERSION=4.1;
-    eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
-  fi
+  - if [ -z "$DEPEND" ] ; then export DEPEND=CocoaPods ; fi
+  case $DEPEND in
+  CocoaPods)
+    pod install --repo-update;;
+  Carthage)
+    carthage bootstrap --cache-builds --no-use-binaries --platform $PLAT --verbose;;
+  SPM)
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      export SWIFT_VERSION=4.1;
+      eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";;
+    fi
+  esac
 install:
-  case $PLAT in
-  iOS|tvOS|macOS|watchOS)
-    pod install --repo-update;
-    xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;;
-  *)
+  case $DEPEND in
+  SPM)
     swift build;;
+  *)
+    xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build-for-testing -enableCodeCoverage YES;;
   esac
 script:
-  case $PLAT in
-  iOS|tvOS|macOS)
-    xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit -destination "$DST" -quiet test -enableCodeCoverage YES;;
-  watchOS)
-    ;;
-  *)
-    swift test -Xswiftc -swift-version -Xswiftc $SWFT;;
-  esac
+  if [ "$PLAT" != "watchOS"] ; then
+    case $DEPEND in
+    SPM)
+      swift test -Xswiftc -swift-version -Xswiftc $SWFT;;
+    *)
+      xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit -destination "$DST" -quiet test -enableCodeCoverage YES;;
+    esac
+  fi
 after_success:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       bash <(curl -s https://codecov.io/bash);
