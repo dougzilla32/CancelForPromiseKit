@@ -44,7 +44,7 @@ matrix:
 
 before_install:
   - if [ -z "$DEPEND" ] ; then export DEPEND=CocoaPods ; fi
-  case $DEPEND in
+  - case $DEPEND in
   CocoaPods)
     pod install --repo-update;;
   Carthage)
@@ -56,14 +56,14 @@ before_install:
     fi
   esac
 install:
-  case $DEPEND in
+  - case $DEPEND in
   SPM)
     swift build;;
   *)
     xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build-for-testing -enableCodeCoverage YES;;
   esac
 script:
-  if [ "$PLAT" != "watchOS"] ; then
+  - if [ "$PLAT" != "watchOS"] ; then
     case $DEPEND in
     SPM)
       swift test -Xswiftc -swift-version -Xswiftc $SWFT;;
