@@ -68,11 +68,10 @@ script:
     SPM)
       swift test -Xswiftc -swift-version -Xswiftc $SWFT;;
     *)
-      xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit -destination "$DST" -quiet test -enableCodeCoverage YES;;
+      xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES test -enableCodeCoverage YES;;
     esac
   fi
 after_success:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       bash <(curl -s https://codecov.io/bash);
     fi
- 
