@@ -5,7 +5,7 @@
 
 CancelForPromiseKit provides clear and concise cancellation abilities for [PromiseKit] and the [PromiseKit Extensions].  While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
 
-This README has the same structure as the [PromiseKit README], with cancellation added to the sample code blocks:
+For example:
 
 <pre><code>UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
@@ -103,7 +103,7 @@ func getForecast(forCity name: String) -> <mark><b>CancellablePromise</b></mark>
 }
 </code></pre>
 
-# Quick Start
+# Quick Start with CocoaPods
 
 In your [Podfile]:
 
@@ -115,12 +115,14 @@ target "Change Me!" do
 end
 </code></pre>
 
-CancelForPromiseKit has the same platform and XCode support as PromiseKit
+CancelForPromiseKit has the same platform and Xcode support as PromiseKit
 
 # Documentation
 
 The following functions and methods are part of the core CancelForPromiseKit module.  Functions and Methods with the <b>CC</b> suffix create a new CancellablePromise,
-and those without the <b>CC</b> suffix accept an existing CancellablePromise:
+and those without the <b>CC</b> suffix accept an existing CancellablePromise.
+
+View the Jazzy generated [CancelForPromiseKit API documentation].
 
 <pre><code>Global functions (all returning <mark><b>CancellablePromise</b></mark> unless otherwise noted)
 	after<mark><b>CC</b></mark>(seconds:)
@@ -365,6 +367,7 @@ func makeUrlRequest() throws -> URLRequest {
 [PromiseKit]: https://github.com/mxcl/PromiseKit
 [PromiseKit Extensions]: https://github.com/PromiseKit
 [PromiseKit README]: https://github.com/mxcl/PromiseKit/blob/master/README.md
+[CancelForPromiseKit API Documentation]: https://dougzilla32.github.io/CancelForPromiseKit/api/
 [CancelForPromiseKit]: https://github.com/dougzilla32/CancelForPromiseKit
 [OMGHTTPURLRQ]: http://github.com/dougzilla32/CancelForPromiseKit-OMGHTTPURLRQ
 [Alamofire]: http://github.com/dougzilla32/CancelForPromiseKit-Alamofire

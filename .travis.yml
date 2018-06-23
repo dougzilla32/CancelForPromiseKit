@@ -50,7 +50,7 @@ before_install:
     Carthage)
       carthage bootstrap --cache-builds --no-use-binaries --platform $PLAT --verbose;;
     SPM)
-      if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      if [ "$TRAVIS_OS_NAME" == "linux" ] ; then
         export SWIFT_VERSION=4.1;
         eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
       fi;;
@@ -60,10 +60,14 @@ install:
     SPM)
       swift build;;
     *)
-      xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build-for-testing -enableCodeCoverage YES;;
+      if [ "$PLAT" != "watchOS" ] ; then
+        xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build-for-testing -enableCodeCoverage YES;
+      else
+        xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build -enableCodeCoverage YES;
+      fi;;
     esac
 script:
-  - if [ "$PLAT" != "watchOS"] ; then
+  - if [ "$PLAT" != "watchOS" ] ; then
       case $DEPEND in
       SPM)
         swift test -Xswiftc -swift-version -Xswiftc $SWFT;;
@@ -72,6 +76,6 @@ script:
       esac
     fi
 after_success:
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+  - if [ "$TRAVIS_OS_NAME" == "osx" ] ; then
       bash <(curl -s https://codecov.io/bash);
     fi
