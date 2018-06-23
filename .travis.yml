@@ -63,7 +63,7 @@ install:
       if [ "$PLAT" != "watchOS" ] ; then
         xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build-for-testing -enableCodeCoverage YES;
       else
-        xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build -enableCodeCoverage YES;
+        xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;
       fi;;
     esac
 script:
