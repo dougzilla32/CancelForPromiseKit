@@ -104,6 +104,20 @@
                ReferencedContainer = "container:Extensions/Foundation/CPKFoundation.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "91DF53DF20E44C2C001CBF46"
+               BuildableName = "JazzyDocs.xctest"
+               BlueprintName = "JazzyDocs"
+               ReferencedContainer = "container:CancelForPromiseKit.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
