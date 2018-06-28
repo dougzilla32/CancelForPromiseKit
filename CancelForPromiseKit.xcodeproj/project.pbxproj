@@ -43,7 +43,6 @@
 		91940E5F20B0D2E200551388 /* ThenableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91940E4E20B0D2E100551388 /* ThenableTests.swift */; };
 		91940E6020B0D2E200551388 /* RaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91940E4F20B0D2E200551388 /* RaceTests.swift */; };
 		91A917C920ACD525004067C2 /* hang.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A917C820ACD525004067C2 /* hang.swift */; };
-		91B92B3120E4A77300CCEADB /* OHHTTPStubs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91B92B3020E4A77300CCEADB /* OHHTTPStubs.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,7 +113,6 @@
 		91940E4E20B0D2E100551388 /* ThenableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThenableTests.swift; sourceTree = "<group>"; };
 		91940E4F20B0D2E200551388 /* RaceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceTests.swift; sourceTree = "<group>"; };
 		91A917C820ACD525004067C2 /* hang.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = hang.swift; path = Sources/hang.swift; sourceTree = "<group>"; };
-		91B92B3020E4A77300CCEADB /* OHHTTPStubs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OHHTTPStubs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		91DF540020E44C2C001CBF46 /* JazzyDocs.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JazzyDocs.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E83A83206BCE319ACDC1739 /* Pods-CancelForPromiseKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CancelForPromiseKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CancelForPromiseKit/Pods-CancelForPromiseKit.debug.xcconfig"; sourceTree = "<group>"; };
 		E51160FADBC920457C2E7542 /* Pods-CancelForPromiseKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CancelForPromiseKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-CancelForPromiseKit/Pods-CancelForPromiseKit.release.xcconfig"; sourceTree = "<group>"; };
@@ -125,7 +123,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				91B92B3120E4A77300CCEADB /* OHHTTPStubs.framework in Frameworks */,
 				635D64301D596E8500BC0AF5 /* CancelForPromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -252,7 +249,6 @@
 		7CED5C5FF05FBAC1AD6922F9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				91B92B3020E4A77300CCEADB /* OHHTTPStubs.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
