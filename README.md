@@ -1,5 +1,6 @@
 # CancelForPromiseKit
-![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit] [![Build Status](https://travis-ci.org/dougzilla32/CancelForPromiseKit.svg?branch=master)](https://travis-ci.org/dougzilla32/CancelForPromiseKit) ![badge-docs]
+
+![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit] ![badge-docs] [![Build Status](https://travis-ci.org/dougzilla32/CancelForPromiseKit.svg?branch=master)](https://travis-ci.org/dougzilla32/CancelForPromiseKit)
 
 ---
 
@@ -35,9 +36,15 @@ let fetchLocation = CLLocationManager.requestLocation<mark><b>CC</b></mark>().la
 
 Note: For all code samples, the differences between PromiseKit and CancelForPromiseKit are highlighted in bold.
 
-# Goals
+# Getting Started Examples
 
-The goals of this project are to:
+* **Cancel a chain**
+
+* **Mix Promise and CancellablePromise, cancel some branches and not other branches**
+
+* **Use the 'delegate' promise**
+
+# Design Goals
 
 * **Provide a streamlined way to cancel a promise chain, which rejects all associated promises and cancels all associated tasks. For example:**
 
