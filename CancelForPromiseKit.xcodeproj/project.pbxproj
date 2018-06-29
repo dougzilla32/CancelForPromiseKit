@@ -403,6 +403,7 @@
 			);
 			inputPaths = (
 				PromiseKit,
+				OHHTTPStubs,
 			);
 			name = "Embed Carthage Frameworks";
 			outputPaths = (

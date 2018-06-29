@@ -72,7 +72,7 @@ script:
       SPM)
         swift test -Xswiftc -swift-version -Xswiftc $SWFT;;
       *)
-        xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES test -enableCodeCoverage YES;;
+        xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES test -enableCodeCoverage YES;;
       esac
     fi
 after_success:
