@@ -22,12 +22,7 @@ public protocol CancellableThenable: class {
     var cancelContext: CancelContext { get }
     
     /// Tracks the cancel items for this `CancellableThenable`.  These items are removed from the associated `CancelContext` when the thenable resolves.
-    var cancelItems: CancelItemList { get }
-}
-
-struct CancelContextKey {
-    public static var cancelContext: UInt8 = 0
-    public static var cancelItems: UInt8 = 0
+    var cancelItemList: CancelItemList { get }
 }
 
 public extension CancellableThenable {
@@ -93,23 +88,21 @@ public extension CancellableThenable {
     func then<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.U.T> {
 
         let description = PromiseDescription<V.U.T>()
-        let cancelItems = CancelItemList()
+        let cancelItemList = CancelItemList()
         
         let cancelBody = { (value: U.T) throws -> V.U in
-            if let error = self.cancelContext.cancelledError {
+            if let error = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
                 throw error
             } else {
-                self.cancelContext.removeItems(self.cancelItems, clearList: true)
-                
                 let rv = try body(value)
-                self.cancelContext.append(context: rv.cancelContext, description: description, cancelItems: cancelItems)
+                self.cancelContext.append(context: rv.cancelContext, description: description, thenableCancelItemList: cancelItemList)
                 return rv.thenable
             }
         }
         
         let promise = self.thenable.then(on: on, cancelBody)
         description.promise = promise
-        return CancellablePromise(promise, context: self.cancelContext, cancelItems: cancelItems)
+        return CancellablePromise(promise, context: self.cancelContext, cancelItemList: cancelItemList)
     }
     
     /**
@@ -133,10 +126,9 @@ public extension CancellableThenable {
      */
     func thenCC<V: Thenable>(on: DispatchQueue? = conf.Q.map, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
         let cancelBody = { (value: U.T) throws -> V in
-            if let error = self.cancelContext.cancelledError {
+            if let error = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
                 throw error
             } else {
-                self.cancelContext.removeItems(self.cancelItems, clearList: true)
                 return try body(value)
             }
         }
@@ -168,10 +160,9 @@ public extension CancellableThenable {
      */
     func map<V>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping (U.T) throws -> V) -> CancellablePromise<V> {
         let cancelTransform = { (value: U.T) throws -> V in
-            if let error = self.cancelContext.cancelledError {
+            if let error = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
                 throw error
             } else {
-                self.cancelContext.removeItems(self.cancelItems, clearList: true)
                 return try transform(value)
             }
         }
@@ -201,10 +192,9 @@ public extension CancellableThenable {
      */
     func compactMap<V>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping (U.T) throws -> V?) -> CancellablePromise<V> {
         let cancelTransform = { (value: U.T) throws -> V? in
-            if let error = self.cancelContext.cancelledError {
+            if let error = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
                 throw error
             } else {
-                self.cancelContext.removeItems(self.cancelItems, clearList: true)
                 return try transform(value)
             }
         }
@@ -235,10 +225,9 @@ public extension CancellableThenable {
      */
     func done(on: DispatchQueue? = conf.Q.return, _ body: @escaping (U.T) throws -> Void) -> CancellablePromise<Void> {
         let cancelBody = { (value: U.T) throws -> Void in
-            if let error = self.cancelContext.cancelledError {
+            if let error = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
                 throw error
             } else {
-                self.cancelContext.removeItems(self.cancelItems, clearList: true)
                 try body(value)
             }
         }

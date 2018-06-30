@@ -22,7 +22,12 @@ public class CancelContext: Hashable, CustomStringConvertible {
         return lhs === rhs
     }
     
-    private var cancelItemList = [CancelItem]()
+    // Create a barrier queue that is used as a read/write lock for the CancelContext
+    //   For reads:  barrier.sync { }
+    //   For writes: barrier.sync(flags: .barrier) { }
+    private let barrier = DispatchQueue(label: "CancelForPromiseKit.CancelContextBarrier", attributes: .concurrent)
+
+    private var cancelItems = [CancelItem]()
     private var cancelItemSet = Set<CancelItem>()
     
     init(description: CustomStringConvertible? = nil) {
@@ -64,9 +69,13 @@ public class CancelContext: Hashable, CustomStringConvertible {
             error = PromiseCancelledError(file: file, function: function, line: line)
         }
 
-        cancelledError = error
+        var items: [CancelItem]!
+        barrier.sync(flags: .barrier) {
+            internalCancelledError = error
+            items = cancelItems
+        }
         
-        for item in cancelItemList {
+        for item in items {
             item.cancel(error: error!, visited: visited, file: file, function: function, line: line)
         }
     }
@@ -75,7 +84,12 @@ public class CancelContext: Hashable, CustomStringConvertible {
      True if all members of the promise chain have been successfully cancelled, false otherwise.
      */
     public var isCancelled: Bool {
-        for item in cancelItemList where !item.isCancelled {
+        var items: [CancelItem]!
+        barrier.sync {
+            items = cancelItems
+        }
+        
+        for item in items where !item.isCancelled {
             return false
         }
         return true
@@ -88,25 +102,24 @@ public class CancelContext: Hashable, CustomStringConvertible {
         return cancelledError != nil
     }
     
-    // Atomic access to cancelledError
-    let cancelledErrorSemaphore = DispatchSemaphore(value: 1)
     private var internalCancelledError: Error?
+    
     /**
-     The cancellation error generated when the promise is cancelled, or `nil` if not cancelled.
+     The cancellation error initialized when the promise is cancelled, or `nil` if not cancelled.
      */
     public private(set) var cancelledError: Error? {
         get {
-            let error: Error?
-            cancelledErrorSemaphore.wait()
-            error = internalCancelledError
-            cancelledErrorSemaphore.signal()
-            return error
+            var err: Error!
+            barrier.sync {
+                err = internalCancelledError
+            }
+            return err
         }
         
         set {
-            cancelledErrorSemaphore.wait()
-            internalCancelledError = newValue
-            cancelledErrorSemaphore.signal()
+            barrier.sync(flags: .barrier) {
+                internalCancelledError = newValue
+            }
         }
     }
     
@@ -115,97 +128,119 @@ public class CancelContext: Hashable, CustomStringConvertible {
             return
         }
         let item = CancelItem(task: task, reject: reject, thenable: thenable.thenable)
-        if let error = cancelledError {
-            item.cancel(error: error)
+
+        var error: Error?
+        barrier.sync(flags: .barrier) {
+            error = internalCancelledError
+            cancelItems.append(item)
+            cancelItemSet.insert(item)
+            thenable.cancelItemList.append(item)
         }
-        cancelItemList.append(item)
-        cancelItemSet.insert(item)
-        thenable.cancelItems.append(item)
+
+        if error != nil {
+            item.cancel(error: error!)
+        }
     }
     
     func append<Z: CancellableThenable>(context childContext: CancelContext, thenable: Z) {
-        if validateContext(context: childContext) {
-            let item = CancelItem(context: childContext, thenable: thenable.thenable)
-            cancelItemList.append(item)
-            cancelItemSet.insert(item)
-            thenable.cancelItems.append(item)
-        }
-    }
-    
-    func append<Z: ThenableDescription>(context childContext: CancelContext, description: Z, cancelItems: CancelItemList) {
-        if validateContext(context: childContext) {
-            let item = CancelItem(context: childContext, description: description)
-            cancelItemList.append(item)
-            cancelItemSet.insert(item)
-            cancelItems.append(item)
-        }
-    }
-    
-    private func validateContext(context childContext: CancelContext) -> Bool {
         guard childContext !== self else {
-            return false
+            return
         }
+        let item = CancelItem(context: childContext, thenable: thenable.thenable)
+
+        var error: Error?
+        barrier.sync(flags: .barrier) {
+            error = internalCancelledError
+            cancelItems.append(item)
+            cancelItemSet.insert(item)
+            thenable.cancelItemList.append(item)
+        }
+
+        crossCancel(childContext: childContext, parentCancelledError: error)
+    }
+    
+    func append<Z: ThenableDescription>(context childContext: CancelContext, description: Z, thenableCancelItemList: CancelItemList) {
+        guard childContext !== self else {
+            return
+        }
+        let item = CancelItem(context: childContext, description: description)
+
+        var error: Error?
+        barrier.sync(flags: .barrier) {
+            error = internalCancelledError
+            cancelItems.append(item)
+            cancelItemSet.insert(item)
+            thenableCancelItemList.append(item)
+        }
+
+        crossCancel(childContext: childContext, parentCancelledError: error)
+    }
+    
+    private func crossCancel(childContext: CancelContext, parentCancelledError: Error?) {
+        let parentError = parentCancelledError
+        let childError =  childContext.cancelledError
         
-        if let parentError = cancelledError {
-            if !childContext.cancelAttempted {
+        if parentError != nil {
+            if childError == nil {
                 childContext.cancel(error: parentError)
             }
-        } else if let childError = childContext.cancelledError {
-            if !cancelAttempted {
+        } else if childError != nil {
+            if parentError == nil {
                 cancel(error: childError)
             }
         }
-        
-        return true
     }
     
     func recover() {
         cancelledError = nil
     }
     
-    func removeItems(_ list: CancelItemList, clearList: Bool) {
-        guard list.items.count != 0 else {
-            return
-        }
-        
-        defer {
-            if clearList {
-                list.removeAll()
-            }
-        }
-        
-        var currentIndex = 1
-        // The `list` parameter should match a block of items in the cancelItemList, remove them from the cancelItemList
-        // in one operation for efficiency
-        if cancelItemSet.remove(list.items[0]) != nil {
-            let removeIndex = cancelItemList.index(of: list.items[0])!
-            while currentIndex < list.items.count {
-                let item = list.items[currentIndex]
-                if item != cancelItemList[removeIndex + currentIndex] {
-                    break
+    func removeItems(_ list: CancelItemList, clearList: Bool) -> Error? {
+        var error: Error?
+        barrier.sync(flags: .barrier) {
+            error = internalCancelledError
+            if error == nil && list.items.count != 0 {
+                var currentIndex = 1
+                // The `list` parameter should match a block of items in the cancelItemList, remove them from the cancelItemList
+                // in one operation for efficiency
+                if cancelItemSet.remove(list.items[0]) != nil {
+                    let removeIndex = cancelItems.index(of: list.items[0])!
+                    while currentIndex < list.items.count {
+                        let item = list.items[currentIndex]
+                        if item != cancelItems[removeIndex + currentIndex] {
+                            break
+                        }
+                        cancelItemSet.remove(item)
+                        currentIndex += 1
+                    }
+                    cancelItems.removeSubrange(removeIndex..<(removeIndex+currentIndex))
                 }
-                cancelItemSet.remove(item)
-                currentIndex += 1
+                
+                // Remove whatever falls outside of the block
+                while currentIndex < list.items.count {
+                    let item = list.items[currentIndex]
+                    if cancelItemSet.remove(item) != nil {
+                        cancelItems.remove(at: cancelItems.index(of: item)!)
+                    }
+                    currentIndex += 1
+                }
+                
+                if clearList {
+                    list.removeAll()
+                }
             }
-            cancelItemList.removeSubrange(removeIndex..<(removeIndex+currentIndex))
         }
-        
-        // Remove whatever falls outside of the block
-        while currentIndex < list.items.count {
-            let item = list.items[currentIndex]
-            if cancelItemSet.remove(item) != nil {
-                cancelItemList.remove(at: cancelItemList.index(of: item)!)
-            }
-            currentIndex += 1
-        }
+        return error
     }
 }
 
 /// Tracks the cancel items for a CancellablePromise.  These items are removed from the associated CancelContext when the promise resolves.
 public class CancelItemList {
-    fileprivate var items = [CancelItem]()
+    fileprivate var items: [CancelItem]
     
-    init() {}
+    init() {
+        self.items = []
+    }
     
     func append(_ item: CancelItem) {
         items.append(item)
@@ -268,7 +303,6 @@ class CancelItem: Hashable, CustomStringConvertible {
 
         task?.cancel()
         reject?(error)
-        reject = nil
 
         if var v = visited, let c = context {
             if !v.contains(c) {

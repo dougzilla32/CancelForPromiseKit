@@ -1,5 +1,5 @@
 import PromiseKit
-import CancelForPromiseKit
+@testable import CancelForPromiseKit
 import Dispatch
 import XCTest
 
@@ -76,6 +76,61 @@ class StressTests: XCTestCase {
 
         waitForExpectations(timeout: 10, handler: nil)
     }
+    
+    class StressTask: CancellableTask {
+        init() {
+            isCancelled = true
+        }
+        
+        func cancel() {
+        }
+        
+        var isCancelled: Bool
+    }
+    
+    func testCancelContextConcurrentReadWrite() {
+        let e1 = expectation(description: "")
+        let context = CancelContext()
+        func consume(error: Swift.Error?) { }
+        
+        stressRace(expectation: e1, iterations: 1000, stressFactor: 1000, stressFunction: {
+            consume(error: context.cancelledError)
+        }, fulfillFunction: {
+            context.cancel()
+        })
+        
+        waitForExpectations(timeout: 10, handler: nil)
+    }
+    
+    func testCancelContextConcurrentAppend() {
+        let e1 = expectation(description: "")
+        let context = CancelContext()
+        let promise = CancellablePromise()
+        let task = StressTask()
+        
+        stressRace(expectation: e1, iterations: 1000, stressFactor: 100, stressFunction: {
+            context.append(task: task, reject: nil, thenable: promise)
+        }, fulfillFunction: {
+            context.append(task: task, reject: nil, thenable: promise)
+        })
+        
+        waitForExpectations(timeout: 10, handler: nil)
+    }
+
+    func testCancelContextConcurrentCancel() {
+        let e1 = expectation(description: "")
+        let context = CancelContext()
+        let promise = CancellablePromise()
+        let task = StressTask()
+        
+        stressRace(expectation: e1, iterations: 500, stressFactor: 10, stressFunction: {
+            context.append(task: task, reject: nil, thenable: promise)
+        }, fulfillFunction: {
+            context.cancel()
+        })
+        
+        waitForExpectations(timeout: 10, handler: nil)
+    }
 }
 
 private enum Error: Swift.Error {
@@ -98,5 +153,22 @@ private func stressDataRace<T: Equatable>(expectation e1: XCTestExpectation, ite
         }
     }
 
+    group.notify(queue: queue, execute: e1.fulfill)
+}
+
+private func stressRace(expectation e1: XCTestExpectation, iterations: Int = 10000, stressFactor: Int = 1000, stressFunction: @escaping () -> Void, fulfillFunction: @escaping () -> Void) {
+    let group = DispatchGroup()
+    let queue = DispatchQueue(label: "the.domain.of.Zalgo", attributes: .concurrent)
+    
+    for _ in 0..<iterations {
+        DispatchQueue.concurrentPerform(iterations: stressFactor) { _ in
+            _ = stressFunction()
+        }
+        
+        queue.async(group: group) {
+            fulfillFunction()
+        }
+    }
+    
     group.notify(queue: queue, execute: e1.fulfill)
 }

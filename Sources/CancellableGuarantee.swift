@@ -31,7 +31,7 @@ public class CancellableGuarantee<T>: CancellableThenable {
     public var cancelContext: CancelContext
     
     /// Tracks the cancel items for this CancellableGuarantee.  These items are removed from the associated CancelContext when the guarantee resolves.
-    public var cancelItems: CancelItemList
+    public var cancelItemList: CancelItemList
     
     /// Override value to use for resolution after the CancellableGuarantee is cancelled.  If `nil` (default) then do not override the resolved value when the CancellableGuarantee is cancelled.
     public let cancelValue: T?
@@ -46,7 +46,7 @@ public class CancellableGuarantee<T>: CancellableThenable {
         self.guarantee = guarantee
         self.cancelValue = cancelValue
         self.cancelContext = context ?? CancelContext()
-        self.cancelItems = CancelItemList()
+        self.cancelItemList = CancelItemList()
     }
     
     /**
@@ -89,8 +89,8 @@ public extension CancellableGuarantee {
     @discardableResult
     func done(on: DispatchQueue? = conf.Q.return, cancelValue: T? = nil, _ body: @escaping(T) -> Void) -> CancellableGuarantee<Void> {
         let cancelBody = { (value: T) -> Void in
-            let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
-            self.cancelContext.removeItems(self.cancelItems, clearList: true)
+            let value = self.cancelContext.removeItems(self.cancelItemList, clearList: true) == nil
+                ? value : (self.cancelValue ?? value)
             body(value)
         }
         
@@ -101,8 +101,9 @@ public extension CancellableGuarantee {
     /// - See: `CancellableThenable.map(on:_:)`
     func map<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, _ body: @escaping(T) -> U) -> CancellableGuarantee<U> {
         let cancelBody = { (value: T) -> U in
-            let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
-            self.cancelContext.removeItems(self.cancelItems, clearList: true)
+            let value = self.cancelContext.removeItems(self.cancelItemList, clearList: true) == nil
+                ? value : (self.cancelValue ?? value)
+            
             return body(value)
         }
         

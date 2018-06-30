@@ -116,10 +116,10 @@ public extension CancellableCatchMixin {
    func recover<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.U.T == M.T {
         
         let description = PromiseDescription<V.U.T>()
-        let cancelItems = CancelItemList()
+        let cancelItemList = CancelItemList()
         
         let cancelBody = { (error: Error) throws -> V.U in
-            if let cancelledError = self.cancelContext.cancelledError {
+            if let cancelledError = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
                 if policy == .allErrorsExceptCancellation {
                     throw cancelledError
                 } else {
@@ -127,16 +127,14 @@ public extension CancellableCatchMixin {
                 }
             }
             
-            self.cancelContext.removeItems(self.cancelItems, clearList: true)
-            
             let rv = try body(error)
-            self.cancelContext.append(context: rv.cancelContext, description: description, cancelItems: cancelItems)
+            self.cancelContext.append(context: rv.cancelContext, description: description, thenableCancelItemList: cancelItemList)
             return rv.thenable
         }
         
         let promise = self.catchable.recover(on: on, policy: policy, cancelBody)
         description.promise = promise
-        return CancellablePromise(promise, context: self.cancelContext, cancelItems: cancelItems)
+        return CancellablePromise(promise, context: self.cancelContext, cancelItemList: cancelItemList)
     }
     
      /**
@@ -165,15 +163,13 @@ public extension CancellableCatchMixin {
     func recoverCC<V: Thenable>(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.T == M.T {
         
         let cancelBody = { (error: Error) throws -> V in
-            if let cancelledError = self.cancelContext.cancelledError {
+            if let cancelledError = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
                 if policy == .allErrorsExceptCancellation {
                     throw cancelledError
                 } else {
                     self.cancelContext.recover()
                 }
             }
-            
-            self.cancelContext.removeItems(self.cancelItems, clearList: true)
             
             return try body(error)
         }
@@ -194,14 +190,12 @@ public extension CancellableCatchMixin {
     @discardableResult
     func recover(on: DispatchQueue? = conf.Q.map, cancelValue: M.T? = nil, _ body: @escaping(Error) -> CancellableGuarantee<M.T>) -> CancellableGuarantee<M.T> {
         let cancelBody = { (error: Error) -> Guarantee<M.T> in
-            if self.cancelContext.cancelledError != nil {
+            if self.cancelContext.removeItems(self.cancelItemList, clearList: true) != nil {
                 self.cancelContext.recover()
                 if let v = cancelValue {
                     return Guarantee.value(v)
                 }
             }
-            
-            self.cancelContext.removeItems(self.cancelItems, clearList: true)
             
             return body(error).guarantee
         }
@@ -223,14 +217,12 @@ public extension CancellableCatchMixin {
     @discardableResult
     func recoverCC(on: DispatchQueue? = conf.Q.map, cancelValue: M.T? = nil, _ body: @escaping(Error) -> Guarantee<M.T>) -> CancellableGuarantee<M.T> {
         let cancelBody = { (error: Error) -> Guarantee<M.T> in
-            if self.cancelContext.cancelledError != nil {
+            if self.cancelContext.removeItems(self.cancelItemList, clearList: true) != nil {
                 self.cancelContext.recover()
                 if let v = cancelValue {
                     return Guarantee.value(v)
                 }
             }
-            
-            self.cancelContext.removeItems(self.cancelItems, clearList: true)
             
             return body(error)
         }

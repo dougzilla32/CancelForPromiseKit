@@ -39,12 +39,12 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
     public var cancelContext: CancelContext
     
     /// Tracks the cancel items for this CancellablePromise.  These items are removed from the associated CancelContext when the promise resolves.
-    public var cancelItems: CancelItemList
+    public var cancelItemList: CancelItemList
     
-    init(_ promise: Promise<T>, context: CancelContext? = nil, cancelItems: CancelItemList? = nil) {
+    init(_ promise: Promise<T>, context: CancelContext? = nil, cancelItemList: CancelItemList? = nil) {
         self.promise = promise
         self.cancelContext = context ?? CancelContext()
-        self.cancelItems = cancelItems ?? CancelItemList()
+        self.cancelItemList = cancelItemList ?? CancelItemList()
     }
     
     /// Initialize a new rejected cancellable promise.
