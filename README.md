@@ -1,6 +1,6 @@
 # CancelForPromiseKit
 
-![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit] ![badge-docs] [![Build Status](https://travis-ci.org/dougzilla32/CancelForPromiseKit.svg?branch=master)](https://travis-ci.org/dougzilla32/CancelForPromiseKit)
+![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit] [![badge-docs]][CancelForPromiseKit API Documentation] [![Build Status](https://travis-ci.org/dougzilla32/CancelForPromiseKit.svg?branch=master)](https://travis-ci.org/dougzilla32/CancelForPromiseKit)
 
 ---
 
@@ -13,8 +13,9 @@ For example:
 let fetchImage = URLSession.shared.dataTask<mark><b>CC</b></mark>(.promise, with: url).compactMap{ UIImage(data: $0.data) }
 let fetchLocation = CLLocationManager.requestLocation<mark><b>CC</b></mark>().lastValue
 
-// Hold on to the <b>CancelContext</b> rather than the promise chain so the
-// promises can be freed up.
+/* Cancellable promises can be cancelled directly.  However by holding on to the
+   <mark><b>CancelContext</b></mark> rather than a promise, each promise in the chain can be
+   deallocated by ARC as it is resolved. */
 <mark><b>let context =</b></mark> firstly {
     when(fulfilled: fetchImage, fetchLocation)
 }.done { image, location in
@@ -23,92 +24,20 @@ let fetchLocation = CLLocationManager.requestLocation<mark><b>CC</b></mark>().la
 }.ensure {
     UIApplication.shared.isNetworkActivityIndicatorVisible = false
 }.catch(policy: .allErrors) { error in
-    // Will be invoked with a PromiseCancelledError when cancel is called on the context.
-    // Use the default policy of .allErrorsExceptCancellation to ignore cancellation errors.
+    /* Will be invoked with a PromiseCancelledError when cancel is called on the context.
+       Use the default policy of .allErrorsExceptCancellation to ignore cancellation errors. */
     self.show(UIAlertController(for: error), sender: self)
 }<mark><b>.cancelContext</b></mark>
 
 //…
 
-// Cancel currently active tasks and reject all promises with PromiseCancelledError
+// Cancel currently active tasks and reject all cancellable promises with PromiseCancelledError
 <mark><b>context.cancel()</b></mark>
 </code></pre>
 
 Note: For all code samples, the differences between PromiseKit and CancelForPromiseKit are highlighted in bold.
 
-# Getting Started Examples
-
-* **Cancel a chain**
-
-* **Mix Promise and CancellablePromise, cancel some branches and not other branches**
-
-* **Use the 'delegate' promise**
-
-# Design Goals
-
-* **Provide a streamlined way to cancel a promise chain, which rejects all associated promises and cancels all associated tasks. For example:**
-
-<pre><code><mark><b>let promise =</b></mark> firstly {
-    login<mark><b>CC</b></mark>() // Use <b>CC</b> (a.k.a. cancel chain) methods or CancellablePromise to
-              // initiate a cancellable promise chain
-}.then { creds in
-    fetch(avatar: creds.user)
-}.done { image in
-    self.imageView = image
-}.catch(policy: .allErrors) { error in
-    if <mark><b>error.isCancelled</b></mark> {
-        // the chain has been cancelled!
-    }
-}
-//…
-<mark><b>promise.cancel()</b></mark>
-</code></pre>
-
-* **Ensure that subsequent code blocks in a promise chain are _NEVER_ called after the chain has been cancelled**
-
-* **Provide cancellable varients for all appropriate PromiseKit extensions (e.g. Foundation, CoreLocation, Alamofire, etc.)**
-
-* **Support cancellation for all PromiseKit primitives such as 'after', 'firstly', 'when', 'race'**
-
-* **Provide a simple way to make new types of cancellable promises**
-
-* **Ensure promise branches are properly cancelled.  For example:**
-
-<pre><code>import Alamofire
-import PromiseKit
-import CancelForPromiseKit
-
-func updateWeather(forCity searchName: String) {
-    refreshButton.startAnimating()
-    <mark><b>let context =</b></mark> firstly {
-        getForecast(forCity: searchName)
-    }.done { response in
-        updateUI(forecast: response)
-    }.ensure {
-        refreshButton.stopAnimating()
-    }.catch { error in
-        // Cancellation errors are ignored by default
-        showAlert(error: error) 
-    }<mark><b>.cancelContext</b></mark>
-
-    //…
-
-    // <mark><b>**** Cancels EVERYTHING</b></mark> (however the 'ensure' block always executes regardless)
-    <mark><b>context.cancel()</b></mark>
-}
-
-func getForecast(forCity name: String) -> <mark><b>CancellablePromise</b></mark>&lt;WeatherInfo&gt; {
-    return firstly {
-        Alamofire.request("https://autocomplete.weather.com/\(name)")
-            .responseDecodable<mark><b>CC</b></mark>(AutoCompleteCity.self)
-    }.then { city in
-        Alamofire.request("https://forecast.weather.com/\(city.name)")
-            .responseDecodable<mark><b>CC</b></mark>(WeatherResponse.self)
-    }.map { response in
-        format(response)
-    }
-}
-</code></pre>
+The format for this README and for the project as a whole mirrors PromiseKit in an attempt to be readable and concise. 
 
 # Quick Start with CocoaPods
 
@@ -124,12 +53,53 @@ end
 
 CancelForPromiseKit has the same platform and Xcode support as PromiseKit
 
+# Getting Started Examples
+
+* **Cancelling a chain**
+
+<pre><code><mark><b>let promise =</b></mark> firstly {
+    /* <mark><b>CC</b></mark> (a.k.a. cancel chain) methods initiate a cancellable promise chain by
+       returning a <mark><b>CancellablePromise</b></mark>. */
+    login<mark><b>CC</b></mark>()
+}.then { creds in
+    /* 'fetch' in this example may return either Promise or <mark><b>CancellablePromise</b></mark> --
+        If 'fetch' returns a <mark><b>CancellablePromise</b></mark> then the fetch task can be cancelled.
+        If 'fetch' returns a standard Promise then the fetch task cannot be cancelled,
+        however the promise chain will still be rejected with a PromiseCancelledError
+        once the 'fetch' task completes.
+    fetch(avatar: creds.user)
+}.done { image in
+    self.imageView = image
+}.catch(policy: .allErrors) { error in
+    if <mark><b>error.isCancelled</b></mark> {
+        // the chain has been cancelled!
+    }
+}
+
+// …
+
+/* '<mark><b>promise</b></mark>' here refers to the last promise in the chain.  Calling '<mark><b>cancel</b></mark>' on
+   any promise in the chain cancels the entire chain, therefore cancelling the
+   last promise in the chain cancels everything: */
+<mark><b>promise.cancel()</b></mark>
+</code></pre>
+
+* **Mixing Promise and CancellablePromise to cancel some branches and not others**
+
+In the example above: if `fetch(avatar: creds.user)` returns a standard Promise then the fetch cannot be cancelled.  However, if cancel is called in the middle of the fetch then the promise chain will still be rejected with a PromiseCancelledError once the fetch completes. The `done` block will not be called and the `catch(policy: .allErrors)` block will be called instead.
+
+If `fetch` returns a CancellablePromise then the fetch will be cancelled when `cancel()` is invoked, and the `catch` block will be called immediately.
+
+* **Use the 'delegate' promise**
+
+CancellablePromise wraps a delegate Promise, which can be accessed with the `promise` property.
+
 # Documentation
 
 The following functions and methods are part of the core CancelForPromiseKit module.  Functions and Methods with the <b>CC</b> suffix create a new CancellablePromise,
 and those without the <b>CC</b> suffix accept an existing CancellablePromise.
 
-View the Jazzy generated [CancelForPromiseKit API documentation].
+Here is the Jazzy generated [CancelForPromiseKit API documentation].
 
 <pre><code>Global functions (all returning <mark><b>CancellablePromise</b></mark> unless otherwise noted)
 	after<mark><b>CC</b></mark>(seconds:)
@@ -365,6 +335,79 @@ func makeUrlRequest() throws -> URLRequest {
 }
 </code></pre>
 
+# Design Goals
+
+* **Provide a streamlined way to cancel a promise chain, which rejects all associated promises and cancels all associated tasks. For example:**
+
+<pre><code><mark><b>let promise =</b></mark> firstly {
+    login<mark><b>CC</b></mark>() // Use <b>CC</b> (a.k.a. cancel chain) methods or CancellablePromise to
+              // initiate a cancellable promise chain
+}.then { creds in
+    fetch(avatar: creds.user)
+}.done { image in
+    self.imageView = image
+}.catch(policy: .allErrors) { error in
+    if <mark><b>error.isCancelled</b></mark> {
+        // the chain has been cancelled!
+    }
+}
+//…
+<mark><b>promise.cancel()</b></mark>
+</code></pre>
+
+* **Ensure that subsequent code blocks in a promise chain are _NEVER_ called after the chain has been cancelled**
+
+* **Fully support concurrecy, where all code is thead-safe**
+
+* **Provide cancellable varients for all appropriate PromiseKit extensions (e.g. Foundation, CoreLocation, Alamofire, etc.)**
+
+* **Support cancellation for all PromiseKit primitives such as 'after', 'firstly', 'when', 'race'**
+
+* **Provide a simple way to make new types of cancellable promises**
+
+* **Ensure promise branches are properly cancelled.  For example:**
+
+<pre><code>import Alamofire
+import PromiseKit
+import CancelForPromiseKit
+
+func updateWeather(forCity searchName: String) {
+    refreshButton.startAnimating()
+    <mark><b>let context =</b></mark> firstly {
+        getForecast(forCity: searchName)
+    }.done { response in
+        updateUI(forecast: response)
+    }.ensure {
+        refreshButton.stopAnimating()
+    }.catch { error in
+        // Cancellation errors are ignored by default
+        showAlert(error: error) 
+    }<mark><b>.cancelContext</b></mark>
+
+    //…
+
+    // <mark><b>**** Cancels EVERYTHING</b></mark> (however the 'ensure' block always executes regardless)
+    <mark><b>context.cancel()</b></mark>
+}
+
+func getForecast(forCity name: String) -> <mark><b>CancellablePromise</b></mark>&lt;WeatherInfo&gt; {
+    return firstly {
+        Alamofire.request("https://autocomplete.weather.com/\(name)")
+            .responseDecodable<mark><b>CC</b></mark>(AutoCompleteCity.self)
+    }.then { city in
+        Alamofire.request("https://forecast.weather.com/\(city.name)")
+            .responseDecodable<mark><b>CC</b></mark>(WeatherResponse.self)
+    }.map { response in
+        format(response)
+    }
+}
+</code></pre>
+
+# Support
+
+If you have a question or an issue to report, please use [my bug tracker].
+
+
 [badge-pod]: https://img.shields.io/cocoapods/v/CancelForPromiseKit.svg?label=version
 [badge-pms]: https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20SwiftPM-green.svg
 [badge-languages]: https://img.shields.io/badge/languages-Swift-orange.svg
@@ -380,3 +423,4 @@ func makeUrlRequest() throws -> URLRequest {
 [Alamofire]: http://github.com/dougzilla32/CancelForPromiseKit-Alamofire
 [Foundation]: http://github.com/dougzilla32/CancelForPromiseKit-Foundation
 [Podfile]: https://guides.cocoapods.org/syntax/podfile.html
+[my bug tracker]: https://github.com/dougzilla32/CancelForPromiseKit/issues/new
