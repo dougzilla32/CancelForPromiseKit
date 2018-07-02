@@ -1,0 +1,12 @@
+[submodule "Extensions/Foundation"]
+	path = Extensions/Foundation
+	url = https://github.com/dougzilla32/CPKFoundation
+[submodule "Extensions/CoreLocation"]
+	path = Extensions/CoreLocation
+	url = https://github.com/dougzilla32/CPKCoreLocation
+[submodule "Extensions/Alamofire"]
+	path = Extensions/Alamofire
+	url = https://github.com/dougzilla32/CPKAlamofire
+[submodule "dougzilla32.github.io"]
+	path = dougzilla32.github.io
+	url = https://github.com/dougzilla32/dougzilla32.github.io

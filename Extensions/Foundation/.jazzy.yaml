@@ -1,0 +1,9 @@
+author: Doug
+author_url: https://github.com/dougzilla32
+module: CPKFoundation
+module_version: 1.0.0
+readme: README.md
+root_url: https://dougzilla32.github.io/CPKFoundation/api
+dash_url: https://dougzilla32.github.io/CPKFoundation/api/docsets/CPKFoundation.xml
+github_url: https://github.com/dougzilla32/CPKFoundation
+github_file_prefix: https://github.com/dougzilla32/CPKFoundation/tree/master
