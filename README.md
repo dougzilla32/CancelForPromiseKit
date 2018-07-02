@@ -13,9 +13,6 @@ For example:
 let fetchImage = URLSession.shared.dataTask<mark><b>CC</b></mark>(.promise, with: url).compactMap{ UIImage(data: $0.data) }
 let fetchLocation = CLLocationManager.requestLocation<mark><b>CC</b></mark>().lastValue
 
-/* Cancellable promises can be cancelled directly.  However by holding on to the
-   <mark><b>CancelContext</b></mark> rather than a promise, each promise in the chain can be
-   deallocated by ARC as it is resolved. */
 <mark><b>let context =</b></mark> firstly {
     when(fulfilled: fetchImage, fetchLocation)
 }.done { image, location in
@@ -33,11 +30,13 @@ let fetchLocation = CLLocationManager.requestLocation<mark><b>CC</b></mark>().la
 
 // Cancel currently active tasks and reject all cancellable promises with PromiseCancelledError
 <mark><b>context.cancel()</b></mark>
+
+/* Note: Cancellable promises can be cancelled directly.  However by holding on to
+   the <mark><b>CancelContext</b></mark> rather than a promise, each promise in the chain can be
+   deallocated by ARC as it is resolved. */
 </code></pre>
 
-Note: For all code samples, the differences between PromiseKit and CancelForPromiseKit are highlighted in bold.
-
-The format for this README and for the project as a whole mirrors PromiseKit in an attempt to be readable and concise. 
+Note: The format for this README and for the project as a whole mirrors PromiseKit in an attempt to be readable and concise. For all code samples, the differences between PromiseKit and CancelForPromiseKit are highlighted in bold.
 
 # Quick Start with CocoaPods
 
@@ -53,20 +52,23 @@ end
 
 CancelForPromiseKit has the same platform and Xcode support as PromiseKit
 
-# Getting Started Examples
+# Examples
 
 * **Cancelling a chain**
 
 <pre><code><mark><b>let promise =</b></mark> firstly {
-    /* <mark><b>CC</b></mark> (a.k.a. cancel chain) methods initiate a cancellable promise chain by
-       returning a <mark><b>CancellablePromise</b></mark>. */
+    /* Methods and functions with the <mark><b>CC</b></mark> (a.k.a. cancel chain) suffix initiate a
+    cancellable promise chain by returning a <mark><b>CancellablePromise</b></mark>. */
     login<mark><b>CC</b></mark>()
 }.then { creds in
     /* 'fetch' in this example may return either Promise or <mark><b>CancellablePromise</b></mark> --
         If 'fetch' returns a <mark><b>CancellablePromise</b></mark> then the fetch task can be cancelled.
         If 'fetch' returns a standard Promise then the fetch task cannot be cancelled,
-        however the promise chain will still be rejected with a PromiseCancelledError
-        once the 'fetch' task completes.
+        however if cancel is called during the fetch then the promise chain will still be
+        rejected with a PromiseCancelledError as soon as the 'fetch' task completes.
+        
+        Note: if 'fetch' returns a <mark><b>CancellablePromise</b></mark> then the convention is to name
+        it 'fetchCC'. */
     fetch(avatar: creds.user)
 }.done { image in
     self.imageView = image
@@ -79,8 +81,11 @@ CancelForPromiseKit has the same platform and Xcode support as PromiseKit
 // …
 
 /* '<mark><b>promise</b></mark>' here refers to the last promise in the chain.  Calling '<mark><b>cancel</b></mark>' on
-   any promise in the chain cancels the entire chain, therefore cancelling the
-   last promise in the chain cancels everything: */
+   any promise in the chain cancels the entire chain.  Therefore cancelling the
+   last promise in the chain cancels everything.
+   
+   Note: It may be desirable to hold on to the <mark><b>CancelContext</b></mark> directly rather than a
+   promise so that the promise can be deallocated by ARC when it is resolved. */
 <mark><b>promise.cancel()</b></mark>
 </code></pre>
 
@@ -92,14 +97,38 @@ If `fetch` returns a CancellablePromise then the fetch will be cancelled when `c
 
 * **Use the 'delegate' promise**
 
-CancellablePromise wraps a delegate Promise, which can be accessed with the `promise` property.
+CancellablePromise wraps a delegate Promise, which can be accessed with the `promise` property.  The above example can be modified as follows so that once 'loginCC' completes, the chain cannot be cancelled:
+
+<pre><code><mark><b>let cancellablePromise =</b></mark> firstly {
+    login<mark><b>CC</b></mark>()
+}
+cancellablePromise.then { creds in
+    // For this example 'fetch' returns a standard Promise
+    fetch(avatar: creds.user)  
+    
+    /* Here, by calling '<mark><b>promise</b></mark>.done' rather than 'done' the chain is converted from a
+       cancellable promise chain to a standard Promise chain. In this case, calling
+       'cancel' during the 'fetch' operation has no effect: */
+}.<mark><b>promise</b></mark>.done { image in
+    self.imageView = image
+}.catch(policy: .allErrors) { error in
+    if <mark><b>error.isCancelled</b></mark> {
+        // the chain has been cancelled!
+    }
+}
+
+// …
+
+<mark><b>cancellablePromise.cancel()</b></mark>
+</code></pre>
+
 
 # Documentation
 
 The following functions and methods are part of the core CancelForPromiseKit module.  Functions and Methods with the <b>CC</b> suffix create a new CancellablePromise,
 and those without the <b>CC</b> suffix accept an existing CancellablePromise.
 
-Here is the Jazzy generated [CancelForPromiseKit API documentation].
+Here is the [Jazzy](https://github.com/realm/jazzy) generated [CancelForPromiseKit API documentation].
 
 <pre><code>Global functions (all returning <mark><b>CancellablePromise</b></mark> unless otherwise noted)
 	after<mark><b>CC</b></mark>(seconds:)
@@ -355,7 +384,7 @@ func makeUrlRequest() throws -> URLRequest {
 <mark><b>promise.cancel()</b></mark>
 </code></pre>
 
-* **Ensure that subsequent code blocks in a promise chain are _NEVER_ called after the chain has been cancelled**
+* **Ensure that subsequent code blocks in a promise chain are _never_ called after the chain has been cancelled**
 
 * **Fully support concurrecy, where all code is thead-safe**
 
