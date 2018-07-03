@@ -2,6 +2,7 @@ author: Doug
 author_url: https://github.com/dougzilla32
 module: CancelForPromiseKit
 module_version: 1.0.0
+copyright: "[![badge-mit](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/dougzilla32/CancelForPromiseKit/blob/master/LICENSE)"
 readme: README.md
 root_url: https://dougzilla32.github.io/CancelForPromiseKit/api
 dash_url: https://dougzilla32.github.io/CancelForPromiseKit/api/docsets/CancelForPromiseKit.xml

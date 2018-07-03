@@ -1,8 +1,11 @@
 # CancelForPromiseKit
 
-![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit] [![badge-docs]][CancelForPromiseKit API Documentation] [![Build Status](https://travis-ci.org/dougzilla32/CancelForPromiseKit.svg?branch=master)](https://travis-ci.org/dougzilla32/CancelForPromiseKit)
+![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] [![badge-mit]](https://github.com/dougzilla32/CancelForPromiseKit/blob/master/LICENSE) [![badge-docs]][CancelForPromiseKit API Documentation] [![Build Status](https://travis-ci.org/dougzilla32/CancelForPromiseKit.svg?branch=master)](https://travis-ci.org/dougzilla32/CancelForPromiseKit)
 
 ---
+
+Docs | [CancelForPromiseKit](https://dougzilla32.github.io/CancelForPromiseKit/api/) | [CPKAlamofire](https://dougzilla32.github.io/CPKAlamofire/api/) | [CPKCoreLocation](https://dougzilla32.github.io/CPKCoreLocation/api/) | [CPKFoundation](https://dougzilla32.github.io/CPKFoundation/api/) |
+------------- | ------------- | ------------- |  ------------- |   ------------- | 
 
 CancelForPromiseKit provides clear and concise cancellation abilities for [PromiseKit] and the [PromiseKit Extensions].  While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
 

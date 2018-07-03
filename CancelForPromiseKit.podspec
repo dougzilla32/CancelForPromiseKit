@@ -18,16 +18,16 @@ Pod::Spec.new do |s|
   s.description = 'Add-on to PromiseKit to enable cancellation of all tasks have the ability to be cancelled.  Simply call the cancel() function on any Promise, or use a CancelContext to cancel all Promises in a chain or other grouping.'
 # s.social_media_url = ''
   s.authors  = { 'Doug Stein' => 'dougstein@gmail.com' }
-# s.documentation_url = ''
+  s.documentation_url = 'https://dougzilla32.github.io/CancelForPromiseKit/api/'
   s.default_subspecs = 'CorePromise', 'Foundation'
   s.requires_arc = true
-# s.swift_version = '4.0'
+  s.swift_version = '4.0'
 
   # CocoaPods requires us to specify the root deployment targets
   # even though for us it is nonsense. Our root spec has no
   # sources.
   s.ios.deployment_target = '8.0'
-  s.osx.deployment_target = '10.9'
+  s.osx.deployment_target = '10.11'
   s.watchos.deployment_target = '2.0'
   s.tvos.deployment_target = '9.0'
   
@@ -56,7 +56,7 @@ Pod::Spec.new do |s|
 #    ss.dependency 'CancelForPromiseKit/CorePromise'
 #    ss.dependency 'Bolts', '~> 1.9.0'
 #    ss.ios.deployment_target = '8.0'
-#    ss.osx.deployment_target = '10.9'
+#    ss.osx.deployment_target = '10.11'
 #    ss.watchos.deployment_target = '2.0'
 #    ss.tvos.deployment_target = '9.0'
 #  end
@@ -85,7 +85,7 @@ Pod::Spec.new do |s|
     ss.frameworks = 'Foundation'
     
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.9'
+    ss.osx.deployment_target = '10.11'
     ss.watchos.deployment_target = '2.0'
     ss.tvos.deployment_target = '9.0'
   end
@@ -98,7 +98,7 @@ Pod::Spec.new do |s|
     ss.frameworks = 'CoreLocation'
 
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.9'
+    ss.osx.deployment_target = '10.11'
     ss.watchos.deployment_target = '3.0'
     ss.tvos.deployment_target = '9.0'
   end
@@ -109,7 +109,7 @@ Pod::Spec.new do |s|
     ss.dependency 'CancelForPromiseKit/CorePromise'
     ss.frameworks = 'Foundation'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.9'
+    ss.osx.deployment_target = '10.11'
     ss.watchos.deployment_target = '2.0'
     ss.tvos.deployment_target = '9.0'
     ss.test_spec do |test_spec|
@@ -123,7 +123,7 @@ Pod::Spec.new do |s|
 #    ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'MapKit'
 #    ss.dependency 'CancelForPromiseKit/CorePromise'
 #    ss.ios.deployment_target = '8.0'
-#    ss.osx.deployment_target = '10.9'
+#    ss.osx.deployment_target = '10.11'
 #    ss.watchos.deployment_target = '2.0'
 #    ss.tvos.deployment_target = '9.2'
 #  end
@@ -133,7 +133,7 @@ Pod::Spec.new do |s|
 #    ss.dependency 'CancelForPromiseKit/Foundation'
 #    ss.dependency 'OMGHTTPURLRQ', '~> 3.2'
 #    ss.ios.deployment_target = '8.0'
-#    ss.osx.deployment_target = '10.9'
+#    ss.osx.deployment_target = '10.11'
 #    ss.watchos.deployment_target = '2.0'
 #    ss.tvos.deployment_target = '9.0'
 #  end
@@ -144,7 +144,7 @@ Pod::Spec.new do |s|
 #    ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'StoreKit'
 #    ss.dependency 'CancelForPromiseKit/CorePromise'
 #    ss.ios.deployment_target = '8.0'
-#    ss.osx.deployment_target = '10.9'
+#    ss.osx.deployment_target = '10.11'
 #    ss.tvos.deployment_target = '9.0'
 #  end
 #
