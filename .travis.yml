@@ -48,7 +48,7 @@ before_install:
     CocoaPods)
       pod install --repo-update;;
     Carthage)
-      carthage bootstrap --cache-builds --no-use-binaries --platform $PLAT --verbose;;
+      brew upgrade carthage; carthage bootstrap --cache-builds --no-use-binaries --platform $PLAT --verbose;;
     SPM)
       if [ "$TRAVIS_OS_NAME" == "linux" ] ; then
         export SWIFT_VERSION=4.1;
