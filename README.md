@@ -4,10 +4,10 @@
 
 ---
 
-Docs | [CancelForPromiseKit](https://dougzilla32.github.io/CancelForPromiseKit/api/) | [CPKAlamofire](https://dougzilla32.github.io/CPKAlamofire/api/) | [CPKCoreLocation](https://dougzilla32.github.io/CPKCoreLocation/api/) | [CPKFoundation](https://dougzilla32.github.io/CPKFoundation/api/) |
+API Docs | [CancelForPromiseKit](https://dougzilla32.github.io/CancelForPromiseKit/api/) | [CPKAlamofire](https://dougzilla32.github.io/CPKAlamofire/api/) | [CPKCoreLocation](https://dougzilla32.github.io/CPKCoreLocation/api/) | [CPKFoundation](https://dougzilla32.github.io/CPKFoundation/api/) |
 ------------- | ------------- | ------------- |  ------------- |   ------------- | 
 
-CancelForPromiseKit provides clear and concise cancellation abilities for [PromiseKit] and the [PromiseKit Extensions].  While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
+[CancelForPromiseKit] provides clear and concise cancellation abilities for the most excellent [PromiseKit] and [PromiseKit Extensions].  While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
 
 For example:
 

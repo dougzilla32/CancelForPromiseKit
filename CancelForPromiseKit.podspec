@@ -1,4 +1,3 @@
-# coding: utf-8
 Pod::Spec.new do |s|
   s.name = "CancelForPromiseKit"
 
@@ -15,7 +14,7 @@ Pod::Spec.new do |s|
   s.license = 'MIT'
   s.summary = 'Cancellable Promises for Swift.'
   s.homepage = 'https://github.com/dougzilla32/CancelForPromiseKit.git'
-  s.description = 'Add-on to PromiseKit to enable cancellation of all tasks have the ability to be cancelled.  Simply call the cancel() function on any Promise, or use a CancelContext to cancel all Promises in a chain or other grouping.'
+  s.description = 'Provides clear, concise and complete cancellation abilities for PromiseKit and the PromiseKit Extensions.'
 # s.social_media_url = ''
   s.authors  = { 'Doug Stein' => 'dougstein@gmail.com' }
   s.documentation_url = 'https://dougzilla32.github.io/CancelForPromiseKit/api/'
