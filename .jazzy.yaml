@@ -1,3 +1,4 @@
+xcodebuild_arguments: [-workspace,CancelForPromiseKit.xcworkspace,-scheme,CancelForPromiseKit,SWIFT_VERSION=4.1,-destination,"arch=x86_64",SWIFT_TREAT_WARNINGS_AS_ERRORS=YES,build]
 author: Doug
 author_url: https://github.com/dougzilla32
 module: CancelForPromiseKit

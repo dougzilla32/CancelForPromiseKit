@@ -1,10 +1,10 @@
 # CancelForPromiseKit
 
-![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] [![badge-mit]](https://github.com/dougzilla32/CancelForPromiseKit/blob/master/LICENSE) [![badge-docs]][CancelForPromiseKit API Documentation] [![Build Status](https://travis-ci.org/dougzilla32/CancelForPromiseKit.svg?branch=master)](https://travis-ci.org/dougzilla32/CancelForPromiseKit)
+[![badge-pod]](https://cocoapods.org/pods/CancelForPromiseKit) [![badge-languages]](https://developer.apple.com/swift/) [![badge-pms]](https://medium.com/xcblog/swift-dependency-management-for-ios-3bcfc4771ec0) [![badge-platforms]](https://cocoapods.org/pods/CancelForPromiseKit) [![badge-mit]](https://github.com/dougzilla32/CancelForPromiseKit/blob/master/LICENSE) [![badge-docs]][CancelForPromiseKit API Documentation] [![Build Status](https://travis-ci.org/dougzilla32/CancelForPromiseKit.svg?branch=master)](https://travis-ci.org/dougzilla32/CancelForPromiseKit)
 
 ---
 
-API Docs | [CancelForPromiseKit](https://dougzilla32.github.io/CancelForPromiseKit/api/) | [CPKAlamofire](https://dougzilla32.github.io/CPKAlamofire/api/) | [CPKCoreLocation](https://dougzilla32.github.io/CPKCoreLocation/api/) | [CPKFoundation](https://dougzilla32.github.io/CPKFoundation/api/) |
+API Docs: | [CancelForPromiseKit](https://dougzilla32.github.io/CancelForPromiseKit/api/) | [CPKAlamofire](https://dougzilla32.github.io/CPKAlamofire/api/) | [CPKCoreLocation](https://dougzilla32.github.io/CPKCoreLocation/api/) | [CPKFoundation](https://dougzilla32.github.io/CPKFoundation/api/) |
 ------------- | ------------- | ------------- |  ------------- |   ------------- | 
 
 [CancelForPromiseKit] provides clear and concise cancellation abilities for the most excellent [PromiseKit] and [PromiseKit Extensions].  While PromiseKit includes basic support for cancellation, CancelForPromiseKit extends this to make cancelling promises and their associated tasks simple and straightforward.
