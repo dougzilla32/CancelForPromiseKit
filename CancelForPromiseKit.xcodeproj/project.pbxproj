@@ -43,7 +43,6 @@
 		91940E6020B0D2E200551388 /* RaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91940E4F20B0D2E200551388 /* RaceTests.swift */; };
 		91A917C920ACD525004067C2 /* hang.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A917C820ACD525004067C2 /* hang.swift */; };
 		91B92B3320E5D6C900CCEADB /* OHHTTPStubs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91B92B3220E5D6C900CCEADB /* OHHTTPStubs.framework */; };
-		991AC9DE886C71F86F397A60 /* Pods_CancelForPromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E780BEF805EA6CE5906F83C /* Pods_CancelForPromiseKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,7 +114,6 @@
 		91B92B3220E5D6C900CCEADB /* OHHTTPStubs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OHHTTPStubs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		91B92B3420E5DDD200CCEADB /* Cartfile.private */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.private; sourceTree = "<group>"; };
 		91DF540020E44C2C001CBF46 /* JazzyDocs.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JazzyDocs.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9E780BEF805EA6CE5906F83C /* Pods_CancelForPromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CancelForPromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,7 +131,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				916E91E320E6FF7700071DCD /* PromiseKit.framework in Frameworks */,
-				991AC9DE886C71F86F397A60 /* Pods_CancelForPromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,7 +254,6 @@
 			children = (
 				916E91E220E6FF7700071DCD /* PromiseKit.framework */,
 				91B92B3220E5D6C900CCEADB /* OHHTTPStubs.framework */,
-				9E780BEF805EA6CE5906F83C /* Pods_CancelForPromiseKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
