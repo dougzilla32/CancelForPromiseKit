@@ -5,7 +5,8 @@
 //  Created by Doug Stein on 5/10/18.
 //
 
-import Foundation
+import class Foundation.Thread
+import Dispatch
 import PromiseKit
 
 /**
@@ -85,21 +86,29 @@ public class CancellableGuarantee<T>: CancellableThenable {
 }
 
 public extension CancellableGuarantee {
-    /// - See: `CancellableThenable.done(on:_:)`
+    /// - See: `CancellableThenable.done(on:flags:_:)`
     @discardableResult
-    func done(on: DispatchQueue? = conf.Q.return, cancelValue: T? = nil, _ body: @escaping(T) -> Void) -> CancellableGuarantee<Void> {
+    func done(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, cancelValue: T? = nil, _ body: @escaping(T) -> Void) -> CancellableGuarantee<Void> {
         let cancelBody = { (value: T) -> Void in
             let value = self.cancelContext.removeItems(self.cancelItemList, clearList: true) == nil
                 ? value : (self.cancelValue ?? value)
             body(value)
         }
         
-        let guarantee: Guarantee<Void> = self.guarantee.done(on: on, cancelBody)
+        let guarantee: Guarantee<Void> = self.guarantee.done(on: on, flags: flags, cancelBody)
         return CancellableGuarantee<Void>(guarantee, cancelValue: (), context: self.cancelContext)
     }
 
-    /// - See: `CancellableThenable.map(on:_:)`
-    func map<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, _ body: @escaping(T) -> U) -> CancellableGuarantee<U> {
+    /// - See: `CancellableThenable.get(on:flags:_:)`
+    func get(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, cancelValue: T? = nil, _ body: @escaping (T) -> Void) -> CancellableGuarantee<T> {
+        return map(on: on, flags: flags) {
+            body($0)
+            return $0
+        }
+    }
+    
+    /// - See: `CancellableThenable.map(on:flags:_:)`
+    func map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, cancelValue: U? = nil, _ body: @escaping(T) -> U) -> CancellableGuarantee<U> {
         let cancelBody = { (value: T) -> U in
             let value = self.cancelContext.removeItems(self.cancelItemList, clearList: true) == nil
                 ? value : (self.cancelValue ?? value)
@@ -107,13 +116,13 @@ public extension CancellableGuarantee {
             return body(value)
         }
         
-        let guarantee = self.guarantee.map(on: on, cancelBody)
+        let guarantee = self.guarantee.map(on: on, flags: flags, cancelBody)
         return CancellableGuarantee<U>(guarantee, cancelValue: cancelValue, context: self.cancelContext)
     }
     
-    /// - See: `CancellableThenable.then(on:_:)`
+    /// - See: `CancellableThenable.then(on:flags:_:)`
     @discardableResult
-    func then<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, _ body: @escaping(T) -> CancellableGuarantee<U>) -> CancellableGuarantee<U> {
+    func then<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, cancelValue: U? = nil, _ body: @escaping(T) -> CancellableGuarantee<U>) -> CancellableGuarantee<U> {
         let cancelBody = { (value: T) -> Guarantee<U> in
             let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
             let rv = body(value)
@@ -121,19 +130,19 @@ public extension CancellableGuarantee {
             return rv.guarantee
         }
         
-        let guarantee = self.guarantee.then(on: on, cancelBody)
+        let guarantee = self.guarantee.then(on: on, flags: flags, cancelBody)
         return CancellableGuarantee<U>(guarantee, cancelValue: cancelValue, context: self.cancelContext)
     }
 
-    /// - See: `CancellableThenable.thenCC(on:_:)`
+    /// - See: `CancellableThenable.thenCC(on:flags:_:)`
     @discardableResult
-    func thenCC<U>(on: DispatchQueue? = conf.Q.map, cancelValue: U? = nil, _ body: @escaping(T) -> Guarantee<U>) -> CancellableGuarantee<U> {
+    func thenCC<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, cancelValue: U? = nil, _ body: @escaping(T) -> Guarantee<U>) -> CancellableGuarantee<U> {
         let cancelBody = { (value: T) -> Guarantee<U> in
             let value = self.cancelContext.cancelledError == nil ? value : (self.cancelValue ?? value)
             return body(value)
         }
         
-        let guarantee = self.guarantee.then(on: on, cancelBody)
+        let guarantee = self.guarantee.then(on: on, flags: flags, cancelBody)
         return CancellableGuarantee<U>(guarantee, cancelValue: cancelValue, context: self.cancelContext)
     }
 
@@ -154,7 +163,7 @@ public extension CancellableGuarantee {
 public extension CancellableGuarantee where T: Sequence {
 
     /**
-     `CancellableGuarantee<[T]>` => `T` -> `CancellableGuarantee<U>` => `CancellableGuarantee<[U]>`
+     `CancellableGuarantee<[T]>` => `T` -> `CancellableGuarantee<V>` => `CancellableGuarantee<[V]>`
 
          let context = firstly {
              .valueCC([1,2,3])
@@ -168,12 +177,11 @@ public extension CancellableGuarantee where T: Sequence {
      
          context.cancel()
      */
-    func thenMap<V>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) -> CancellableGuarantee<V>) -> CancellableGuarantee<[V]> {
-        return then(on: on) {
+    func thenMap<V>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, cancelValue: [V]? = nil, _ transform: @escaping(T.Iterator.Element) -> CancellableGuarantee<V>) -> CancellableGuarantee<[V]> {
+        return then(on: on, flags: flags) {
             when(fulfilled: $0.map(transform))
-        }.recover {
-            // if happens then is bug inside PromiseKit
-            fatalError(String(describing: $0))
+        }.recover { _ in
+            return CancellableGuarantee<[V]>.valueCC(cancelValue ?? [])
         }
     }
 }

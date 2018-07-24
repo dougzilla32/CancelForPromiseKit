@@ -5,8 +5,8 @@
 //  Created by Doug Stein on 4/28/18.
 //
 
-import Foundation
-import PromiseKit
+import struct Foundation.TimeInterval
+import Dispatch
 
 /**
      afterCC(seconds: 1.5).then {
@@ -32,7 +32,7 @@ public func afterCC(_ interval: DispatchTimeInterval) -> CancellablePromise<Void
     return at(time: DispatchTime.now() + interval)
 }
 
-func at(time: DispatchTime) -> CancellablePromise<Void> {
+private func at(time: DispatchTime) -> CancellablePromise<Void> {
 #if swift(>=4.0)
     var fulfill: ((()) -> Void)!
 #else

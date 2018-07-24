@@ -62,26 +62,49 @@ public func when<V: CancellableThenable>(fulfilled promises: [V]) -> Cancellable
     return rp
 }
 
-/// Wait for all promises in a set to fulfill, unless cancelled before completion.
-public func when<U: CancellableThenable, V: CancellableThenable>(fulfilled pu: U, _ pv: V) -> CancellablePromise<(U.U.T, V.U.T)> {
+/**
+ Wait for all promises in a set to fulfill, unless cancelled before completion.
+
+ - Note: by convention this function should not have a 'CC' suffix, however the suffix is necessary due to a compiler bug exemplified by the following:
+ 
+     ````
+     This works fine:
+       1  func hi(_: String...) { }
+       2  func hi(_: String, _: String) { }
+       3  hi("hi", "there")
+
+     This does not compile:
+       1  func hi(_: String...) { }
+       2  func hi(_: String, _: String) { }
+       3  func hi(_: Int...) { }
+       4  func hi(_: Int, _: Int) { }
+       5
+       6  hi("hi", "there")  // Ambiguous use of 'hi' (lines 1 & 2 are candidates)
+       7  hi(1, 2)           // Ambiguous use of 'hi' (lines 3 & 4 are candidates)
+     ````
+ */
+public func whenCC<U: CancellableThenable, V: CancellableThenable>(fulfilled pu: U, _ pv: V) -> CancellablePromise<(U.U.T, V.U.T)> {
     let t = [pu.asVoid(), pv.asVoid()]
     return when(fulfilled: t).map(on: nil) { (pu.value!, pv.value!) }
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
-public func when<U: CancellableThenable, V: CancellableThenable, W: CancellableThenable>(fulfilled pu: U, _ pv: V, _ pw: W) -> CancellablePromise<(U.U.T, V.U.T, W.U.T)> {
+/// - SeeAlso: `whenCC(fulfilled:,_:)`
+public func whenCC<U: CancellableThenable, V: CancellableThenable, W: CancellableThenable>(fulfilled pu: U, _ pv: V, _ pw: W) -> CancellablePromise<(U.U.T, V.U.T, W.U.T)> {
     let t = [pu.asVoid(), pv.asVoid(), pw.asVoid()]
     return when(fulfilled: t).map(on: nil) { (pu.value!, pv.value!, pw.value!) }
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
-public func when<U: CancellableThenable, V: CancellableThenable, W: CancellableThenable, X: CancellableThenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X) -> CancellablePromise<(U.U.T, V.U.T, W.U.T, X.U.T)> {
+/// - SeeAlso: `whenCC(fulfilled:,_:)`
+public func whenCC<U: CancellableThenable, V: CancellableThenable, W: CancellableThenable, X: CancellableThenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X) -> CancellablePromise<(U.U.T, V.U.T, W.U.T, X.U.T)> {
     let t = [pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid()]
     return when(fulfilled: t).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!) }
 }
 
 /// Wait for all promises in a set to fulfill, unless cancelled before completion.
-public func when<U: CancellableThenable, V: CancellableThenable, W: CancellableThenable, X: CancellableThenable, Y: CancellableThenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X, _ py: Y) -> CancellablePromise<(U.U.T, V.U.T, W.U.T, X.U.T, Y.U.T)> {
+/// - SeeAlso: `whenCC(fulfilled:,_:)`
+public func whenCC<U: CancellableThenable, V: CancellableThenable, W: CancellableThenable, X: CancellableThenable, Y: CancellableThenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X, _ py: Y) -> CancellablePromise<(U.U.T, V.U.T, W.U.T, X.U.T, Y.U.T)> {
     let t = [pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid(), py.asVoid()]
     return when(fulfilled: t).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!, py.value!) }
 }
@@ -157,7 +180,7 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
 
  `when(fulfilled:)` rejects as soon as one of the provided promises rejects. `when(resolved:)` waits on all provided promises and *never*
  rejects.  When cancelled, all promises will attempt to be cancelled and those that are successfully cancelled will have a result of
- PromiseCancelledError.
+ PMKError.cancelled.
 
      let p = when(resolved: promise1, promise2, promise3, cancel: context).then { results in
          for result in results where case .fulfilled(let value) {

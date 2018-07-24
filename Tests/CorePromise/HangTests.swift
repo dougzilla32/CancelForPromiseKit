@@ -40,7 +40,7 @@ class HangTests: XCTestCase {
             XCTFail()
         } catch {
             if !error.isCancelled {
-                XCTFail("Unexpected error (expected PromiseCancelledError)")
+                XCTFail("Unexpected error (expected PMKError.cancelled)")
             }
             return
         }

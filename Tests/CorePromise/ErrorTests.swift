@@ -2,12 +2,12 @@ import PromiseKit
 import CancelForPromiseKit
 import XCTest
 
-class CPKErrorTests: XCTestCase {
+class CancellableErrorTests: XCTestCase {
     func testCustomStringConvertible() {
-        XCTAssertNotNil(PromiseCancelledError().errorDescription)
+        XCTAssertNotNil(PMKError.cancelled.errorDescription)
     }
-
+    
     func testCustomDebugStringConvertible() {
-        XCTAssertNotNil(PromiseCancelledError().debugDescription.isEmpty)
+        XCTAssertFalse(PMKError.cancelled.debugDescription.isEmpty)
     }
 }

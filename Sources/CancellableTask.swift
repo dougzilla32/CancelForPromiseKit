@@ -5,7 +5,7 @@
 //  Created by Doug Stein on 5/3/18.
 //
 
-import Foundation
+import Dispatch
 
 /**
  Use this protocol to define cancellable tasks for CancellablePromise.

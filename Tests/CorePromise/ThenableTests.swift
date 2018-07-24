@@ -139,4 +139,30 @@ class ThenableTests: XCTestCase {
         }.cancel()
         wait(for: [ex], timeout: 1)
     }
+
+    func testBarrier() {
+        let ex = expectation(description: "")
+        let q = DispatchQueue(label: "\(#file):\(#line)", attributes: .concurrent)
+        CancellablePromise.valueCC(1).done(on: q, flags: .barrier) {
+            XCTAssertEqual($0, 1)
+            dispatchPrecondition(condition: .onQueueAsBarrier(q))
+            ex.fulfill()
+        }.catch { _ in
+            XCTFail()
+        }
+        wait(for: [ex], timeout: 10)
+    }
+
+    func testDispatchFlagsSyntax() {
+        let ex = expectation(description: "")
+        let q = DispatchQueue(label: "\(#file):\(#line)", attributes: .concurrent)
+        CancellablePromise.valueCC(1).done(on: q, flags: [.barrier, .inheritQoS]) {
+            XCTAssertEqual($0, 1)
+            dispatchPrecondition(condition: .onQueueAsBarrier(q))
+            ex.fulfill()
+        }.catch { _ in
+            XCTFail()
+        }
+        wait(for: [ex], timeout: 10)
+    }
 }

@@ -5,7 +5,8 @@
 //  Created by Doug Stein on 4/28/18.
 //
 
-import Foundation
+import class Foundation.Thread
+import Dispatch
 import PromiseKit
 
 /**
@@ -81,6 +82,12 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
         self.appendCancellableTask(task: task, reject: reject)
     }
     
+    /// Initialize a new cancellable promise using the giving Promise and it's Resolver.
+    public convenience init(task: CancellableTask? = nil, promise: Promise<T>, resolver: Resolver<T>) {
+        self.init(promise)
+        self.appendCancellableTask(task: task, reject: resolver.reject)
+    }
+
     /// - Returns: a tuple of a new cancellable pending promise and its `Resolver`.
     public class func pending() -> (promise: CancellablePromise<T>, resolver: Resolver<T>) {
         let rp = Promise<T>.pending()
@@ -113,16 +120,6 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
         return promise.result
     }
 
-    /**
-     Immutably and asynchronously inspect the current `Result`:
-     
-        promise.tap{ print($0) }.then{ /*…*/ }
-     */
-    public func tap(_ body: @escaping(Result<T>) -> Void) -> CancellablePromise {
-        _ = promise.tap(body)
-        return self
-    }
-    
     /**
      Blocks this thread, so—you know—don’t call this on a serial thread that
      any part of your chain may use. Like the main thread for example.

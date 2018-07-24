@@ -28,4 +28,18 @@ class GuaranteeTests: XCTestCase {
         }
         wait(for: [ex], timeout: 1)
     }
+    
+    func testThenMap() {
+
+        let ex = expectation(description: "")
+
+        CancellableGuarantee.valueCC([1, 2, 3])
+            .thenMap { CancellableGuarantee.valueCC($0 * 2) }
+            .done { values in
+                XCTAssertEqual([], values)
+                ex.fulfill()
+        }.cancel()
+
+        wait(for: [ex], timeout: 1)
+    }
 }

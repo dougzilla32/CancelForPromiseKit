@@ -48,7 +48,7 @@ class WrapTests: XCTestCase {
         
         let value: Int?
         let error: Swift.Error?
-        var finalizer: CPKFinalizer?
+        var finalizer: CancellableFinalizer?
         
         init(value: Int?, error: Swift.Error?) {
             self.value = value

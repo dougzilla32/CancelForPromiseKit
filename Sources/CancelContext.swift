@@ -5,13 +5,13 @@
 //  Created by Doug Stein on 5/3/18.
 //
 
-import Foundation
+import Dispatch
 import PromiseKit
 
 /**
  Keeps track of all promises in a promise chain with pending or currently running tasks, and cancels them all when `cancel` is called.
  */
-public class CancelContext: Hashable, CustomStringConvertible {
+public class CancelContext: Hashable {
     /// - See: `Hashable`
     public lazy var hashValue: Int = {
         return ObjectIdentifier(self).hashValue
@@ -25,48 +25,24 @@ public class CancelContext: Hashable, CustomStringConvertible {
     // Create a barrier queue that is used as a read/write lock for the CancelContext
     //   For reads:  barrier.sync { }
     //   For writes: barrier.sync(flags: .barrier) { }
-    private let barrier = DispatchQueue(label: "CancelForPromiseKit.CancelContextBarrier", attributes: .concurrent)
+    private let barrier = DispatchQueue(label: "org.cancelforpromisekit.barrier.cancel", attributes: .concurrent)
 
     private var cancelItems = [CancelItem]()
     private var cancelItemSet = Set<CancelItem>()
     
-    init(description: CustomStringConvertible? = nil) {
-        self.descriptionCSC = description
-    }
-    
-    var cachedDescription: String?
-    
-    var descriptionCSC: CustomStringConvertible? {
-        didSet {
-#if DEBUG
-            self.cachedDescription = descriptionCSC?.description
-#endif
-        }
-    }
-    
-    public var description: String {
-        var rv = rawPointerDescription(obj: self)
-        if let desc = descriptionCSC?.description, desc != "" {
-            rv += "  \(desc) "
-        } else if let desc = cachedDescription, desc != "" {
-            rv += " [\(desc)]"
-        }
-        return rv
-    }
-
     /**
      Cancel all members of the promise chain and their associated asynchronous operations.
      
-     - Parameter error: Specifies the cancellation error to use for the cancel operation, defaults to `nil` which will create a new `PromiseCancelledError`
+     - Parameter error: Specifies the cancellation error to use for the cancel operation, defaults to `PMKError.cancelled`
      */
-    public func cancel(error: Error? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
-        self.cancel(error: error, visited: Set<CancelContext>(), file: file, function: function, line: line)
+    public func cancel(error: Error? = nil) {
+        self.cancel(error: error, visited: Set<CancelContext>())
     }
     
-    func cancel(error: Error? = nil, visited: Set<CancelContext>, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+    func cancel(error: Error? = nil, visited: Set<CancelContext>) {
         var error = error
         if error == nil {
-            error = PromiseCancelledError(file: file, function: function, line: line)
+            error = PMKError.cancelled
         }
 
         var items: [CancelItem]!
@@ -76,7 +52,7 @@ public class CancelContext: Hashable, CustomStringConvertible {
         }
         
         for item in items {
-            item.cancel(error: error!, visited: visited, file: file, function: function, line: line)
+            item.cancel(error: error!, visited: visited)
         }
     }
     
@@ -127,7 +103,7 @@ public class CancelContext: Hashable, CustomStringConvertible {
         if task == nil && reject == nil {
             return
         }
-        let item = CancelItem(task: task, reject: reject, thenable: thenable.thenable)
+        let item = CancelItem(task: task, reject: reject)
 
         var error: Error?
         barrier.sync(flags: .barrier) {
@@ -146,7 +122,7 @@ public class CancelContext: Hashable, CustomStringConvertible {
         guard childContext !== self else {
             return
         }
-        let item = CancelItem(context: childContext, thenable: thenable.thenable)
+        let item = CancelItem(context: childContext)
 
         var error: Error?
         barrier.sync(flags: .barrier) {
@@ -159,11 +135,11 @@ public class CancelContext: Hashable, CustomStringConvertible {
         crossCancel(childContext: childContext, parentCancelledError: error)
     }
     
-    func append<Z: ThenableDescription>(context childContext: CancelContext, description: Z, thenableCancelItemList: CancelItemList) {
+    func append(context childContext: CancelContext, thenableCancelItemList: CancelItemList) {
         guard childContext !== self else {
             return
         }
-        let item = CancelItem(context: childContext, description: description)
+        let item = CancelItem(context: childContext)
 
         var error: Error?
         barrier.sync(flags: .barrier) {
@@ -258,7 +234,7 @@ public class CancelItemList {
     }
 }
 
-class CancelItem: Hashable, CustomStringConvertible {
+class CancelItem: Hashable {
     lazy var hashValue: Int = {
         return ObjectIdentifier(self).hashValue
     }()
@@ -272,33 +248,17 @@ class CancelItem: Hashable, CustomStringConvertible {
     weak var context: CancelContext?
     var cancelAttempted = false
     
-    init<Z: Thenable>(task: CancellableTask?, reject: ((Error) -> Void)?, thenable: Z) {
+    init(task: CancellableTask?, reject: ((Error) -> Void)?) {
         self.task = task
         self.reject = reject
-        self.descriptionCSC = CancelItem.createDescription(thenable)
     }
     
-    init<Z: Thenable>(context: CancelContext, thenable: Z) {
+    init(context: CancelContext) {
         self.task = nil
         self.context = context
-        self.descriptionCSC = CancelItem.createDescription(thenable)
     }
     
-    init<Z: ThenableDescription>(context: CancelContext, description: Z) {
-        self.task = nil
-        self.context = context
-        self.descriptionCSC = description
-    }
-    
-    static func createDescription<Z: Thenable>(_ thenable: Z) -> CustomStringConvertible {
-        if let promise = thenable as? Promise<Z.T> {
-            return PromiseDescription(promise)
-        } else {
-            return GuaranteeDescription(thenable as! Guarantee<Z.T>)
-        }
-    }
-    
-    func cancel(error: Error, visited: Set<CancelContext>? = nil, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+    func cancel(error: Error, visited: Set<CancelContext>? = nil) {
         cancelAttempted = true
 
         task?.cancel()
@@ -307,45 +267,12 @@ class CancelItem: Hashable, CustomStringConvertible {
         if var v = visited, let c = context {
             if !v.contains(c) {
                 v.insert(c)
-                c.cancel(error: error, visited: v, file: file, function: function, line: line)
+                c.cancel(error: error, visited: v)
             }
         }
     }
     
     var isCancelled: Bool {
         return task?.isCancelled ?? cancelAttempted
-    }
-
-    // MARK: CanceItem description
-    
-    var cachedDescription: String?
-    
-    var descriptionCSC: CustomStringConvertible {
-        didSet {
-#if DEBUG
-            self.cachedDescription = descriptionCSC.description
-#endif
-        }
-    }
-    
-    var description: String {
-        var rv = rawPointerDescription(obj: self)
-        let desc = descriptionCSC.description
-        if desc != "" {
-            rv += "  \(desc) "
-        } else if let desc = cachedDescription, desc != "" {
-            rv += " [\(desc)]"
-        }
-        
-        if let t = task {
-            rv += " task=\(t)"
-        }
-        if let r = reject {
-            rv += " reject=\(r)"
-        }
-        if let c = context {
-            rv += " context=\(c)"
-        }
-        return rv
     }
 }

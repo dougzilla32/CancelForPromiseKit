@@ -6,7 +6,7 @@ import XCTest
 
 private enum Error: Swift.Error { case dummy }
 
-class CPKDefaultDispatchQueueTest: XCTestCase {
+class CancellableDefaultDispatchQueueTest: XCTestCase {
 
     let myQueue = DispatchQueue(label: "myQueue")
 

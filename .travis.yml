@@ -1,46 +1,47 @@
 matrix:
   include:
-    - {osx_image: xcode8.3,     env: 'SWFT=3.1  PLAT=iOS      DST="OS=10.3.1,name=iPhone SE"',       os: osx, language: swift}
-    - {osx_image: xcode8.3,     env: 'SWFT=3.1  PLAT=tvOS     DST="OS=10.2,name=Apple TV 1080p"',    os: osx, language: swift}
-    - {osx_image: xcode8.3,     env: 'SWFT=3.1  PLAT=macOS    DST="arch=x86_64"',                    os: osx, language: swift}
-    - {osx_image: xcode8.3,     env: 'SWFT=3.1  PLAT=watchOS  DST="OS=3.2,name=Apple Watch - 38mm"', os: osx, language: swift}
+    - {osx_image: xcode8.3,     env: 'SWFT=3.1  PLAT=iOS      DST="OS=10.3.1,name=iPhone SE"',              os: osx, language: swift}
+    - {osx_image: xcode8.3,     env: 'SWFT=3.1  PLAT=tvOS     DST="OS=10.2,name=Apple TV 1080p"',           os: osx, language: swift}
+    - {osx_image: xcode8.3,     env: 'SWFT=3.1  PLAT=macOS    DST="arch=x86_64"',                           os: osx, language: swift}
+    - {osx_image: xcode8.3,     env: 'SWFT=3.1  PLAT=watchOS  DST="OS=3.2,name=Apple Watch - 38mm"',        os: osx, language: swift}
+                                                                                                            
+    - {osx_image: xcode9.2,     env: 'SWFT=3.2  PLAT=iOS      DST="OS=11.2,name=iPhone SE"',                os: osx, language: swift}
+    - {osx_image: xcode9.2,     env: 'SWFT=3.2  PLAT=tvOS     DST="OS=11.2,name=Apple TV"',                 os: osx, language: swift}
+    - {osx_image: xcode9.2,     env: 'SWFT=3.2  PLAT=macOS    DST="arch=x86_64"',                           os: osx, language: swift}
+    - {osx_image: xcode9.2,     env: 'SWFT=3.2  PLAT=watchOS  DST="OS=4.2,name=Apple Watch - 38mm"',        os: osx, language: swift}
+                                                                                                            
+    - {osx_image: xcode9.4,     env: 'SWFT=3.3  PLAT=iOS      DST="OS=11.4,name=iPhone SE"',                os: osx, language: swift}
+    - {osx_image: xcode9.4,     env: 'SWFT=3.3  PLAT=tvOS     DST="OS=11.4,name=Apple TV"',                 os: osx, language: swift}
+    - {osx_image: xcode9.4,     env: 'SWFT=3.3  PLAT=macOS    DST="arch=x86_64"',                           os: osx, language: swift}
+    - {osx_image: xcode9.4,     env: 'SWFT=3.3  PLAT=watchOS  DST="OS=4.3,name=Apple Watch - 38mm"',        os: osx, language: swift}
+                                                                                                            
+    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=iOS      DST="OS=11.2,name=iPhone SE"',                os: osx, language: swift}
+    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=tvOS     DST="OS=11.2,name=Apple TV"',                 os: osx, language: swift}
+    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=macOS    DST="arch=x86_64"',                           os: osx, language: swift}
+    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=watchOS  DST="OS=4.2,name=Apple Watch - 38mm"',        os: osx, language: swift}
+                                                                                                            
+    - {osx_image: xcode9.4,     env: 'SWFT=4.1  PLAT=iOS      DST="OS=8.4,name=iPhone 4s"',                 os: osx, language: swift}
+    - {osx_image: xcode9.4,     env: 'SWFT=4.1  PLAT=iOS      DST="OS=9.3,name=iPhone 5s"',                 os: osx, language: swift}
+    - {osx_image: xcode9.4,     env: 'SWFT=4.1  PLAT=iOS      DST="OS=10.3.1,name=iPhone SE"',              os: osx, language: swift}
+    - {osx_image: xcode9.4,     env: 'SWFT=4.1  PLAT=iOS      DST="OS=11.4,name=iPhone SE"        TEST=1',  os: osx, language: swift}
+    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=tvOS     DST="OS=9.2,name=Apple TV 1080p"',            os: osx, language: swift}
+    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=tvOS     DST="OS=10.2,name=Apple TV 1080p"',           os: osx, language: swift}
+    - {osx_image: xcode9.4,     env: 'SWFT=4.1  PLAT=tvOS     DST="OS=11.4,name=Apple TV"         TEST=1',  os: osx, language: swift}
+    - {osx_image: xcode9.4,     env: 'SWFT=4.1  PLAT=macOS    DST="arch=x86_64"                   TEST=1',  os: osx, language: swift}
+    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=2.2,name=Apple Watch - 38mm"',        os: osx, language: swift}
+    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=3.2,name=Apple Watch - 38mm"',        os: osx, language: swift}
+    - {osx_image: xcode9.4,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=4.3,name=Apple Watch - 38mm"',        os: osx, language: swift}
 
-    - {osx_image: xcode9.2,     env: 'SWFT=3.2  PLAT=iOS      DST="OS=11.2,name=iPhone SE"',         os: osx, language: swift}
-    - {osx_image: xcode9.2,     env: 'SWFT=3.2  PLAT=tvOS     DST="OS=11.2,name=Apple TV"',          os: osx, language: swift}
-    - {osx_image: xcode9.2,     env: 'SWFT=3.2  PLAT=macOS    DST="arch=x86_64"',                    os: osx, language: swift}
-    - {osx_image: xcode9.2,     env: 'SWFT=3.2  PLAT=watchOS  DST="OS=4.2,name=Apple Watch - 38mm"', os: osx, language: swift}
+    - {osx_image: xcode9.4,     env: 'SWFT=3.3 PLAT=macOS DST="arch=x86_64" DEPEND="CocoaPods"',     os: osx, language: swift}
+    - {osx_image: xcode9.4,     env: 'SWFT=4.1 PLAT=macOS DST="arch=x86_64" DEPEND="CocoaPods"',     os: osx, language: swift}
 
-    - {osx_image: xcode9.3,     env: 'SWFT=3.3  PLAT=iOS      DST="OS=11.3,name=iPhone SE"',         os: osx, language: swift}
-    - {osx_image: xcode9.3,     env: 'SWFT=3.3  PLAT=tvOS     DST="OS=11.3,name=Apple TV"',          os: osx, language: swift}
-    - {osx_image: xcode9.3,     env: 'SWFT=3.3  PLAT=macOS    DST="arch=x86_64"',                    os: osx, language: swift}
-    - {osx_image: xcode9.3,     env: 'SWFT=3.3  PLAT=watchOS  DST="OS=4.3,name=Apple Watch - 38mm"', os: osx, language: swift}
+    - {os: osx, osx_image: xcode9.4, sudo: required, language: swift, env: 'SWFT=3 DEPEND="SPM"'}
+    - {os: osx, osx_image: xcode9.4, sudo: required, language: swift, env: 'SWFT=4 DEPEND="SPM"'}
 
-    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=iOS      DST="OS=11.2,name=iPhone SE"',         os: osx, language: swift}
-    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=tvOS     DST="OS=11.2,name=Apple TV"',          os: osx, language: swift}
-    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=macOS    DST="arch=x86_64"',                    os: osx, language: swift}
-    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=watchOS  DST="OS=4.2,name=Apple Watch - 38mm"', os: osx, language: swift}
+#   - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0  SWFT=4 TEST=1 DEPEND="SPM"'}
+#   - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.0  SWFT=4 TEST=1 DEPEND="SPM"'}
+#   - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2018-06-20-a SWFT=4 DEPEND="SPM"'}
 
-    # we would test this with Xcode 9.3 but it reliably fails and gives no useful rationale for failure
-    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=iOS      DST="OS=8.4,name=iPhone 4s"',          os: osx, language: swift}
-    
-    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=iOS      DST="OS=9.3,name=iPhone SE"',          os: osx, language: swift}
-    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=iOS      DST="OS=10.3.1,name=iPhone SE"',       os: osx, language: swift}
-    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=iOS      DST="OS=11.3,name=iPhone SE"',         os: osx, language: swift}
-    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=tvOS     DST="OS=10.2,name=Apple TV 1080p"',    os: osx, language: swift}
-    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=tvOS     DST="OS=11.3,name=Apple TV"',          os: osx, language: swift}
-    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=macOS    DST="arch=x86_64"',                    os: osx, language: swift}
-    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=2.2,name=Apple Watch - 38mm"', os: osx, language: swift}
-    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=3.2,name=Apple Watch - 38mm"', os: osx, language: swift}
-    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=4.3,name=Apple Watch - 38mm"', os: osx, language: swift}
-
-    - {osx_image: xcode9.3,     env: 'SWFT=3.3 PLAT=macOS DST="arch=x86_64" DEPEND="CocoaPods"',     os: osx, language: swift}
-    - {osx_image: xcode9.3,     env: 'SWFT=4.1 PLAT=macOS DST="arch=x86_64" DEPEND="CocoaPods"',     os: osx, language: swift}
-
-    - {os: osx, osx_image: xcode9.3, sudo: required, language: swift, env: 'SWFT=3 DEPEND="SPM"'}
-    - {os: osx, osx_image: xcode9.3, sudo: required, language: swift, env: 'SWFT=4 DEPEND="SPM"'}
-
-#   - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWFT=3 DEPEND="SPM"'}
-#   - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWFT=4 DEPEND="SPM"'}
 
 before_install:
   - if [ -z "$DEPEND" ] ; then export DEPEND=Carthage ; fi
@@ -51,14 +52,14 @@ before_install:
       brew upgrade carthage; carthage bootstrap --cache-builds --no-use-binaries --platform $PLAT --verbose;;
     SPM)
       if [ "$TRAVIS_OS_NAME" == "linux" ] ; then
-        export SWIFT_VERSION=4.1;
         eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
       fi;;
     esac
 install:
   - case $DEPEND in
     SPM)
-      swift build;;
+        swift --version;
+        swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;;
     *)
       if [ "$PLAT" != "watchOS" ] ; then
         xcodebuild -workspace CancelForPromiseKit.xcworkspace -scheme CancelForPromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build-for-testing -enableCodeCoverage YES;
