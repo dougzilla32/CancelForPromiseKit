@@ -35,8 +35,8 @@ matrix:
     - {osx_image: xcode9.4,     env: 'SWFT=3.3 PLAT=macOS DST="arch=x86_64" DEPEND="CocoaPods"',     os: osx, language: swift}
     - {osx_image: xcode9.4,     env: 'SWFT=4.1 PLAT=macOS DST="arch=x86_64" DEPEND="CocoaPods"',     os: osx, language: swift}
 
-    - {os: osx, osx_image: xcode9.4, sudo: required, language: swift, env: 'SWFT=3 DEPEND="SPM"'}
-    - {os: osx, osx_image: xcode9.4, sudo: required, language: swift, env: 'SWFT=4 DEPEND="SPM"'}
+    - {os: osx, osx_image: xcode9.4, sudo: required, language: swift, env: 'SWFT=3 SWIFT_BUILD_VERSION=4 DEPEND="SPM"'}
+    - {os: osx, osx_image: xcode9.4, sudo: required, language: swift, env: 'SWFT=4 SWIFT_BUILD_VERSION=4 DEPEND="SPM"'}
 
 #   - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0  SWFT=4 TEST=1 DEPEND="SPM"'}
 #   - {os: linux, dist: trusty, sudo: required, language: swift, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.0  SWFT=4 TEST=1 DEPEND="SPM"'}
