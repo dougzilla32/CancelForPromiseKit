@@ -5,6 +5,7 @@ import XCTest
 
 class CatchableTests: XCTestCase {
 
+    @available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 2.0, *)
     func testFinally() {
         let finallyQueue = DispatchQueue(label: "\(#file):\(#line)", attributes: .concurrent)
 
