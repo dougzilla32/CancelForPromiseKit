@@ -20,5 +20,5 @@ let cpk: Target = .target(
 )
 pkg.targets = [
     cpk,
-    .testTarget(name: "CorePromise", dependencies: ["CancelForPromiseKit", "PromiseKit"], path: "Tests/CorePromise"),
+    .testTarget(name: "CPKPromise", dependencies: ["CancelForPromiseKit", "PromiseKit"], path: "Tests/CorePromise"),
 ]
