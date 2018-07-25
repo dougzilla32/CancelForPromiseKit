@@ -5,7 +5,7 @@
 //  Created by Doug Stein on 5/16/18.
 //
 
-import PromiseKit
+@_exported import PromiseKit
 
 /**
  Resolves with the first resolving cancellable promise from a set of cancellable promises. Calling `cancel` on the

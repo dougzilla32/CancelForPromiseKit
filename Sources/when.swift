@@ -7,7 +7,7 @@
 
 import Foundation
 import Dispatch
-import PromiseKit
+@_exported import PromiseKit
 
 /**
  Wait for all promises in a set to fulfill.

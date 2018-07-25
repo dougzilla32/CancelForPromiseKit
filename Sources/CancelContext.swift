@@ -6,7 +6,7 @@
 //
 
 import Dispatch
-import PromiseKit
+@_exported import PromiseKit
 
 /**
  Keeps track of all promises in a promise chain with pending or currently running tasks, and cancels them all when `cancel` is called.

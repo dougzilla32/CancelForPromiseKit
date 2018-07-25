@@ -7,7 +7,7 @@
 
 import class Foundation.Thread
 import Dispatch
-import PromiseKit
+@_exported import PromiseKit
 
 /**
  A `CancellablePromise` is a functional abstraction around a failable and cancellable asynchronous operation.

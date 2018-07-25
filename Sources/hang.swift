@@ -5,7 +5,7 @@
 //  Created by Doug Stein on 5/16/18.
 //
 
-import PromiseKit
+@_exported import PromiseKit
 
 /**
  Runs the active run-loop until the provided promise resolves.

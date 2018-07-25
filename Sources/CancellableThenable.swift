@@ -6,7 +6,7 @@
 //
 
 import Dispatch
-import PromiseKit
+@_exported import PromiseKit
 
 /**
  CancellableThenable represents an asynchronous operation that can be both chained and cancelled.  When chained, all CancellableThenable members of the chain are cancelled when `cancel` is called on the associated CancelContext.

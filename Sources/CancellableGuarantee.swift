@@ -7,7 +7,7 @@
 
 import class Foundation.Thread
 import Dispatch
-import PromiseKit
+@_exported import PromiseKit
 
 /**
  A `CancellableGuarantee` is a functional abstraction around an asynchronous operation that can be cancelled but cannot error.

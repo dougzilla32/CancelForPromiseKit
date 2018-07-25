@@ -5,7 +5,7 @@
 //  Created by Doug Stein on 5/10/18.
 //
 
-import PromiseKit
+@_exported import PromiseKit
 
 /**
  `firstly` for cancellable promises.
