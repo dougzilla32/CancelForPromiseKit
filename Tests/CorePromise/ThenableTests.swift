@@ -140,31 +140,34 @@ class ThenableTests: XCTestCase {
         wait(for: [ex], timeout: 1)
     }
 
-    @available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 2.0, *)
     func testBarrier() {
-        let ex = expectation(description: "")
-        let q = DispatchQueue(label: "\(#file):\(#line)", attributes: .concurrent)
-        CancellablePromise.valueCC(1).done(on: q, flags: .barrier) {
-            XCTAssertEqual($0, 1)
-            dispatchPrecondition(condition: .onQueueAsBarrier(q))
-            ex.fulfill()
-        }.catch { _ in
-            XCTFail()
+        if #available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 2.0, *) {
+            let ex = expectation(description: "")
+            let q = DispatchQueue(label: "\(#file):\(#line)", attributes: .concurrent)
+            CancellablePromise.valueCC(1).done(on: q, flags: .barrier) {
+                XCTAssertEqual($0, 1)
+                dispatchPrecondition(condition: .onQueueAsBarrier(q))
+                ex.fulfill()
+            }.catch { _ in
+                XCTFail()
+            }
+            
+            wait(for: [ex], timeout: 10)
         }
-        wait(for: [ex], timeout: 10)
     }
 
-    @available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 2.0, *)
     func testDispatchFlagsSyntax() {
-        let ex = expectation(description: "")
-        let q = DispatchQueue(label: "\(#file):\(#line)", attributes: .concurrent)
-        CancellablePromise.valueCC(1).done(on: q, flags: [.barrier, .inheritQoS]) {
-            XCTAssertEqual($0, 1)
-            dispatchPrecondition(condition: .onQueueAsBarrier(q))
-            ex.fulfill()
-        }.catch { _ in
-            XCTFail()
+        if #available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 2.0, *) {
+            let ex = expectation(description: "")
+            let q = DispatchQueue(label: "\(#file):\(#line)", attributes: .concurrent)
+            CancellablePromise.valueCC(1).done(on: q, flags: [.barrier, .inheritQoS]) {
+                XCTAssertEqual($0, 1)
+                dispatchPrecondition(condition: .onQueueAsBarrier(q))
+                ex.fulfill()
+            }.catch { _ in
+                XCTFail()
+            }
+            wait(for: [ex], timeout: 10)
         }
-        wait(for: [ex], timeout: 10)
     }
 }

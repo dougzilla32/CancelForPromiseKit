@@ -5,37 +5,38 @@ import XCTest
 
 class CatchableTests: XCTestCase {
 
-    @available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 2.0, *)
     func testFinally() {
-        let finallyQueue = DispatchQueue(label: "\(#file):\(#line)", attributes: .concurrent)
-
-        func helper(error: Error, on queue: DispatchQueue = .main, flags: DispatchWorkItemFlags? = nil) {
-            let ex = (expectation(description: ""), expectation(description: ""))
-            var x = 0
-            let p = afterCC(seconds: 0.01).catch(policy: .allErrors) { _ in
-                XCTAssertEqual(x, 0)
-                x += 1
-                ex.0.fulfill()
-            }.finally(on: queue, flags: flags) {
-                if let flags = flags, flags.contains(.barrier) {
-                    dispatchPrecondition(condition: .onQueueAsBarrier(queue))
-                } else {
-                    dispatchPrecondition(condition: .onQueue(queue))
+        if #available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 2.0, *) {
+            let finallyQueue = DispatchQueue(label: "\(#file):\(#line)", attributes: .concurrent)
+            
+            func helper(error: Error, on queue: DispatchQueue = .main, flags: DispatchWorkItemFlags? = nil) {
+                let ex = (expectation(description: ""), expectation(description: ""))
+                var x = 0
+                let p = afterCC(seconds: 0.01).catch(policy: .allErrors) { _ in
+                    XCTAssertEqual(x, 0)
+                    x += 1
+                    ex.0.fulfill()
+                }.finally(on: queue, flags: flags) {
+                    if let flags = flags, flags.contains(.barrier) {
+                        dispatchPrecondition(condition: .onQueueAsBarrier(queue))
+                    } else {
+                        dispatchPrecondition(condition: .onQueue(queue))
+                    }
+                    XCTAssertEqual(x, 1)
+                    x += 1
+                    ex.1.fulfill()
                 }
-                XCTAssertEqual(x, 1)
-                x += 1
-                ex.1.fulfill()
+                
+                p.cancel(error: error)
+                
+                wait(for: [ex.0, ex.1], timeout: 10)
             }
-
-            p.cancel(error: error)
-
-            wait(for: [ex.0, ex.1], timeout: 10)
+            
+            helper(error: Error.dummy)
+            helper(error: Error.cancelled)
+            helper(error: Error.dummy, on: finallyQueue)
+            helper(error: Error.dummy, on: finallyQueue, flags: .barrier)
         }
-
-        helper(error: Error.dummy)
-        helper(error: Error.cancelled)
-        helper(error: Error.dummy, on: finallyQueue)
-        helper(error: Error.dummy, on: finallyQueue, flags: .barrier)
     }
 
     func testCauterize() {
