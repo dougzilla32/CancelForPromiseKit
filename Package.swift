@@ -1,24 +1,12 @@
-// swift-tools-version:4.0
-
 import PackageDescription
 
-let pkg = Package(
+let package = Package(
     name: "CancelForPromiseKit",
-    products: [
-        .library(name: "CancelForPromiseKit", targets: ["CancelForPromiseKit"]),
-    ],
     dependencies: [
-        .package(url: "https://github.com/mxcl/PromiseKit", from: "6.1.0")
+        .Package(url: "https://github.com/mxcl/PromiseKit", majorVersion: 6)
     ],
-    swiftLanguageVersions: [3, 4]
+    swiftLanguageVersions: [3, 4],
+    exclude: [
+		"Tests"
+    ]
 )
-
-let cpk: Target = .target(
-    name: "CancelForPromiseKit",
-    dependencies: ["PromiseKit"],
-    path: "Sources"
-)
-pkg.targets = [
-    cpk,
-    .testTarget(name: "CPKPromise", dependencies: ["CancelForPromiseKit", "PromiseKit"], path: "Tests/CorePromise"),
-]

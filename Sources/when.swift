@@ -199,7 +199,7 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
  - Note: Any promises that error are implicitly consumed.
  - Remark: Doesn't take CancellableThenable due to protocol associatedtype paradox
 */
-public func when<T>(resolved promises: CancellablePromise<T>...) -> CancellableGuarantee<[Result<T>]> {
+public func when<T>(resolved promises: CancellablePromise<T>...) -> CancellableGuarantee<[PromiseKit.Result<T>]> {
     return CancellableGuarantee(when(resolved: asPromises(promises)))
 }
 
@@ -311,13 +311,13 @@ public func whenCC<It: IteratorProtocol>(fulfilled promiseIterator: It, concurre
 
 /// - Note: Methods with the `CC` suffix create a new CancellablePromise or CancellableGuarantee, and those without the `CC` suffix accept an existing
 ///   CancellablePromise or CancellableGuarantee.
-public func whenCC<T>(resolved promises: Promise<T>...) -> CancellableGuarantee<[Result<T>]> {
+public func whenCC<T>(resolved promises: Promise<T>...) -> CancellableGuarantee<[PromiseKit.Result<T>]> {
     return CancellableGuarantee(when(resolved: promises))
 }
 
 /// - Note: Methods with the `CC` suffix create a new CancellablePromise or CancellableGuarantee, and those without the `CC` suffix accept an existing
 ///   CancellablePromise or CancellableGuarantee.
-public func whenCC<T>(resolved promises: [Promise<T>]) -> CancellableGuarantee<[Result<T>]> {
+public func whenCC<T>(resolved promises: [Promise<T>]) -> CancellableGuarantee<[PromiseKit.Result<T>]> {
     return CancellableGuarantee(when(resolved: promises))
 }
 

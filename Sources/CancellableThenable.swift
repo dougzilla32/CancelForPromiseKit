@@ -276,7 +276,7 @@ public extension CancellableThenable {
 
      promise.tap{ print($0) }.then{ /*…*/ }
      */
-    func tap(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Result<U.T>) -> Void) -> CancellablePromise<U.T> {
+    func tap(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(PromiseKit.Result<U.T>) -> Void) -> CancellablePromise<U.T> {
         let rp = CancellablePromise<U.T>.pending()
         rp.promise.cancelContext = self.cancelContext
         self.thenable.pipe { result in

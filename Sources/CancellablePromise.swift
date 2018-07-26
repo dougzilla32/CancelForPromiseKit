@@ -110,13 +110,13 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
 
     /// Internal function required for `Thenable` conformance.
     /// - See: `Thenable.pipe`
-    public func pipe(to: @escaping (Result<T>) -> Void) {
+    public func pipe(to: @escaping (PromiseKit.Result<T>) -> Void) {
         promise.pipe(to: to)
     }
     
     /// - Returns: The current `Result` for this cancellable promise.
     /// - See: `Thenable.result`
-    public var result: Result<T>? {
+    public var result: PromiseKit.Result<T>? {
         return promise.result
     }
 

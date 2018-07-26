@@ -75,12 +75,12 @@ public class CancellableGuarantee<T>: CancellableThenable {
     }
     
     /// Internal function required for `Thenable` conformance.
-    public func pipe(to: @escaping (Result<T>) -> Void) {
+    public func pipe(to: @escaping (PromiseKit.Result<T>) -> Void) {
         guarantee.pipe(to: to)
     }
     
     /// - Returns: The current `Result` for this cancellable guarantee.
-    public var result: Result<T>? {
+    public var result: PromiseKit.Result<T>? {
         return guarantee.result
     }
 }
