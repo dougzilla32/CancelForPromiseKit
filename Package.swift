@@ -3,10 +3,7 @@ import PackageDescription
 let package = Package(
     name: "CancelForPromiseKit",
     dependencies: [
-        .Package(url: "https://github.com/mxcl/PromiseKit", majorVersion: 6)
+        .Package(url: "https://github.com/mxcl/PromiseKit.git", majorVersion: 6, minor: 3)
     ],
-    swiftLanguageVersions: [3, 4],
-    exclude: [
-		"Tests"
-    ]
+    swiftLanguageVersions: [3, 4]
 )
