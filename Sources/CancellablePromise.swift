@@ -55,21 +55,41 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
             reject = seal.reject
             seal.reject(error)
         })
-        self.appendCancellableTask(task: task, reject: reject)
+        self.appendCancellableTask(task, reject: reject)
     }
     
     /// Initialize a new cancellable promise bound to the provided `Thenable`.
-    public convenience init<U: Thenable>(task: CancellableTask? = nil, _ bridge: U) where U.T == T {
+    public convenience init<U: Thenable>(_ bridge: U, cancelContext: CancelContext? = nil) where U.T == T {
+        var promise: Promise<U.T>!
+        let task: CancellableTask!
         var reject: ((Error) -> Void)!
-        self.init(Promise { seal in
-            reject = seal.reject
-            bridge.done(on: nil) {
-                seal.fulfill($0)
-            }.catch {
-                seal.reject($0)
+
+        if let p = bridge as? Promise<U.T> {
+            task = p.cancellableTask
+            if let r = p.rejectIfCancelled {
+                promise = p
+                reject = r
             }
-        })
-        self.appendCancellableTask(task: task, reject: reject)
+        } else if let g = bridge as? Guarantee<U.T> {
+            task = g.cancellableTask
+        } else {
+            task = nil
+        }
+        
+        if promise == nil {
+            // Wrapper promise
+            promise = Promise { seal in
+                reject = seal.reject
+                bridge.done(on: nil) {
+                    seal.fulfill($0)
+                }.catch {
+                    seal.reject($0)
+                }
+            }
+        }
+
+        self.init(promise, context: cancelContext)
+        self.appendCancellableTask(task, reject: reject)
     }
     
     /// Initialize a new cancellable promise that can be resolved with the provided `Resolver`.
@@ -79,13 +99,13 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
             reject = seal.reject
             try body(seal)
         })
-        self.appendCancellableTask(task: task, reject: reject)
+        self.appendCancellableTask(task, reject: reject)
     }
     
     /// Initialize a new cancellable promise using the giving Promise and it's Resolver.
     public convenience init(task: CancellableTask? = nil, promise: Promise<T>, resolver: Resolver<T>) {
         self.init(promise)
-        self.appendCancellableTask(task: task, reject: resolver.reject)
+        self.appendCancellableTask(task, reject: resolver.reject)
     }
 
     /// - Returns: a tuple of a new cancellable pending promise and its `Resolver`.
@@ -94,29 +114,15 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
         return (promise: CancellablePromise(rp.promise), resolver: rp.resolver)
     }
     
-    /// - Returns: a new fulfilled cancellable promise.
-    public class func valueCC(_ value: T) -> CancellablePromise<T> {
-        var reject: ((Error) -> Void)!
-        
-        let promise = Promise<T> { seal in
-            reject = seal.reject
-            seal.fulfill(value)
-        }
-        
-        let cp = CancellablePromise(promise)
-        cp.appendCancellableTask(task: nil, reject: reject)
-        return cp
-    }
-
     /// Internal function required for `Thenable` conformance.
     /// - See: `Thenable.pipe`
-    public func pipe(to: @escaping (PromiseKit.Result<T>) -> Void) {
+    public func pipe(to: @escaping (Result<T>) -> Void) {
         promise.pipe(to: to)
     }
     
     /// - Returns: The current `Result` for this cancellable promise.
     /// - See: `Thenable.result`
-    public var result: PromiseKit.Result<T>? {
+    public var result: Result<T>? {
         return promise.result
     }
 
@@ -139,43 +145,7 @@ extension CancellablePromise where T == Void {
     /// Initializes a new cancellable promise fulfilled with `Void` and with the given `CancellableTask`
     public convenience init(task: CancellableTask) {
         self.init()
-        self.appendCancellableTask(task: task, reject: nil)
+        self.appendCancellableTask(task, reject: nil)
     }
 }
 #endif
-
-public extension DispatchQueue {
-    /**
-     Asynchronously executes the provided closure on a dispatch queue.
-
-         let context = DispatchQueue.global().asyncCC(.promise) {
-             try md5(input)
-         }.done { md5 in
-             //…
-         }.cancelContext
-     
-         //…
-     
-         context.cancel()
-     
-     - Parameter cancelValue: No-op -- workaround for compiler problem, can get 'ambiguous use of asynCC' error otherwise
-     - Parameter body: The closure that resolves this promise.
-     - Returns: A new `Promise` resolved by the result of the provided closure.
-     */
-    @available(macOS 10.10, iOS 8.0, tvOS 9.0, watchOS 2.0, *)
-    final func asyncCC<T>(_: PMKNamespacer, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], cancelValue: T? = nil, execute body: @escaping () throws -> T) -> CancellablePromise<T> {
-        let rp = CancellablePromise<T>.pending()
-        async(group: group, qos: qos, flags: flags) {
-            if let error = rp.promise.cancelContext.cancelledError {
-                rp.resolver.reject(error)
-            } else {
-                do {
-                    rp.resolver.fulfill(try body())
-                } catch {
-                    rp.resolver.reject(error)
-                }
-            }
-        }
-        return rp.promise
-    }
-}

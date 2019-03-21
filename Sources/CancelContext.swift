@@ -11,15 +11,22 @@ import Dispatch
 /**
  Keeps track of all promises in a promise chain with pending or currently running tasks, and cancels them all when `cancel` is called.
  */
-public class CancelContext: Hashable {
-    /// - See: `Hashable`
-    public lazy var hashValue: Int = {
-        return ObjectIdentifier(self).hashValue
-    }()
-    
-    /// - See: `Hashable`
-    public static func == (lhs: CancelContext, rhs: CancelContext) -> Bool {
-        return lhs === rhs
+public class CancelContext {
+    // Hashable wrapper for a cancel context
+    class HashableContext: Hashable {
+        let context: CancelContext
+        
+        init(_ context: CancelContext) {
+            self.context = context
+        }
+        
+        lazy var hashValue: Int = {
+            return ObjectIdentifier(self.context).hashValue
+        }()
+        
+        static func == (lhs: HashableContext, rhs: HashableContext) -> Bool {
+            return lhs.context === rhs.context
+        }
     }
     
     // Create a barrier queue that is used as a read/write lock for the CancelContext
@@ -36,10 +43,10 @@ public class CancelContext: Hashable {
      - Parameter error: Specifies the cancellation error to use for the cancel operation, defaults to `PMKError.cancelled`
      */
     public func cancel(error: Error? = nil) {
-        self.cancel(error: error, visited: Set<CancelContext>())
+        self.cancel(error: error, visited: Set<HashableContext>())
     }
     
-    func cancel(error: Error? = nil, visited: Set<CancelContext>) {
+    func cancel(error: Error? = nil, visited: Set<HashableContext>) {
         var error = error
         if error == nil {
             error = PMKError.cancelled
@@ -218,23 +225,23 @@ public class CancelItemList {
         self.items = []
     }
     
-    func append(_ item: CancelItem) {
+    fileprivate func append(_ item: CancelItem) {
         items.append(item)
     }
     
-    func append(contentsOf list: CancelItemList, clearList: Bool) {
+    fileprivate func append(contentsOf list: CancelItemList, clearList: Bool) {
         items.append(contentsOf: list.items)
         if clearList {
             list.removeAll()
         }
     }
     
-    func removeAll() {
+    fileprivate func removeAll() {
         items.removeAll()
     }
 }
 
-class CancelItem: Hashable {
+fileprivate class CancelItem: Hashable {
     lazy var hashValue: Int = {
         return ObjectIdentifier(self).hashValue
     }()
@@ -258,15 +265,16 @@ class CancelItem: Hashable {
         self.context = context
     }
     
-    func cancel(error: Error, visited: Set<CancelContext>? = nil) {
+    func cancel(error: Error, visited: Set<CancelContext.HashableContext>? = nil) {
         cancelAttempted = true
 
         task?.cancel()
         reject?(error)
 
         if var v = visited, let c = context {
-            if !v.contains(c) {
-                v.insert(c)
+            let hc = CancelContext.HashableContext(c)
+            if !v.contains(hc) {
+                v.insert(hc)
                 c.cancel(error: error, visited: v)
             }
         }

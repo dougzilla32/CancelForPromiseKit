@@ -80,7 +80,7 @@ Pod::Spec.new do |s|
     ss.source_files = cc
     ss.public_header_files = hh
     # ss.preserve_paths = 'Sources/AnyPromise+Private.h', 'Sources/PMKCallVariadicBlock.m', 'Sources/NSMethodSignatureForBlock.m'
-    ss.dependency 'PromiseKit/CorePromise', '~> 6.0'
+    ss.dependency 'PromiseKit/CorePromise', '~> 6.3.4'
     ss.frameworks = 'Foundation'
     
     ss.ios.deployment_target = '8.0'

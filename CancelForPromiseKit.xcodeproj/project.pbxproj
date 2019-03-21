@@ -7,14 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		591D1A857E529FFD3063D905 /* Pods_CancelForPromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FA4423206513A31389FEE6D /* Pods_CancelForPromiseKit.framework */; };
 		635D64301D596E8500BC0AF5 /* CancelForPromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B0AC571D595E1B00FA21D9 /* CancelForPromiseKit.framework */; };
 		910B77732097DCB500A893F8 /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910B77702097DCB500A893F8 /* after.swift */; };
 		91195B4520AC134000074F63 /* when.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91195B4220AC134000074F63 /* when.swift */; };
 		91195B4720AC134000074F63 /* race.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91195B4420AC134000074F63 /* race.swift */; };
 		912F4C1E209BED250037EF4C /* CancellableTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912F4C1D209BED250037EF4C /* CancellableTask.swift */; };
+		915187AE21439E9D0091B352 /* cancellable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915187AD21439E9D0091B352 /* cancellable.swift */; };
 		916DAD6F20B3DBFB001AF0D7 /* CancellablePromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DAD6E20B3DBFB001AF0D7 /* CancellablePromiseTests.swift */; };
 		916DAD7120B4B130001AF0D7 /* CancellablePromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DAD7020B4B130001AF0D7 /* CancellablePromise.swift */; };
-		916DAD7320B4B43C001AF0D7 /* CancellableGuarantee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DAD7220B4B43C001AF0D7 /* CancellableGuarantee.swift */; };
 		916DAD7520B4B493001AF0D7 /* CancellableThenable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DAD7420B4B493001AF0D7 /* CancellableThenable.swift */; };
 		916DAD7720B4B6FE001AF0D7 /* CancellableCatchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DAD7620B4B6FE001AF0D7 /* CancellableCatchable.swift */; };
 		916DAD7B20B9C73B001AF0D7 /* ListOfItemsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916DAD7A20B9C73B001AF0D7 /* ListOfItemsTest.swift */; };
@@ -71,6 +72,7 @@
 		63B0AC571D595E1B00FA21D9 /* CancelForPromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CancelForPromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B0AC6C1D595E6300FA21D9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sources/Info.plist; sourceTree = "<group>"; };
 		7D530F7EDE41968CBAA83C88 /* Pods-CancelForPromiseKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CancelForPromiseKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-CancelForPromiseKit/Pods-CancelForPromiseKit.release.xcconfig"; sourceTree = "<group>"; };
+		7FA4423206513A31389FEE6D /* Pods_CancelForPromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CancelForPromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		910B77702097DCB500A893F8 /* after.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = after.swift; path = Sources/after.swift; sourceTree = "<group>"; };
 		910B778A2097E0F300A893F8 /* ValueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValueTests.swift; sourceTree = "<group>"; };
 		91195B4220AC134000074F63 /* when.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = when.swift; path = Sources/when.swift; sourceTree = "<group>"; };
@@ -81,9 +83,9 @@
 		912F4C1D209BED250037EF4C /* CancellableTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CancellableTask.swift; path = Sources/CancellableTask.swift; sourceTree = "<group>"; };
 		913ADD9E20C10F3D001F2B57 /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		91436DBD20A0EC3B004E99DB /* CancelForPromiseKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = CancelForPromiseKit.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		915187AD21439E9D0091B352 /* cancellable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = cancellable.swift; path = Sources/cancellable.swift; sourceTree = "<group>"; };
 		916DAD6E20B3DBFB001AF0D7 /* CancellablePromiseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancellablePromiseTests.swift; sourceTree = "<group>"; };
 		916DAD7020B4B130001AF0D7 /* CancellablePromise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CancellablePromise.swift; path = Sources/CancellablePromise.swift; sourceTree = "<group>"; };
-		916DAD7220B4B43C001AF0D7 /* CancellableGuarantee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CancellableGuarantee.swift; path = Sources/CancellableGuarantee.swift; sourceTree = "<group>"; };
 		916DAD7420B4B493001AF0D7 /* CancellableThenable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CancellableThenable.swift; path = Sources/CancellableThenable.swift; sourceTree = "<group>"; };
 		916DAD7620B4B6FE001AF0D7 /* CancellableCatchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CancellableCatchable.swift; path = Sources/CancellableCatchable.swift; sourceTree = "<group>"; };
 		916DAD7A20B9C73B001AF0D7 /* ListOfItemsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListOfItemsTest.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				916E91E320E6FF7700071DCD /* PromiseKit.framework in Frameworks */,
+				591D1A857E529FFD3063D905 /* Pods_CancelForPromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,8 +229,8 @@
 			children = (
 				91195B4820ACB9F500074F63 /* .swiftlint.yml */,
 				910B77702097DCB500A893F8 /* after.swift */,
+				915187AD21439E9D0091B352 /* cancellable.swift */,
 				916DAD7620B4B6FE001AF0D7 /* CancellableCatchable.swift */,
-				916DAD7220B4B43C001AF0D7 /* CancellableGuarantee.swift */,
 				916DAD7020B4B130001AF0D7 /* CancellablePromise.swift */,
 				916DAD7420B4B493001AF0D7 /* CancellableThenable.swift */,
 				912F4C1D209BED250037EF4C /* CancellableTask.swift */,
@@ -254,6 +257,7 @@
 			children = (
 				916E91E220E6FF7700071DCD /* PromiseKit.framework */,
 				91B92B3220E5D6C900CCEADB /* OHHTTPStubs.framework */,
+				7FA4423206513A31389FEE6D /* Pods_CancelForPromiseKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -294,6 +298,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 63B0AC5F1D595E1B00FA21D9 /* Build configuration list for PBXNativeTarget "CancelForPromiseKit" */;
 			buildPhases = (
+				EEBB701C73312ABACD21DCB7 /* [CP] Check Pods Manifest.lock */,
 				63B0AC521D595E1B00FA21D9 /* Sources */,
 				63B0AC531D595E1B00FA21D9 /* Frameworks */,
 				63B0AC541D595E1B00FA21D9 /* Headers */,
@@ -443,6 +448,24 @@
 			shellScript = "# This avoids having to include Pods-CancelForPromiseKit.[debug/release].xcconfig in the 'Configurations' section for every extension project\nfor f in PromiseKit Alamofire OHHTTPStubs ; do\n    if [ -d \"$PODS_CONFIGURATION_BUILD_DIR/$f/$f.framework\" ] ; then\n        ln -fs $PODS_CONFIGURATION_BUILD_DIR/$f/$f.framework $PODS_CONFIGURATION_BUILD_DIR/$f.framework ;\n    fi\ndone\n";
 			showEnvVarsInLog = 0;
 		};
+		EEBB701C73312ABACD21DCB7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CancelForPromiseKit-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -485,7 +508,7 @@
 				910B77732097DCB500A893F8 /* after.swift in Sources */,
 				912F4C1E209BED250037EF4C /* CancellableTask.swift in Sources */,
 				91A917C920ACD525004067C2 /* hang.swift in Sources */,
-				916DAD7320B4B43C001AF0D7 /* CancellableGuarantee.swift in Sources */,
+				915187AE21439E9D0091B352 /* cancellable.swift in Sources */,
 				916DAD7120B4B130001AF0D7 /* CancellablePromise.swift in Sources */,
 				918734D320A576A000F8D9D3 /* firstly.swift in Sources */,
 				916DAD7520B4B493001AF0D7 /* CancellableThenable.swift in Sources */,

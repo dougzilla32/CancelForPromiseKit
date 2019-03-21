@@ -17,6 +17,3 @@ public protocol CancellableTask {
     /// `true` if the task was successfully cancelled, `false` otherwise
     var isCancelled: Bool { get }
 }
-
-/// Extend DispatchWorkItem to be a CancellableTask
-extension DispatchWorkItem: CancellableTask { }

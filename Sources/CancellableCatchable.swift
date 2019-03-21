@@ -118,20 +118,19 @@ public extension CancellableCatchMixin {
         let cancelItemList = CancelItemList()
 
         let cancelBody = { (error: Error) throws -> V.U in
-            if let cancelledError = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
-                if policy == .allErrorsExceptCancellation {
-                    throw cancelledError
-                } else {
-                    self.cancelContext.recover()
-                }
+            _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
+            let rval = try body(error)
+            if policy == .allErrors {
+                self.cancelContext.recover()
             }
-            
-            let rv = try body(error)
-            self.cancelContext.append(context: rv.cancelContext, thenableCancelItemList: cancelItemList)
-            return rv.thenable
+            self.cancelContext.append(context: rval.cancelContext, thenableCancelItemList: cancelItemList)
+            return rval.thenable
         }
         
         let promise = self.catchable.recover(on: on, flags: flags, policy: policy, cancelBody)
+        if thenable.result != nil && policy == .allErrors {
+            self.cancelContext.recover()
+        }
         return CancellablePromise(promise, context: self.cancelContext, cancelItemList: cancelItemList)
     }
     
@@ -156,82 +155,24 @@ public extension CancellableCatchMixin {
      - Parameter policy: The default policy does not execute your handler for cancellation errors.
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
-     - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
+     - Note: Methods with the `cancellable` prefix create a new CancellablePromise, and those without the `cancellable` prefix accept an existing CancellablePromise.
      */
-    func recoverCC<V: Thenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.T == M.T {
+    func cancellableRecover<V: Thenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.T == M.T {
         
         let cancelBody = { (error: Error) throws -> V in
-            if let cancelledError = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
-                if policy == .allErrorsExceptCancellation {
-                    throw cancelledError
-                } else {
-                    self.cancelContext.recover()
-                }
+            _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
+            let rval = try body(error)
+            if policy == .allErrors {
+                self.cancelContext.recover()
             }
-            
-            return try body(error)
+            return rval
         }
         
         let promise = self.catchable.recover(on: on, flags: flags, policy: policy, cancelBody)
+        if thenable.result != nil && policy == .allErrors {
+            self.cancelContext.recover()
+        }
         return CancellablePromise(promise, context: self.cancelContext)
-    }
-    
-    /**
-     The provided closure executes when this promise rejects.
-     
-     This variant of `recover` requires the handler to return a CancellableGuarantee, thus it returns a CancellableGuarantee itself and your
-     closure cannot `throw`.
-     
-     - Note it is logically impossible for this to take a `catchPolicy`, thus `allErrors` are handled.
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter cancelValue: optional override value to use when cancelled
-     - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
-     */
-    @discardableResult
-    func recover(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, cancelValue: M.T? = nil, _ body: @escaping(Error) -> CancellableGuarantee<M.T>) -> CancellableGuarantee<M.T> {
-        let cancelBody = { (error: Error) -> Guarantee<M.T> in
-            if self.cancelContext.removeItems(self.cancelItemList, clearList: true) != nil {
-                self.cancelContext.recover()
-                if let v = cancelValue {
-                    return Guarantee.value(v)
-                }
-            }
-            
-            return body(error).guarantee
-        }
-        
-        let guarantee = self.catchable.recover(on: on, flags: flags, cancelBody)
-        return CancellableGuarantee(guarantee, context: self.cancelContext)
-    }
-
-    /**
-     The provided closure executes when this promise rejects.
-     
-     This variant of `recover` requires the handler to return a Guarantee, thus it returns a Guarantee itself and your closure cannot `throw`.
-     
-     - Note it is logically impossible for this to take a `catchPolicy`, thus `allErrors` are handled.
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter cancelValue: optional override value to use when cancelled
-     - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
-     - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
-     */
-    @discardableResult
-    func recoverCC(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, cancelValue: M.T? = nil, _ body: @escaping(Error) -> Guarantee<M.T>) -> CancellableGuarantee<M.T> {
-        let cancelBody = { (error: Error) -> Guarantee<M.T> in
-            if self.cancelContext.removeItems(self.cancelItemList, clearList: true) != nil {
-                self.cancelContext.recover()
-                if let v = cancelValue {
-                    return Guarantee.value(v)
-                }
-            }
-            
-            return body(error)
-        }
-        
-        let guarantee = self.catchable.recover(on: on, flags: flags, cancelBody)
-        return CancellableGuarantee(guarantee, context: self.cancelContext)
     }
 
     /**
@@ -342,21 +283,6 @@ public extension CancellableCatchMixin where M.T == Void {
     /**
      The provided closure executes when this cancellable promise rejects.
      
-     This variant of `recover` is specialized for `Void` promises and de-errors your chain returning a `CancellableGuarantee`, thus you cannot `throw` and you must handle all errors including cancellation.
-     
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
-     */
-    @discardableResult
-    func recover(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Error) -> Void) -> CancellableGuarantee<Void> {
-        let guarantee: Guarantee<Void> = self.catchable.recover(on: on, flags: flags, body)
-        return CancellableGuarantee(guarantee, cancelValue: nil, context: self.cancelContext)
-    }
-    
-    /**
-     The provided closure executes when this cancellable promise rejects.
-     
      This variant of `recover` ensures that no error is thrown from the handler and allows specifying a catch policy.
      
      - Parameter on: The queue to which the provided closure dispatches.
@@ -366,14 +292,17 @@ public extension CancellableCatchMixin where M.T == Void {
      */
     func recover(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> CancellablePromise<Void> {
         let cancelBody = { (error: Error) throws -> Void in
-            if let error = self.cancelContext.cancelledError, policy == .allErrorsExceptCancellation {
-                throw error
-            } else {
-                try body(error)
+            _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
+            try body(error)
+            if policy == .allErrors {
+                self.cancelContext.recover()
             }
         }
         
         let promise = self.catchable.recover(on: on, flags: flags, policy: policy, cancelBody)
+        if thenable.result != nil && policy == .allErrors {
+            self.cancelContext.recover()
+        }
         return CancellablePromise(promise, context: self.cancelContext)
     }
 }

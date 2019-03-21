@@ -8,54 +8,56 @@
 import struct Foundation.TimeInterval
 import Dispatch
 
+
+/// Extend DispatchWorkItem to be a CancellableTask
+extension DispatchWorkItem: CancellableTask { }
+
 /**
-     afterCC(seconds: 1.5).then {
+     cancellableAfter(seconds: 1.5).then {
          //…
      }
 
-- Returns: A cancellable promise that resolves after the specified duration.
- - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
+- Returns: A guarantee that resolves after the specified duration.
 */
-public func afterCC(seconds: TimeInterval) -> CancellablePromise<Void> {
-    return at(time: DispatchTime.now() + seconds)
-}
+public func cancellableAfter(seconds: TimeInterval) -> CancellablePromise<Void> {
+    let (rp, seal) = CancellablePromise<Void>.pending()
+    let when = DispatchTime.now() + seconds
 
-/**
-     after(.seconds(2)).then {
-         //…
-     }
-
- - Returns: A cancellable promise that resolves after the specified duration.
- - Note: Methods with the `CC` suffix create a new CancellablePromise, and those without the `CC` suffix accept an existing CancellablePromise.
-*/
-public func afterCC(_ interval: DispatchTimeInterval) -> CancellablePromise<Void> {
-    return at(time: DispatchTime.now() + interval)
-}
-
-private func at(time: DispatchTime) -> CancellablePromise<Void> {
-#if swift(>=4.0)
-    var fulfill: ((()) -> Void)!
-#else
-    var fulfill: (() -> Void)!
-#endif
-    var reject: ((Error) -> Void)!
-
-    let promise = CancellablePromise<Void> { seal in
-        fulfill = seal.fulfill
-        reject = seal.reject
-    }
-    
     let task = DispatchWorkItem {
 #if swift(>=4.0)
-        fulfill(())
+        seal.fulfill(())
 #else
-        fulfill()
+        seal.fulfill()
 #endif
     }
-    q.asyncAfter(deadline: time, execute: task)
 
-    promise.appendCancellableTask(task: task, reject: reject)
-    return promise
+    q.asyncAfter(deadline: when, execute: task)
+    rp.appendCancellableTask(task, reject: seal.reject)
+    return rp
+}
+
+/**
+     cancellableAfter(.seconds(2)).then {
+         //…
+     }
+
+ - Returns: A guarantee that resolves after the specified duration.
+*/
+public func cancellableAfter(_ interval: DispatchTimeInterval) -> CancellablePromise<Void> {
+    let (rp, seal) = CancellablePromise<Void>.pending()
+    let when = DispatchTime.now() + interval
+
+    let task = DispatchWorkItem {
+#if swift(>=4.0)
+        seal.fulfill(())
+#else
+        seal.fulfill()
+#endif
+    }
+    
+    q.asyncAfter(deadline: when, execute: task)
+    rp.appendCancellableTask(task, reject: seal.reject)
+    return rp
 }
 
 private var q: DispatchQueue {
